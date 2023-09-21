@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <title>layout</title>
+    <style>
+        body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            background-color: #000000;
+        }
+        .body_container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+        }
+        .edge_item {
+            width: 100%;
+            height: 7%;
+            background-color: #383838;
+        }
+        .main_container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            height: 86%;
+            width: 100%;
+            background-color: #FFFFFF;
+        }
+        .search_keyword_container {
+            width: 100%;
+            height: 13%;
+            background-color: red;
+        }
+        .detail_emotion_container {
+            width: 100%;
+            height: 13%;
+            background-color: orange;
+        }
+        .comment_info_container {
+            display: flex;
+            justify-content: space-evenly;
+            width: 100%;
+            height: 38%;
+            background-color: yellow;
+        }
+        .relation_sentence_container {
+            width: 100%;
+            height: 28%;
+            background-color: green;
+        }
+        .comment_item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            width:70%;
+            height:100%;
+            background-color: azure;
+        }
+        .info_item {
+            width:20%;
+            height:100%;
+            background-color: aliceblue;
+        }
+        .comment {
+            width:100%;
+            height:55%;
+            background-color: blanchedalmond;
+        }
+        .title {
+            width:100%;
+            height:20px;
+            background-color: blanchedalmond;
+        }
+        .link {
+            width:100%;
+            height:20px;
+            background-color: blanchedalmond;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="body_container">
+        <div class="edge_item">
+            header
+        </div>
+        <div class="main_container">
+            <div class="search_keyword_container">
+                검색어
+            </div>
+            <div class="detail_emotion_container">
+                상세감정
+            </div>
+            <div class="comment_info_container">
+                <div class="comment_item">
+                    <div class="comment">
+                        댓글내용
+                    </div>
+                    <div class="title">
+                        기사제목
+                    </div>
+                    <div class="link">
+                        기사링크
+                    </div>
+                </div>
+                <div class="info_item">
+                    댓글 좋아요/싫어요 정보
+                </div>
+            </div>
+            <div class="relation_sentence_container">
+                기사 본문 연관 문장
+            </div>
+        </div>
+        <div class="edge_item">
+            footer
+        </div>
+    </div>
+  </body>
+</html>
