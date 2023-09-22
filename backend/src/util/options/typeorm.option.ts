@@ -4,16 +4,19 @@ export const typeormAsyncOptions: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: async (config: ConfigService) => {
-    const user = config.get('MONGO_USER');
-    const password = config.get('MONGO_PASSWORD');
-    const database = config.get('MONGO_DATABASE');
-
-    const url = `mongodb+srv://${user}:${password}@node-mongo.no4qmpi.mongodb.net/?retryWrites=true&w=majority`;
+    const user = config.get('DB_USER');
+    const password = config.get('DB_PASSWORD');
+    const database = config.get('DB_DATABASE');
+    const host = config.get('DB_HOST');
     return {
-      type: 'mongodb',
-      url: url,
+      type: 'mysql',
+      host: host,
       database: database,
+      username: user,
+      password: password,
       entities: ['dist/**/*.entity.js'],
+      charset: 'utf8mb4', // emoji까지 표현 가능,
+      synchronize: true,
     };
   },
 };

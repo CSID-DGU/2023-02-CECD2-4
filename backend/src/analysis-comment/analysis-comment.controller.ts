@@ -1,5 +1,5 @@
 import { Controller, Post, Get, Body, Query, Param } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { createCommentDto } from './dtos/create-comment.dto';
 import { GetCommentsQueriesDto } from './dtos/get-comments-query.dto';
@@ -29,6 +29,9 @@ export class AnalysisCommentController {
   /**
    * 쿼리 정보 기반으로 댓글 정보 가져옴
    */
+  @ApiOperation({
+    description: '존재하는 쿼리 A, B, C를 지정하여 댓글을 가져올 수 있습니다',
+  })
   @Get()
   @ApiResponse({
     description: '가져온 댓글 목록',

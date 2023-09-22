@@ -7,11 +7,13 @@ import { IsString, validateSync } from 'class-validator';
  */
 class EnvironmentVariables {
   @IsString()
-  MONGO_USER: string;
+  DB_USER: string;
   @IsString()
-  MONGO_PASSWORD: string;
+  DB_PASSWORD: string;
   @IsString()
-  MONGO_DATABASE: string;
+  DB_DATABASE: string;
+  @IsString()
+  DB_HOST: string;
 }
 
 export const configOption: ConfigModuleOptions = {

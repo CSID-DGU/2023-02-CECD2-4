@@ -1,12 +1,12 @@
-import { Entity, ObjectId, ObjectIdColumn, Column } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { ArticleContent } from './article-content.entity';
 /**
  * @description 분석된 댓글
  */
 @Entity()
 export class AnalysisComment {
-  @ObjectIdColumn()
-  id: ObjectId;
+  @PrimaryGeneratedColumn()
+  id: number;
   /**
    * 댓글 작성일. 댓글이 DB에 삽입된 시간 아님!
    */
@@ -40,6 +40,6 @@ export class AnalysisComment {
   /**
    * 연관된 기사 내 문장 목록
    */
-  @Column(() => ArticleContent)
+  @OneToMany(() => ArticleContent, (content) => content.comment)
   news_sentences: ArticleContent[];
 }
