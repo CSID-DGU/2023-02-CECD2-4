@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AnalysisCommentModule } from './analysis-comment/analysis-comment.module';
 import { configOption } from './util/options/config.option';
 import { KeywordModule } from './keyword/keyword.module';
+import { NewsSourceModule } from './news-source/news-source.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { KeywordModule } from './keyword/keyword.module';
     ConfigModule.forRoot(configOption),
     TypeOrmModule.forRootAsync(typeormAsyncOptions),
     KeywordModule,
+    NewsSourceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

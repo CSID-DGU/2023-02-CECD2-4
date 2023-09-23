@@ -28,21 +28,26 @@ erDiagram
 
     ArticleContent {
       number id PK
-      number comment_id FK
       string content
       number score
+      number comment_id FK
     }
     
     Keyword {
       number id PK
       string name
+      string description
       date createdAt "auto"
+      date updatedAt "auto"
+      date deletedAt "auto"
     }
 
     KeywordHistory {
       number id PK
-      number keyword_id FK
+      string description
+      string action
       date createdAt "auto"
+      number keyword_id FK
     }
 
     Article ||--o{ Comment: ""

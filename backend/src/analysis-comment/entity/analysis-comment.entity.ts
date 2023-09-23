@@ -31,7 +31,7 @@ export class AnalysisComment {
    * 댓글이 작성된 뉴스 링크
    */
   @Column()
-  news_link: string;
+  link: string;
   /**
    * 댓글에 할당된 감정
    */
