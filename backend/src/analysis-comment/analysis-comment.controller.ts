@@ -5,7 +5,6 @@ import { createCommentDto } from './dtos/create-comment.dto';
 import { GetCommentsQueriesDto } from './dtos/get-comments-query.dto';
 import { AnalysisCommentService } from './analysis-comment.service';
 import { OutCommentDto } from './dtos/out-comment.dto';
-import { ObjectId } from 'mongodb';
 
 @ApiTags('Comment')
 @Controller('comment')
@@ -54,7 +53,7 @@ export class AnalysisCommentController {
     description: '키워드',
     example: '윤석열',
   })
-  async getCommentsById(@Param('keyword') id: ObjectId) {
+  async getCommentsById(@Param('keyword') id: number) {
     return id + 'hello';
   }
 }
