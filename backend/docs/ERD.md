@@ -49,7 +49,20 @@ erDiagram
       date createdAt "auto"
       number keyword_id FK
     }
-
+    Admin {
+      number id PK
+      string login_id UK
+      string password
+      string name
+      date createdAt
+    }
+    NewsSource {
+      number id PK
+      number media_id
+      string media_name
+      date createdAt
+    }
+    Admin ||--o{ KeywordHistory: ""
     Article ||--o{ Comment: ""
     Keyword ||--o{ AnalysisComment: ""
     Keyword ||--|{ KeywordHistory: ""
@@ -94,6 +107,16 @@ interface CrawlingDataType {
 ## 저장되는 엔티티
 저장되는 엔티티들은 RDS-mysql에 저장됩니다. 각 서버가 처리하는 데이터는 다음과 같습니다.
 - AI 서버: AnalysisComment, ArticleContent
-- API 서버: Keyword, KeywordHistory
+- API 서버: Keyword, KeywordHistory, Admin, NewsSource
 
 분석된 결과는 AI 서버에서 바로 저장됩니다. API 서버는 키워드 및 데이터를 관리합니다.
+
+## 엔티티 설명
+- AI 서버
+  - AnalysisComment: 분석된 댓글 정보
+  - ArticleContent: 분석된 댓글과 관계가 있는 문장
+- API 서버
+  - Keyword: 데이터 수집 대상이 되는 키워드
+  - KeywordHistory: 키워드에 대해 관리자가 수행한 동작 기록
+  - Admin: 관리자 유저
+  - NewsSource: 뉴스를 읽어 오는 언론사. 상세 검색 페이지에서 ID 추출 필요
