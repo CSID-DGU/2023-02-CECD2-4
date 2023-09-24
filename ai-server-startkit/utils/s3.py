@@ -1,6 +1,6 @@
 from mypy_boto3_s3 import S3Client
 from json import loads
-from .types import CrawlingDataType
+from .my_types import CrawlingDataType
 
 
 

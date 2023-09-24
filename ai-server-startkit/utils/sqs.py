@@ -1,6 +1,6 @@
 from mypy_boto3_sqs import SQSClient
 from json import loads
-from .types import SQSMessage
+from .my_types import SQSMessage
 
 
 def getMessagesFromSQS(sqs: SQSClient, queue_url: str, max_message = 10, wait_time = 20) -> list[SQSMessage]:
