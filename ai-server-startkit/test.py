@@ -9,9 +9,9 @@ from utils.sqs import getMessagesFromSQS
 if __name__ == '__main__':
     sqs: SQSClient = boto3.client(
         'sqs',
-        aws_access_key_id=keys['SQS_ACCESS_KEY'],
-        aws_secret_access_key=keys['SQS_SECRET_KEY'],
-        region_name=keys['SQS_REGION']
+        aws_access_key_id=keys['AWS_ACCESS_KEY'],
+        aws_secret_access_key=keys['AWS_SECRET_KEY'],
+        region_name=keys['AWS_REGION']
     )
 
     s3: S3Client = boto3.client(
