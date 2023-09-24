@@ -44,7 +44,7 @@ export class createCommentDto {
    * @example https://www.naver.com
    */
   @IsString()
-  news_link: string;
+  link: string;
 
   /**
    * 댓글의 대표 감정

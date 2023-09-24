@@ -19,7 +19,7 @@ export class AnalysisCommentService {
     comment.content = dtos.content;
     comment.sympathy = dtos.sympathy;
     comment.antipathy = dtos.antipathy;
-    comment.news_link = dtos.news_link;
+    comment.link = dtos.link;
     comment.news_sentences = dtos.news_sentences.map(
       (it) => new ArticleContent(it.content, it.score),
     );

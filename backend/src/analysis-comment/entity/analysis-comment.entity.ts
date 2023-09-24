@@ -1,5 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { ArticleContent } from './article-content.entity';
+import { Keyword } from 'src/keyword/keyword.entity';
 /**
  * @description 분석된 댓글
  */
@@ -37,9 +45,13 @@ export class AnalysisComment {
    */
   @Column()
   emotion: string;
-  /**
-   * 연관된 기사 내 문장 목록
-   */
+
+  @Column()
+  keyword_id: number;
+
   @OneToMany(() => ArticleContent, (content) => content.comment)
   news_sentences: ArticleContent[];
+  @JoinColumn({ name: 'keyword_id' })
+  @ManyToOne(() => Keyword, (keyword) => keyword.comments)
+  keyword: Keyword;
 }
