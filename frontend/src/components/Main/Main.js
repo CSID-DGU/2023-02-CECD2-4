@@ -4,6 +4,7 @@ import "./Main.css";
 const Main = (props) => {
     return (
         <div className='main_container'>
+            {props.children}
         </div>
     );
 };

@@ -1,14 +1,10 @@
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
-import Main from"./components/Main/Main";
+import Router from "./Router";
 import "./App.css";
 
 function App() {
   return (
     <div className="root_container">
-      <Header></Header>
-      <Main></Main>
-      <Footer></Footer>
+      <Router></Router>
     </div>
   );
 }
