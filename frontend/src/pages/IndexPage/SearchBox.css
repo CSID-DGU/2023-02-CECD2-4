@@ -1,35 +1,57 @@
+label {
+    position:absolute;
+    left:0;
+    color:#ccc;
+    font-family: "aggro";
+    font-size:20px;
+    transform-origin: 0 0;
+    transition: transform 0.2s ease-in-out;
+    pointer-events: none;
+}
 .search_container {
+    position:relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    width: 70%;
+    width:40%;
     height: 50%;
 }
 
 .text_box {
     border:none;
+    border-bottom: 2px solid #ccc;
+    background-color: unset;
     outline:none;
-    width:50%;
+    width:100%;
     height: 50px;
-    padding-left: 10px;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    box-shadow: inset 0px 0px 3px 1px #ccc;
     font-family: "aggro";
     font-size: 25px;
-    background-color: white;
+    color:#444;
+    caret-color: #bbb;
 }
 
 .search_btn {
-    width:60px;
+    position:absolute;
+    right:0;
+    width:50px;
     height:50px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    box-shadow: 0px 1px 3px 1px #ccc;
+    margin-left:15px;
     font-family: "aggro";
     font-size: 20px;
     text-align: center;
     line-height: 50px;
-    background-color: #bbb;
+    color:#bbb;
+    background-image: url(../../assets/icons/search_icon.png);
+    background-size: 50px 50px;
+    filter: invert(82%) sepia(6%) saturate(7%) hue-rotate(333deg) brightness(92%) contrast(87%);
+}
+
+input:focus + label, input:not(:placeholder-shown) + label{
+    transform: translateY(-27px) scale(0.7);
+}
+
+.search_btn:hover {
+    background-color: #ccc;
+    filter: invert(100%) sepia(0%) saturate(7500%) hue-rotate(209deg) brightness(117%) contrast(87%);
 }
