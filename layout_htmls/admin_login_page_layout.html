@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <title>layout</title>
+    <style>
+        body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            background-color: #000000;
+        }
+        .body_container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+        }
+        .edge_item {
+            width: 100%;
+            height: 7%;
+            background-color: #383838;
+        }
+        .main_container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 86%;
+            width: 100%;
+            background-color: #FFFFFF;
+        }
+        .caption_container {
+            width:50%;
+            height:10%;
+            background-color: red;
+        }
+        .login_form_container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            width:50%;
+            height:50%;
+            background-color: orange;
+        }
+        .issue_contact_container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            width:50%;
+            height:40%;
+            background-color: yellow;
+        }
+        .id_container {
+            width:75%;
+            height:25%;
+            background-color: azure;
+        }
+        .pw_container {
+            width:75%;
+            height:25%;
+            background-color: azure;
+        }
+        .btn_container {
+            width:75%;
+            height:25%;
+            background-color: azure;
+        }
+        .label_item {
+            width:80%;
+            height: 10%;
+        }
+        .text_item {
+            width:80%;
+            height:70%;
+            background-color: azure;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="body_container">
+        <div class="edge_item">
+            header
+        </div>
+        <div class="main_container">
+            <div class="caption_container">
+
+            </div>
+            <div class="login_form_container">
+                <div class="id_container">
+
+                </div>
+                <div class="pw_container">
+
+                </div>
+                <div class="btn_container">
+
+                </div>
+            </div>
+            <div class="issue_contact_container">
+                <div class="label_item">
+                    참고사항
+                </div>
+                <div class="text_item">
+
+                </div>
+            </div>
+        </div>
+        <div class="edge_item">
+            footer
+        </div>
+    </div>
+  </body>
+</html>
