@@ -6,19 +6,22 @@ import PieChart from './PieChart';
 import LeftContentContainer from './LeftContentContainer';
 import CommentsContainer from './CommentsContainer';
 import RepComment from './RepComment';
+import "./SearchResultPage.css";
 
 const SearchResultPage = () => {
     return (
-        <Main direction="row" wrap="wrap">
+        <Main>
             <RepInfo/>
-            <LineChart/>
-            <LeftContentContainer>
-                <PieChart/>
-                <CommentsContainer>
-                    <RepComment/>
-                    <RepComment/>
-                </CommentsContainer>
-            </LeftContentContainer>
+            <div className="bottom_container">
+                <LineChart/>
+                <LeftContentContainer>
+                    <PieChart/>
+                    <CommentsContainer>
+                        <RepComment emotion="긍정" color="red"/>
+                        <RepComment emotion="부정" color="blue"/>
+                    </CommentsContainer>
+                </LeftContentContainer>
+            </div>
         </Main>
     );
 };

@@ -3,14 +3,14 @@ import "./RepInfo.css";
 
 const RepInfo = (props) => {
     return (
-        <>
+        <div className="top_container">
             <div className="search_keyword_container">
-                <div>KEYWORD : {props.keyword}</div>
+                <div>KEYWORD:&nbsp;{props.keyword}</div>
             </div>
             <div className="time_setting_container">
-                기간설정
+                기간설정:&nbsp;<input type="date"></input>&nbsp;~&nbsp;<input type="date"></input>
             </div>
-        </>
+        </div>
     );
 };
 
