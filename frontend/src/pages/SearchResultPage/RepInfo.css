@@ -1,0 +1,16 @@
+.search_keyword_container {
+    display: flex;
+    align-items: center;
+    height:15%;
+    margin-left: 15px;
+    margin-right: auto;
+    font-family: "aggro";
+    font-weight: 700;
+    font-size:30px;
+}
+
+.time_setting_container {
+    width:50%;
+    height:15%;
+    background-color: orange;
+}
