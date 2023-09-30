@@ -21,3 +21,23 @@ github 이외의 경로로 전달한 .env 파일을 settings 폴더에 삽입
 ```
 python test.py
 ```
+
+
+# 모델 테스트 파일(test2.py)
+학습된 모델 다운받고 파일을 `\models` 에 저장해야 함
+- [모델 링크](https://drive.google.com/file/d/1r3Mh6zUfkB9RLrJHYGrgX909p5dC5dfu/view?usp=drive_link)
+
+## 필요 패키지 설치(python 3.9.17) - test1.py 설정 완료 후
+```
+pip install mxnet -f https://dist.mxnet.io/python/cpu
+pip install gluonnlp==0.8.0 pandas tqdm
+pip install sentencepiece
+pip install transformers
+pip install torch
+pip install sentence-transformers
+```
+
+## 실행
+```
+python test2.py
+```
