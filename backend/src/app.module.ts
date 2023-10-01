@@ -9,11 +9,13 @@ import { AnalysisCommentModule } from './analysis-comment/analysis-comment.modul
 import { KeywordModule } from './keyword/keyword.module';
 import { NewsSourceModule } from './news-source/news-source.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     ConfigModule.forRoot(configOption),
     TypeOrmModule.forRootAsync(typeormAsyncOptions),
+    JwtModule.register({ global: true }),
     KeywordModule,
     NewsSourceModule,
     AnalysisCommentModule,

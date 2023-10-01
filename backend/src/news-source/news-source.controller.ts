@@ -3,8 +3,8 @@ import { NewsSourceService } from './news-source.service';
 import { PostNewsSourceDto } from './dtos/post-news-source.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('news_source')
-@Controller('news-source')
+@ApiTags('News Source')
+@Controller('news-sources')
 export class NewsSourceController {
   constructor(private nsService: NewsSourceService) {}
   /**

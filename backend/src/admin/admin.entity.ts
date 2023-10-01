@@ -8,7 +8,7 @@ import {
   Unique,
 } from 'typeorm';
 
-@Entity({ name: 'ADMIN' })
+@Entity({ name: 'admin' })
 @Unique(['login_id'])
 export class AdminUser {
   @PrimaryGeneratedColumn()
@@ -26,6 +26,8 @@ export class AdminUser {
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany(() => KeywordHistory, (history) => history.admin)
+  @OneToMany(() => KeywordHistory, (history) => history.admin, {
+    onDelete: 'SET NULL',
+  })
   keyword_histories: KeywordHistory[];
 }

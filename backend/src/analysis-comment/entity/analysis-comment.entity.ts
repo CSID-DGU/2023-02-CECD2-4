@@ -49,7 +49,9 @@ export class AnalysisComment {
   @Column()
   keyword_id: number;
 
-  @OneToMany(() => ArticleContent, (content) => content.comment)
+  @OneToMany(() => ArticleContent, (content) => content.comment, {
+    eager: true,
+  })
   news_sentences: ArticleContent[];
   @JoinColumn({ name: 'keyword_id' })
   @ManyToOne(() => Keyword, (keyword) => keyword.comments)

@@ -41,14 +41,14 @@ export class createCommentDto {
 
   /**
    * 뉴스 링크
-   * @example https://www.naver.com
+   * @example 'https://www.naver.com'
    */
   @IsString()
   link: string;
 
   /**
    * 댓글의 대표 감정
-   * @example happiness
+   * @example 행복
    */
   @IsString()
   emotion: string;
@@ -68,7 +68,7 @@ export class createCommentDto {
 class ArticleContentDto {
   /**
    * 기사 내 문장
-   * @example 한편 김창섭 기획실장은 차기 디렉터로...
+   * @example '한편 김창섭 기획실장은 차기 디렉터로...'
    */
   @IsString()
   content: string;

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { AnalysisComment } from './entity/analysis-comment.entity';
 import { createCommentDto } from './dtos/create-comment.dto';
 import { ArticleContent } from './entity/article-content.entity';
+import { GetCommentsQueriesDto } from './dtos/get-comments-query.dto';
 @Injectable()
 export class AnalysisCommentService {
   constructor(
@@ -11,7 +12,7 @@ export class AnalysisCommentService {
     private repo: Repository<AnalysisComment>,
   ) {}
 
-  async create(dtos: createCommentDto) {
+  async create(dtos: createCommentDto): Promise<AnalysisComment> {
     const comment = this.repo.create();
     // const {news_sentences, .. other} = dtos;
     // Object.assign(comment, other);
@@ -27,12 +28,27 @@ export class AnalysisCommentService {
     return await this.repo.save(comment);
   }
 
-  async findMany(search?: string, page?: number, size?: number) {
-    // 없는 정보라면 무시
+  async findMany({ search, psize, head_id, from, to }: GetCommentsQueriesDto) {
     if (!search) return [];
-    return await this.repo.find({
-      skip: page * size,
-      take: size,
+
+    const qb = this.repo.createQueryBuilder();
+    qb.select([
+      'id',
+      'createdAt',
+      'content',
+      'sympathy',
+      'antipathy',
+      'emotion',
+      'link',
+    ]).where(`keyword_id IN (SELECT id FROM keyword WHERE name = :name)`, {
+      name: search,
     });
+    // head 정보 있는 경우
+    if (head_id) qb.andWhere('id < :head_id', { head_id });
+    // 기간 정보 있는 경우
+    if (from && to)
+      qb.andWhere('createdAt BETWEEN :from AND :to', { from, to });
+
+    return await qb.limit(psize).orderBy('id', 'DESC').getRawMany();
   }
 }

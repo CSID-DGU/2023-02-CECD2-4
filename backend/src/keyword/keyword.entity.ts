@@ -5,6 +5,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { KeywordHistory } from './keyword-history.entity';
@@ -14,6 +15,7 @@ import { AnalysisComment } from 'src/analysis-comment/entity/analysis-comment.en
  * 데이터 수집 대상이 되는 키워드
  */
 @Entity()
+@Unique(['name'])
 export class Keyword {
   @PrimaryGeneratedColumn()
   id: number;

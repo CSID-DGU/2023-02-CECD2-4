@@ -20,7 +20,7 @@ export class AuthController {
     type: () => OutAdminDto,
   })
   @ApiResponse({
-    status: '4XX',
+    status: 400,
     description: '계정을 생성할 수 없는 경우. 에러 반환',
   })
   @Post('/signup')
@@ -38,7 +38,7 @@ export class AuthController {
     type: () => OutAdminDto,
   })
   @ApiResponse({
-    status: '4XX',
+    status: 400,
     description: '로그인 실패(유저 X, 비밀번호 매칭 X 포함)',
   })
   @Post('/signin')
