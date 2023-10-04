@@ -7,7 +7,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Keyword } from './keyword.entity';
-import { AdminUser } from 'src/admin/admin.entity';
+import { AdminUser } from '../admin/admin.entity';
 
 /**
  * 데이터 수집 대상이 되는 키워드
@@ -36,11 +36,14 @@ export class KeywordHistory {
   /**
    * 키워드를 조작한 관리자
    */
-  @Column()
-  admin_id: number;
+  @Column({ nullable: true })
+  admin_id?: number;
+
   @JoinColumn({ name: 'admin_id' })
-  @ManyToOne(() => AdminUser, (admin) => admin.keyword_histories)
-  admin: AdminUser;
+  @ManyToOne(() => AdminUser, (admin) => admin.keyword_histories, {
+    onDelete: 'SET NULL',
+  })
+  admin?: AdminUser;
 
   /**
    * 연관된 키워드

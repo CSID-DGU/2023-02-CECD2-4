@@ -10,6 +10,7 @@ import { KeywordModule } from './keyword/keyword.module';
 import { NewsSourceModule } from './news-source/news-source.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { JwtModule } from '@nestjs/jwt';
     NewsSourceModule,
     AnalysisCommentModule,
     AuthModule,
+    TokenModule,
   ],
 })
 export class AppModule {}

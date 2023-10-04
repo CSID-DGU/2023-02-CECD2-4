@@ -1,12 +1,14 @@
-import { KeywordHistory } from 'src/keyword/keyword-history.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import { Token } from '../token/token.entity';
+import { KeywordHistory } from '../keyword/keyword-history.entity';
 
 @Entity({ name: 'admin' })
 @Unique(['login_id'])
@@ -26,8 +28,9 @@ export class AdminUser {
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany(() => KeywordHistory, (history) => history.admin, {
-    onDelete: 'SET NULL',
-  })
+  @OneToMany(() => KeywordHistory, (history) => history.admin)
   keyword_histories: KeywordHistory[];
+
+  @OneToOne(() => Token, (token) => token.user)
+  token: Token;
 }

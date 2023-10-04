@@ -7,7 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { ArticleContent } from './article-content.entity';
-import { Keyword } from 'src/keyword/keyword.entity';
+import { Keyword } from '../../keyword/keyword.entity';
 /**
  * @description 분석된 댓글
  */

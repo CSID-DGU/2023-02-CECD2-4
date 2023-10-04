@@ -14,6 +14,8 @@ class EnvironmentVariables {
   DB_DATABASE: string;
   @IsString()
   DB_HOST: string;
+  @IsString()
+  JWT_ACCESS_SECRET: string;
 }
 
 export const configOption: ConfigModuleOptions = {

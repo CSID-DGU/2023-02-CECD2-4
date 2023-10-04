@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { KeywordHistory } from './keyword-history.entity';
-import { AnalysisComment } from 'src/analysis-comment/entity/analysis-comment.entity';
+import { AnalysisComment } from '../analysis-comment/entity/analysis-comment.entity';
 
 /**
  * 데이터 수집 대상이 되는 키워드
