@@ -1,9 +1,16 @@
 import React from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
-import "./PieChart.css";
+import styled from 'styled-components';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+const PieChartContainer = styled.div`
+position:relative;
+width:45%;
+height:80%;
+min-width: 360px;
+`;
 
 export const data = {
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -34,9 +41,9 @@ export const data = {
 
 const PieChart = (props) => {
     return (
-        <div className="pie_chart_container">
+        <PieChartContainer>
             <Pie data={data}/>
-        </div>
+        </PieChartContainer>
     );
 };
 

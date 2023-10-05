@@ -2,19 +2,52 @@ import React from 'react';
 import Main from "../../components/Main/Main";
 import RepInfo from "../SearchResultPage/RepInfo";
 import PieChart from './PieChart';
-import LeftContentContainer from './LeftContentContainer';
-import EmotionsContainer from './EmotionsContainer';
 import RepEmotion from './RepEmotion';
-import "./EmotionDetailPage.css";
+import styled from 'styled-components';
+
+const BottomContainer = styled.div`
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+justify-content: space-evenly;
+width:100%;
+height:85%;
+`;
+
+const LeftContentContainer = styled.div`
+display:flex;
+flex-direction: column;
+justify-content: space-evenly;
+width:45%;
+height:80%;
+min-width: 360px;
+`;
+
+const EmotionsContainer = styled.div`
+display:flex;
+flex-direction: column;
+justify-content: space-evenly;
+width:100%;
+height:30%;
+`;
+const EmotionsContainerCaption = styled.div`
+width:95%;
+font-family: "aggro";
+font-weight: 700;
+color:#777;
+border-bottom: 2px solid #ccc;
+font-size:20px;
+`;
 
 const EmotionDetailPage = () => {
     return (
         <Main>
             <RepInfo/>
-            <div className="bottom_container">
-            <PieChart/>
+            <BottomContainer>
+                <PieChart/>
                 <LeftContentContainer>
                     <EmotionsContainer>
+                        <EmotionsContainerCaption>감정 비율</EmotionsContainerCaption>
                         <RepEmotion emotion="감정1" color="red"/>
                         <RepEmotion emotion="감정2" color="blue"/>
                         <RepEmotion emotion="감정3" color="blue"/>
@@ -23,7 +56,7 @@ const EmotionDetailPage = () => {
                         <RepEmotion emotion="감정6" color="blue"/>
                     </EmotionsContainer>
                 </LeftContentContainer>
-            </div>
+            </BottomContainer>
         </Main>
     );
 };
