@@ -1,0 +1,6 @@
+.line_chart_container {
+    position:relative;
+    width:45%;
+    height:85%;
+    min-width: 360px;
+}
