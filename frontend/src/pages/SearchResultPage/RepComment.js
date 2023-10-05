@@ -1,20 +1,38 @@
 import React from 'react';
 import styled from 'styled-components';
-import "./RepComment.css";
 
 const Emotion = styled.div`
     font-size:25px;
     margin-right: 10px;
     border-left: 10px solid ${(props) => props.color};
 `;
+const RepCommentContainer = styled.div`
+display: flex;
+flex-direction: row;
+align-items: center;
+width:100%;
+height:45vh;
+font-family: "aggro";
+font-weight: 500;
+color:#777;
+`;
+const Comment = styled.div`
+font-size:20px;
+width:75%;
+height:27px;
+margin-right: 10px;
+border: 2px solid #aaa;
+`;
+const Likes = styled.div`
+`;
 
 const RepComment = (props) => {
     return (
-        <div className="rep_comment">
+        <RepCommentContainer>
             <Emotion color={props.color}>{props.emotion}</Emotion>
-            <div className="comment">{props.comment}</div>
-            <div className="likes">{props.likes}</div>
-        </div>
+            <Comment>{props.comment}</Comment>
+            <Likes>{props.likes}</Likes>
+        </RepCommentContainer>
     );
 };
 

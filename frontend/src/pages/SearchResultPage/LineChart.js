@@ -10,7 +10,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import "./LineChart.css";
+import styled  from 'styled-components';
 
 ChartJS.register(
   CategoryScale,
@@ -21,6 +21,13 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+const LineChartContainer = styled.div`
+position:relative;
+width:45%;
+height:85%;
+min-width: 360px;
+`;
 
 export const options = {
     responsive: true,
@@ -57,9 +64,9 @@ export const data = {
 
 const LineChart = (props) => {
     return (
-        <div className="line_chart_container">
+        <LineChartContainer>
             <Line options={options} data={data}/>
-        </div>
+        </LineChartContainer>
     );
 };
 

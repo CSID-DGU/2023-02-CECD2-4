@@ -1,9 +1,0 @@
-.pie_chart_container {
-    position:relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width:100%;
-    height:65%;
-}
