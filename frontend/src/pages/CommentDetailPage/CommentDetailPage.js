@@ -1,11 +1,27 @@
 import React from 'react';
 import Main from "../../components/Main/Main";
 import RepInfo from "./RepInfo";
-import CommentsDetailContainer from './CommentsDetailContainer';
 import RepDetailComment from './RepDetailComment';
 import RepLikes from "./RepLikes";
-import "./CommentDetailPage.css";
 import RepRelated from './RepRelated';
+import styled from 'styled-components';
+
+const BottomContainer = styled.div`
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+justify-content: space-evenly;
+width:100%;
+height:30%;
+`;
+
+const CommentsDetailContainer = styled.div`
+display:flex;
+flex-direction: row;
+justify-content: space-evenly;
+width:100%;
+height:50%;
+`;
 
 const CommentDetailPage = () => {
     return (
@@ -15,9 +31,9 @@ const CommentDetailPage = () => {
                 <RepDetailComment/>
                 <RepLikes/>
             </CommentsDetailContainer>
-            <div className="bottom_container">
-            <RepRelated/>
-            </div>
+            <BottomContainer>
+                <RepRelated/>
+            </BottomContainer>
         </Main>
     );
 };

@@ -1,13 +1,41 @@
 import React from 'react';
-import "./RepDetailComment.css";
+import styled from 'styled-components';
+
+const RDCContainer = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+width:55%;
+font-family: "aggro";
+font-weight: 500;
+color:#777;
+`;
+const Comment = styled.div`
+font-size:20px;
+width:100%;
+height:70%;
+border: 2px solid #aaa;
+`;
+const ArticleTitle = styled.div`
+font-size:20px;
+width:100%;
+height:15%;
+border: 2px solid #aaa;
+`;
+const ArticleLink = styled.div`
+font-size:20px;
+width:100%;
+height:15%;
+border: 2px solid #aaa;
+`;
 
 const RepDetailComment = (props) => {
     return (
-        <div className="rep_detail_comment">
-            <div className="comment_content">{props.comment}</div>
-            <div className="article_title">{props.title}</div>
-            <div className="article_link">{props.link}</div>
-        </div>
+        <RDCContainer>
+            <Comment>{props.comment}</Comment>
+            <ArticleTitle>{props.title}</ArticleTitle>
+            <ArticleLink>{props.link}</ArticleLink>
+        </RDCContainer>
     );
 };
 
