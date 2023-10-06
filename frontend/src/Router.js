@@ -6,6 +6,7 @@ import IndexPage from "./pages/IndexPage/IndexPage";
 import SearchResultPage from './pages/SearchResultPage/SearchResultPage';
 import EmotionDetailPage from './pages/EmotionDetailPage/EmotionDetailPage';
 import CommentDetailPage from './pages/CommentDetailPage/CommentDetailPage';
+import AdminLoginPage from './pages/Admin/LoginPage/AdminLoginPage';
 
 const Router = (props) => {
     return (
@@ -16,6 +17,7 @@ const Router = (props) => {
                     <Route path="/search_result/*" element={<SearchResultPage/>}></Route>
                     <Route path="/emotion_detail/*" element={<EmotionDetailPage/>}></Route>
                     <Route path="/comment_detail/*" element={<CommentDetailPage/>}></Route>
+                    <Route path="/admin/login/" element={<AdminLoginPage/>}></Route>
                 </Routes>
             <Footer/>
         </BrowserRouter>
