@@ -262,8 +262,13 @@ class SBERT():
     def __init__(self):
         self.embedder = SentenceTransformer("jhgan/ko-sroberta-multitask")
 
-    def analysis(self, corpus, comments):
-        corpus_embeddings = self.embedder.encode(corpus, convert_to_tensor=True)
+    def CorpusInit(self, corpus):
+        self.corpus_embeddings = self.embedder.encode(corpus, convert_to_tensor=True)
+        self.corpus = corpus
+
+    # corpus 없어도 됨
+    def analysis(self, comments, corpus=''):
+        corpus_embeddings = self.corpus_embeddings
 
         # 댓글과 연관된 뉴스 기사의 상위 3개 문장 선택
         top_k = 3
@@ -274,14 +279,15 @@ class SBERT():
 
         # score 측정
         top_results = np.argpartition(-cos_scores, range(top_k))[0:top_k]
-        print("\n\n======================\n\n")
-        print("Comment:", query)
-        print("\nTop {} most similar sentences in corpus:".format(top_k))
+        # print("======================")
+        # print("Comment:", query)
+        # print("\nTop {} most similar sentences in corpus:".format(top_k))
 
         result = {'text':[], 'score':[]}
+        
         for idx in top_results[0:top_k]:
-            result['text'].append(corpus[idx].strip())
+            result['text'].append(self.corpus[idx].strip())
             result['score'].append(round(float(cos_scores[idx]), 4))
-            print(corpus[idx].strip(), "(Score: %.4f)" % (cos_scores[idx]))
+            #print(corpus[idx].strip(), "(Score: %.4f)" % (cos_scores[idx]))
         
         return result

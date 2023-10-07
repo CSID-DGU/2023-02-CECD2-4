@@ -1,4 +1,8 @@
 # BERT model 테스트
+# 감정분석 + 원인분석 약 6분 소요(DummyData: 118개 뉴스기사의 118*5개 댓글)
+
+import time
+import math
 
 import boto3
 from mypy_boto3_sqs import SQSClient
@@ -11,6 +15,14 @@ import json
 from models import KcBERT, SBERT
 
 if __name__ == '__main__':
+    # model init
+    print("Model init....", end='')
+    start_t = time.time()
+    KcBERT_model = KcBERT()
+    SBERT_model = SBERT()
+    end_t = time.time()
+    print("end! ({:0.5f} sec)".format(end_t - start_t))
+    
     # sqs: SQSClient = boto3.client(
     #     'sqs',
     #     aws_access_key_id=keys['AWS_ACCESS_KEY'],
@@ -32,22 +44,48 @@ if __name__ == '__main__':
     #     print(news_response['keyword'])
     #     print(news_response['data'][0]['comments'][0])
     #     print(news_response)
-        
-    # data 
+    
+    # 하나의 받은 데이터 처리
+    print("Read data....", end='')
+    start_t = time.time()
     with open('DummyData\\DummyData.json', 'rt', encoding='UTF8') as f:
         news_response = json.load(f)
+    end_t = time.time()
+    print("end! ({:0.5f} sec)".format(end_t - start_t))
 
-    keyword = news_response['keyword']
-    news_n = news_response['data'].__len__()
-    publishedDate = news_response['data'][0]['news']['publishedAt'].split(' ')[0]
-    print(publishedDate)
-
-    a = []
+    keyword = news_response['keyword']  # keyword(단어)
+    news_n = len(news_response['data']) # news 개수
+    MIN_COMMENT = 5
     
-    # model init
-    # KcBERT_model = KcBERT()
-    # SBERT_model = SBERT()
-    # for i in range(1, 10):
-    #     KcBERT_model.predict(predict_sentence="하.... 이 놈의 나라 노인네들은 또 의병이 나라 지키기를 원하는 건가??? 정녕 니 후손들이 통일된 민족, 좋은 나라, 공정한 나라에서 사는 게 그렇게 싫더냐? 미친 노인네들 어휴...")
-    #     #SBERT_model.analysis("본문", "댓글")
-    # print(123)
+    print("Analizing comments....")
+    start_t = time.time()
+    for data in news_response['data']:
+        url = data['url']   # 기사 url
+        publishedDate = data['news']['publishedAt'] # 기사 발행 날짜 
+        
+        body = data['news']['body']     # 본문
+        comments = data['comments']     # 댓글
+        
+        if(len(comments) >= MIN_COMMENT):
+            # SBERT corpus init --> 빠른 속도 위함
+            SBERT_model.CorpusInit(corpus=body)
+            
+            for comment in comments:
+                comment_date = comment['date']          # 댓글 작성 날짜
+                comment_content = comment['contents']   # 댓글 내용
+                
+                emotion = KcBERT_model.predict(predict_sentence=comment_content)
+                related = SBERT_model.analysis(comments=[comment_content])
+                
+                ## 결과 출력해보고 싶다면 아래 주석 해제
+                #
+                ## 감정 분석 결과
+                print("{} --> {}".format(comment_content, emotion))
+                ## 연관도 분석 결과
+                print("{} --> {}".format(comment_content, related))
+                print('')
+    end_t = time.time()
+    print("end! ({:0.5f} sec)".format(end_t - start_t))
+
+    
+    
