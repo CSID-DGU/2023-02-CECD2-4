@@ -6,9 +6,9 @@ from mypy_boto3_s3 import S3Client
 from settings.key import keys
 from utils.s3 import getNewsResponse
 from utils.sqs import getMessagesFromSQS
+import json
 
 from models import KcBERT, SBERT
-
 
 if __name__ == '__main__':
     # sqs: SQSClient = boto3.client(
@@ -33,11 +33,21 @@ if __name__ == '__main__':
     #     print(news_response['data'][0]['comments'][0])
     #     print(news_response)
         
-    # model init
-    KcBERT_model = KcBERT()
-    SBERT_model = SBERT()
-    for i in range(1, 10):
-        KcBERT_model.predict(predict_sentence="하.... 이 놈의 나라 노인네들은 또 의병이 나라 지키기를 원하는 건가??? 정녕 니 후손들이 통일된 민족, 좋은 나라, 공정한 나라에서 사는 게 그렇게 싫더냐? 미친 노인네들 어휴...")
-        #SBERT_model.analysis("본문", "댓글")
-    print(123)
+    # data 
+    with open('DummyData\\DummyData.json', 'rt', encoding='UTF8') as f:
+        news_response = json.load(f)
+
+    keyword = news_response['keyword']
+    news_n = news_response['data'].__len__()
+    publishedDate = news_response['data'][0]['news']['publishedAt'].split(' ')[0]
+    print(publishedDate)
+
+    a = []
     
+    # model init
+    # KcBERT_model = KcBERT()
+    # SBERT_model = SBERT()
+    # for i in range(1, 10):
+    #     KcBERT_model.predict(predict_sentence="하.... 이 놈의 나라 노인네들은 또 의병이 나라 지키기를 원하는 건가??? 정녕 니 후손들이 통일된 민족, 좋은 나라, 공정한 나라에서 사는 게 그렇게 싫더냐? 미친 노인네들 어휴...")
+    #     #SBERT_model.analysis("본문", "댓글")
+    # print(123)
