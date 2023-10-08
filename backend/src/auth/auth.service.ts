@@ -1,10 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { checkPassword, generatePassword } from './util/password';
-import { AdminService } from 'src/admin/admin.service';
+import { AdminService } from '../admin/admin.service';
+import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private adminService: AdminService) {}
+  constructor(
+    private adminService: AdminService,
+    private tokenService: TokenService,
+  ) {}
 
   async signup(login_id: string, password: string, name: string) {
     // 유저 존재 확인
@@ -35,5 +39,11 @@ export class AuthService {
       throw new BadRequestException(errorMessage);
     }
     return user;
+  }
+
+  async refresh(refresh_token: string) {
+    const access_token =
+      await this.tokenService.refreshAccessToken(refresh_token);
+    return access_token;
   }
 }

@@ -17,17 +17,12 @@ import { SigninDto } from './dtos/signin.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { OutAdminDto } from './dtos/out-admin.dto';
-import { TokenService } from '../token/token.service';
-import { MAX_AGE } from '../util/constant';
 
 @ApiTags('auth')
 @Controller('auth')
 @Serialize(OutAdminDto)
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private tokenService: TokenService,
-  ) {}
+  constructor(private authService: AuthService) {}
   /**
    * 계정을 생성한다.
    */
@@ -42,8 +37,8 @@ export class AuthController {
   @Post('/signup')
   async signup(@Body() dto: SignupDto) {
     const { login_id, password, name } = dto;
-    const admin = await this.authService.signup(login_id, password, name);
-    return admin;
+    await this.authService.signup(login_id, password, name);
+    return;
   }
 
   /**
@@ -60,22 +55,9 @@ export class AuthController {
   })
   @Post('/signin')
   @HttpCode(200)
-  async signin(
-    @Body() dto: SigninDto,
-    @Res({ passthrough: true }) res: ExpressResponse,
-  ) {
+  async signin(@Body() dto: SigninDto) {
     const { login_id, password } = dto;
     const admin = await this.authService.signin(login_id, password);
-    const payload = {
-      id: admin.id,
-      name: admin.name,
-    };
-    const { access_token, refresh_token } = await this.tokenService.signTokens(
-      admin.id,
-      payload,
-    );
-    res.cookie('access_token', access_token, { maxAge: MAX_AGE });
-    res.cookie('refresh_token', refresh_token, { maxAge: MAX_AGE });
     return admin;
   }
 
@@ -88,9 +70,14 @@ export class AuthController {
     @Req() req: ExpressRequest,
     @Res({ passthrough: true }) res: ExpressResponse,
   ) {
-    console.log(req.cookies);
-    res.clearCookie('access_token');
-    res.clearCookie('refresh_token');
     return;
   }
+
+  // @Get('/refresh')
+  // async refresh(
+  //   @Req() req: ExpressRequest,
+  //   @Res({ passthrough: true }) res: ExpressResponse,
+  // ) {
+  //   return;
+  // }
 }

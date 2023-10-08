@@ -36,9 +36,9 @@ export class Keyword {
   isActive: boolean;
 
   @OneToMany(() => KeywordHistory, (history) => history.keyword)
-  histories: KeywordHistory[];
+  histories?: KeywordHistory[];
   @OneToMany(() => AnalysisComment, (comment) => comment.keyword)
-  comments: AnalysisComment[];
+  comments?: AnalysisComment[];
 
   @CreateDateColumn()
   createdAt: Date;

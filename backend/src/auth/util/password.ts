@@ -9,7 +9,7 @@ export const genHash = async (user_pass: string, salt: string) => {
 };
 
 export const generatePassword = async (user_pass: string) => {
-  const salt = randomBytes(8).toString('hex'); // random salt 생성
+  const salt = randomBytes(16).toString('hex'); // random salt 생성
   const hash = await genHash(user_pass, salt); // 해시 생성
   return `${hash}.${salt}`; // 해시 + salt 조합한 비밀번호 정보 반환
 };

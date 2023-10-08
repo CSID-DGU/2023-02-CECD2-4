@@ -44,8 +44,7 @@ describe('func generatePassword', () => {
         });
       });
     //Act
-    const result = await pwmodule.generatePassword(input);
-    console.log(result);
+    await pwmodule.generatePassword(input);
     //Assertion
     expect(genHashSpyFn).toHaveBeenCalled();
     //Restore

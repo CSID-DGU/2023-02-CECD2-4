@@ -1,59 +1,86 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
-import { randomBytes } from 'crypto';
-
-import { Token } from './token.entity';
-import { Repository } from 'typeorm';
 import { MAX_AGE } from '../util/constant';
-// import { AdminUser } from 'src/admin/admin.entity';
+import { IOutAdminUser } from '../admin/util/admin.type';
+import { TokenValidator } from './token.validator';
+import { TokenInfoService } from './tokeninfo/tokenInfo.service';
+import { AccessTokenType, RefreshTokenType } from './util/token.type';
 
 @Injectable()
 export class TokenService {
   constructor(
-    @InjectRepository(Token) private tokenRepo: Repository<Token>,
+    private tokeninfoService: TokenInfoService,
     private config: ConfigService,
     private jwtService: JwtService,
+    private tokenValidator: TokenValidator,
   ) {}
 
   /**
    * access_token을 검증하고, 결과를 반환한다.
    */
   async verifyAccessToken(access_token: string) {
-    return await this.jwtService.verifyAsync(access_token, {
-      secret: this.config.get('JWT_ACCESS_SECRET'),
-    });
-  }
-  /**
-   * refresh_token을 이용하여 access_token을 갱신한다
-   * @param refresh_token 갱신 토큰
-   */
-  async refreshAccessToken(user_id: number, refresh_token: string) {
-    const { refresh_key, expiration_date } = await this.getTokenInfo(user_id);
-    // 토큰이 유효하지 않다면
-    if (Date.now() > expiration_date.getTime())
-      throw new UnauthorizedException('refresh token is not valid');
+    const exception_message = 'access token is not valid';
+    let payload: AccessTokenType;
     try {
-      const payload = await this.jwtService.verifyAsync(refresh_token, {
-        secret: refresh_key,
-      });
-
-      const access_token = await this.jwtService.signAsync(payload, {
+      // refresh token 인증
+      payload = await this.jwtService.verifyAsync(access_token, {
         secret: this.config.get('JWT_ACCESS_SECRET'),
       });
-      return access_token;
     } catch {
-      throw new UnauthorizedException('refresh token is not valid');
+      throw new UnauthorizedException(exception_message);
     }
+    // access token 내부 값 검증 -> AccessTokenType
+    const isValid = this.tokenValidator.validateRefreshToken(payload);
+    if (!isValid) {
+      throw new UnauthorizedException(exception_message);
+    }
+
+    return payload;
+  }
+  /**
+   * refresh_token을 이용하여 access_token을 갱신한다.
+   * @param refresh_token 갱신 토큰
+   */
+  async refreshAccessToken(refresh_token: string) {
+    const exception_message = 'refresh token is not valid';
+    let payload: RefreshTokenType;
+
+    try {
+      // refresh token 인증
+      payload = await this.jwtService.verifyAsync(refresh_token, {
+        secret: this.config.get('JWT_REFRESH_SECRET'),
+      });
+    } catch {
+      throw new UnauthorizedException(exception_message);
+    }
+    // refresh token 내부 값 검증 -> RefreshTokenType
+    const isValid = this.tokenValidator.validateRefreshToken(payload);
+    if (!isValid) {
+      throw new UnauthorizedException(exception_message);
+    }
+
+    // refresh key 비교 -> 다르면 이미 만료된 토큰
+    const tokenInfo = await this.tokeninfoService.getTokenInfo(payload.data.id);
+    if (!tokenInfo || tokenInfo.refresh_key != payload.refresh_key) {
+      throw new UnauthorizedException(exception_message);
+    }
+
+    // access token 만들어서 반환
+    const access_token = await this.signAccessToken(payload.data);
+    return access_token;
   }
 
-  async signTokens(user_id: number, payload: any) {
+  /**
+   * access token 및 refresh token을 생성하여 반환한다.
+   */
+  async signTokens(user_id: number, payload: IOutAdminUser) {
     const access_token = await this.signAccessToken(payload);
 
-    const key = randomBytes(32).toString('hex');
-    const { refresh_key } = await this.updateTokenInfo(user_id, key);
+    const { refresh_key } =
+      await this.tokeninfoService.updateTokenInfo(user_id);
+
     const refresh_token = await this.signRefreshToken(payload, refresh_key);
 
     return {
@@ -61,54 +88,32 @@ export class TokenService {
       refresh_token,
     };
   }
-
-  private async signAccessToken(payload: any) {
-    const access_token = await this.jwtService.signAsync(payload, {
+  /**
+   * access token을 생성한다. 토큰 서비스 내부적으로만 사용
+   */
+  private async signAccessToken(payload: IOutAdminUser) {
+    const inner_payload: AccessTokenType = {
+      data: payload,
+    };
+    const access_token = await this.jwtService.signAsync(inner_payload, {
       expiresIn: '5m',
       secret: this.config.get('JWT_ACCESS_SECRET'),
     });
     return access_token;
   }
 
-  private async signRefreshToken(payload: any, refresh_key: string) {
-    const refresh_token = await this.jwtService.signAsync(payload, {
+  /**
+   * refresh token을 생성한다. 토큰 서비스 내부적으로만 사용
+   */
+  private async signRefreshToken(payload: IOutAdminUser, refresh_key: string) {
+    const inner_payload: RefreshTokenType = {
+      data: payload,
+      refresh_key: refresh_key,
+    };
+    const refresh_token = await this.jwtService.signAsync(inner_payload, {
       expiresIn: MAX_AGE,
-      secret: refresh_key,
+      secret: this.config.get('JWT_REFRESH_SECRET'),
     });
     return refresh_token;
   }
-  /**
-   * 토큰 정보를 갱신한다.
-   */
-  async updateTokenInfo(user_id: number, key: string | null) {
-    if (!user_id) throw new UnauthorizedException('User Not Defined');
-
-    let tokenInfo = await this.tokenRepo.findOneBy({ user_id });
-    if (!tokenInfo) {
-      tokenInfo = this.tokenRepo.create();
-      tokenInfo.user_id = user_id;
-    }
-    // 키 갱신
-    tokenInfo.refresh_key = key;
-    tokenInfo.expiration_date = new Date(Date.now() + MAX_AGE * 1000); //Date는 ms 단위
-
-    return await this.tokenRepo.save(tokenInfo);
-  }
-
-  /**
-   * RefreshTokenKey를 가져온다.
-   */
-  async getTokenInfo(user_id: number) {
-    if (!user_id) throw new UnauthorizedException(`User Not Defined`);
-    const tokenInfo = await this.tokenRepo.findOne({
-      where: {
-        user_id,
-      },
-    });
-    return tokenInfo;
-  }
-
-  // async saveTokenInfo() {
-  //   const tokenInfo = await this.tokenRepo.findOneBy({ user_id });
-  // }
 }

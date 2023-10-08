@@ -52,5 +52,5 @@ export class KeywordHistory {
   keyword_id: number;
   @JoinColumn({ name: 'keyword_id' })
   @ManyToOne(() => Keyword, (keyword) => keyword.histories)
-  keyword: Keyword;
+  keyword?: Keyword;
 }

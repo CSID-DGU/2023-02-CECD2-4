@@ -33,7 +33,7 @@ export class ArticleContent {
 
   @JoinColumn({ name: 'comment_id' })
   @ManyToOne(() => AnalysisComment, (comment) => comment.news_sentences)
-  comment: AnalysisComment;
+  comment?: AnalysisComment;
 
   constructor(content: string, score: number) {
     this.content = content;
