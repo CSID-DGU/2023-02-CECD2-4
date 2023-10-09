@@ -18,7 +18,7 @@ export class TokenInfoService {
    */
   async updateTokenInfo(user_id?: number) {
     const error_message = 'User Not Defined';
-    if (!user_id || isNaN(user_id))
+    if (user_id === undefined || user_id === null || isNaN(user_id))
       throw new UnauthorizedException(error_message);
 
     let tokenInfo = await this.tokenRepo.findOneBy({ user_id });
@@ -34,7 +34,6 @@ export class TokenInfoService {
     try {
       tokenInfo = await this.tokenRepo.save(tokenInfo);
     } catch (e) {
-      console.error(e);
       throw new UnauthorizedException(error_message);
     }
     return tokenInfo;
@@ -44,7 +43,7 @@ export class TokenInfoService {
    * 토큰 정보를 가져온다.
    */
   async getTokenInfo(user_id?: number) {
-    if (!user_id || isNaN(user_id))
+    if (user_id === undefined || user_id === null || isNaN(user_id))
       throw new UnauthorizedException(`User Not Defined`);
     const tokenInfo = await this.tokenRepo.findOneBy({ user_id });
     return tokenInfo;
