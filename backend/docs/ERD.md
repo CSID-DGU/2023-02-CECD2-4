@@ -56,12 +56,19 @@ erDiagram
       string name
       date createdAt
     }
+    TokenInfo {
+      number id PK
+      string refresh_key "nullable"
+      date updatedAt
+      number user_id FK
+    }
     NewsSource {
       number id PK
       number media_id
       string media_name
       date createdAt
     }
+    Admin ||--o| TokenInfo: ""
     Admin ||--o{ KeywordHistory: ""
     Article ||--o{ Comment: ""
     Keyword ||--o{ AnalysisComment: ""
@@ -119,4 +126,5 @@ interface CrawlingDataType {
   - Keyword: 데이터 수집 대상이 되는 키워드
   - KeywordHistory: 키워드에 대해 관리자가 수행한 동작 기록
   - Admin: 관리자 유저
+  - TokenInfo: 관리자가 로그인 시 필요한 토큰 정보
   - NewsSource: 뉴스를 읽어 오는 언론사. 상세 검색 페이지에서 ID 추출 필요
