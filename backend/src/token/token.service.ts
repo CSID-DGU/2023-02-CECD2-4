@@ -2,11 +2,11 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
-import { ACCESS_MAX_AGE_MS, REFRESH_MAX_AGE } from './util/constant';
 import { IOutAdminUser } from '../admin/util/admin.type';
 import { TokenValidator } from './token.validator';
 import { TokenInfoService } from './tokeninfo/tokenInfo.service';
 import { AccessTokenType, RefreshTokenType } from './util/token.type';
+import { ACCESS_MAX_AGE_MS, REFRESH_MAX_AGE } from './util/constant';
 
 @Injectable()
 export class TokenService {
@@ -32,7 +32,7 @@ export class TokenService {
       throw new UnauthorizedException(exception_message);
     }
     // access token 내부 값 검증 -> AccessTokenType
-    const isValid = this.tokenValidator.validateRefreshToken(payload);
+    const isValid = this.tokenValidator.validateAccessToken(payload);
     if (!isValid) {
       throw new UnauthorizedException(exception_message);
     }

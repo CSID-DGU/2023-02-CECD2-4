@@ -24,8 +24,8 @@ export class TokenInfo {
   /**
    * refresh token에 사용되는 키. 현재 시스템은 refresh token을 각 유저별로 관리함.
    */
-  @Column()
-  refresh_key: string;
+  @Column({ nullable: true })
+  refresh_key?: string;
 
   /**
    * 토큰 갱신일
