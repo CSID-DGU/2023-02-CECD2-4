@@ -8,6 +8,7 @@ import EmotionDetailPage from './pages/EmotionDetailPage/EmotionDetailPage';
 import CommentDetailPage from './pages/CommentDetailPage/CommentDetailPage';
 import AdminLoginPage from './pages/Admin/LoginPage/AdminLoginPage';
 import AdminAddKeywordPage from './pages/Admin/AddKeywordPage/AdminAddKeywordPage';
+import AdminDetailKeywordPage from './pages/Admin/DetailKeywordPage/AdminDetailKeywordPage';
 
 const Router = (props) => {
     return (
@@ -20,6 +21,7 @@ const Router = (props) => {
                     <Route path="/comment_detail/*" element={<CommentDetailPage/>}></Route>
                     <Route path="/admin/login/" element={<AdminLoginPage/>}></Route>
                     <Route path="/admin/add_keyword/" element={<AdminAddKeywordPage/>}></Route>
+                    <Route path="/admin/detail_keyword/" element={<AdminDetailKeywordPage/>}></Route>
                 </Routes>
             <Footer/>
         </BrowserRouter>
