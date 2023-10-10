@@ -24,7 +24,8 @@ if __name__ == '__main__':
 
     sqs_response = getMessagesFromSQS(sqs, queue_url)
     for res in sqs_response:
+        print(res['keyword']) # keyword로 가져올 수 있음
         news_response = getNewsResponse(s3, keys['S3_BUCKET'], res['key'])
-        print(news_response['keyword'])
-        print(news_response['data'][0]['comments'][0])
-        print(news_response)
+        # print(news_response['keyword'])
+        # print(news_response['data'][0]['comments'][0])
+        # print(news_response)
