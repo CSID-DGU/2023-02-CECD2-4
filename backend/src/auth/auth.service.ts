@@ -10,6 +10,9 @@ export class AuthService {
     private tokenService: TokenService,
   ) {}
 
+  /**
+   * 유저를 생성하는 코드
+   */
   async signup(login_id: string, password: string, name: string) {
     // 유저 존재 확인
     const adminExist = await this.adminService.isExist(login_id);
@@ -27,6 +30,9 @@ export class AuthService {
     return user;
   }
 
+  /**
+   * 유저 로그인과 관련된 코드.
+   */
   async signin(login_id: string, password: string) {
     const errorMessage = 'something wrong with email or password';
     const user = await this.adminService.findByLoginId(login_id);
@@ -38,12 +44,21 @@ export class AuthService {
     if (!passMatch) {
       throw new BadRequestException(errorMessage);
     }
-    return user;
+    const token_info = await this.tokenService.signTokens(user.id, {
+      id: user.id,
+      name: user.name,
+    });
+    return {
+      user,
+      token_info,
+    };
   }
-
+  /**
+   * 토큰을 갱신하고, 관련된 정보를 반환한다.
+   */
   async refresh(refresh_token: string) {
-    const access_token =
+    const token_info =
       await this.tokenService.refreshAccessToken(refresh_token);
-    return access_token;
+    return token_info;
   }
 }

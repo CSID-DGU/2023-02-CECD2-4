@@ -16,7 +16,7 @@ export class SerializeInterceptor<T> implements NestInterceptor {
     return next.handle().pipe(
       map((item) => {
         return plainToInstance(this.ctor, item, {
-          excludeExtraneousValues: true,
+          excludeExtraneousValues: true, // 이외의 값이 존재하면 지우고 내보낸다
         });
       }),
     );

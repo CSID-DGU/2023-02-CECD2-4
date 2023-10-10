@@ -1,26 +1,13 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Res,
-  Req,
-  HttpCode,
-} from '@nestjs/common';
-import {
-  Response as ExpressResponse,
-  Request as ExpressRequest,
-} from 'express';
+import { Controller, Post, Body, HttpCode } from '@nestjs/common';
 import { SignupDto } from './dtos/signup.dto';
 import { AuthService } from './auth.service';
-import { SigninDto } from './dtos/signin.dto';
+import { SigninResDto, SigninReqDto } from './dtos/signin.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Serialize } from '../interceptors/serialize.interceptor';
-import { OutAdminDto } from './dtos/out-admin.dto';
+import { RefreshReqDto, RefreshResDto } from './dtos/refresh.dto';
 
 @ApiTags('auth')
 @Controller('auth')
-@Serialize(OutAdminDto)
 export class AuthController {
   constructor(private authService: AuthService) {}
   /**
@@ -46,8 +33,8 @@ export class AuthController {
    */
   @ApiResponse({
     status: 200,
-    description: '로그인 성공, 일부 유저 정보 반환',
-    type: () => OutAdminDto,
+    description: '로그인 성공, 일부 유저정보 및 토큰 관련  정보 반환',
+    type: () => SigninResDto,
   })
   @ApiResponse({
     status: 400,
@@ -55,29 +42,21 @@ export class AuthController {
   })
   @Post('/signin')
   @HttpCode(200)
-  async signin(@Body() dto: SigninDto) {
+  @Serialize(SigninResDto)
+  async signin(@Body() dto: SigninReqDto): Promise<SigninResDto> {
     const { login_id, password } = dto;
-    const admin = await this.authService.signin(login_id, password);
-    return admin;
+    const login_info = await this.authService.signin(login_id, password);
+    console.log(login_info);
+    return login_info;
   }
 
-  /**
-   * 계정을 로그아웃한다.
-   */
-  @Get('/signout')
-  @HttpCode(200)
-  async signout(
-    @Req() req: ExpressRequest,
-    @Res({ passthrough: true }) res: ExpressResponse,
-  ) {
-    return;
+  @ApiResponse({
+    status: 200,
+    description: 'access token을 갱신. 갱신된 토큰 및 만료일 반환',
+    type: () => RefreshResDto,
+  })
+  @Post('/refresh')
+  async refresh(@Body() dto: RefreshReqDto) {
+    return await this.authService.refresh(dto.refresh_token);
   }
-
-  // @Get('/refresh')
-  // async refresh(
-  //   @Req() req: ExpressRequest,
-  //   @Res({ passthrough: true }) res: ExpressResponse,
-  // ) {
-  //   return;
-  // }
 }

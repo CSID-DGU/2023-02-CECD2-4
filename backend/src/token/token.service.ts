@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
-import { MAX_AGE } from '../util/constant';
+import { ACCESS_MAX_AGE_MS, REFRESH_MAX_AGE } from './util/constant';
 import { IOutAdminUser } from '../admin/util/admin.type';
 import { TokenValidator } from './token.validator';
 import { TokenInfoService } from './tokeninfo/tokenInfo.service';
@@ -68,7 +68,7 @@ export class TokenService {
     }
 
     // access token 만들어서 반환
-    const access_token = await this.signAccessToken(payload.data);
+    const access_token = await this.signAccessTokenWithExp(payload.data);
     return access_token;
   }
 
@@ -76,7 +76,8 @@ export class TokenService {
    * access token 및 refresh token을 생성하여 반환한다.
    */
   async signTokens(user_id: number, payload: IOutAdminUser) {
-    const access_token = await this.signAccessToken(payload);
+    const { access_token, expiration_date } =
+      await this.signAccessTokenWithExp(payload);
 
     const { refresh_key } =
       await this.tokeninfoService.updateTokenInfo(user_id);
@@ -85,13 +86,14 @@ export class TokenService {
 
     return {
       access_token,
+      expiration_date,
       refresh_token,
     };
   }
   /**
    * access token을 생성한다. 토큰 서비스 내부적으로만 사용
    */
-  private async signAccessToken(payload: IOutAdminUser) {
+  private async signAccessTokenWithExp(payload: IOutAdminUser) {
     const inner_payload: AccessTokenType = {
       data: payload,
     };
@@ -99,7 +101,11 @@ export class TokenService {
       expiresIn: '5m',
       secret: this.config.get('JWT_ACCESS_SECRET'),
     });
-    return access_token;
+    const expiration_date = new Date(
+      Date.now() + ACCESS_MAX_AGE_MS,
+    ).toUTCString();
+
+    return { access_token, expiration_date };
   }
 
   /**
@@ -111,7 +117,7 @@ export class TokenService {
       refresh_key: refresh_key,
     };
     const refresh_token = await this.jwtService.signAsync(inner_payload, {
-      expiresIn: MAX_AGE,
+      expiresIn: REFRESH_MAX_AGE,
       secret: this.config.get('JWT_REFRESH_SECRET'),
     });
     return refresh_token;
