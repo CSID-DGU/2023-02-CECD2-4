@@ -30,7 +30,8 @@ class KcBERT():
         # load model
         self.device = torch.device('cpu')
         self.model = self.BERTClassifier(self.bertmodel,  dr_rate=0.5).to(self.device)
-        self.model.load_state_dict(torch.load('models\KcBERT-emotions-model_state_dict3.pt',  map_location=torch.device('cpu')))  # state_dict를 불러 온 후, 기존 모델에 저장
+        
+        self.model.load_state_dict(torch.load('models\KcBERT-emotions-model_state_dict8.pt',  map_location=torch.device('cpu')))  # state_dict를 불러 온 후, 기존 모델에 저장
         
 
     class BERTSentenceTransform:

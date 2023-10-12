@@ -2,7 +2,9 @@
 # 감정분석 + 원인분석 약 6분 소요(DummyData: 118개 뉴스기사의 118*5개 댓글)
 
 import time
-import math
+
+import sys
+import io
 
 import boto3
 from mypy_boto3_sqs import SQSClient
@@ -22,6 +24,9 @@ if __name__ == '__main__':
     SBERT_model = SBERT()
     end_t = time.time()
     print("end! ({:0.5f} sec)".format(end_t - start_t))
+    
+    # 결과 저장할 text파일
+    text_file = open("result.txt", "w", encoding='utf-8')
     
     # sqs: SQSClient = boto3.client(
     #     'sqs',
@@ -80,10 +85,12 @@ if __name__ == '__main__':
                 ## 결과 출력해보고 싶다면 아래 주석 해제
                 #
                 ## 감정 분석 결과
-                print("{} --> {}".format(comment_content, emotion))
+                text_file.write("{} --> {}\n".format(comment_content, emotion))
+                # print("{} --> {}".format(comment_content, emotion))
                 ## 연관도 분석 결과
-                print("{} --> {}".format(comment_content, related))
-                print('')
+                text_file.write("{} --> {}\n\n".format(comment_content, related))
+                # print("{} --> {}".format(comment_content, related))
+                # print('')
     end_t = time.time()
     print("end! ({:0.5f} sec)".format(end_t - start_t))
 
