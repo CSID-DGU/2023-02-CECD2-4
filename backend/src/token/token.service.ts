@@ -73,27 +73,9 @@ export class TokenService {
   }
 
   /**
-   * access token 및 refresh token을 생성하여 반환한다.
-   */
-  async signTokens(user_id: number, payload: IOutAdminUser) {
-    const { access_token, expiration_date } =
-      await this.signAccessTokenWithExp(payload);
-
-    const { refresh_key } =
-      await this.tokeninfoService.updateTokenInfo(user_id);
-
-    const refresh_token = await this.signRefreshToken(payload, refresh_key);
-
-    return {
-      access_token,
-      expiration_date,
-      refresh_token,
-    };
-  }
-  /**
    * access token을 생성한다. 토큰 서비스 내부적으로만 사용
    */
-  private async signAccessTokenWithExp(payload: IOutAdminUser) {
+  async signAccessTokenWithExp(payload: IOutAdminUser) {
     const inner_payload: AccessTokenType = {
       data: payload,
     };
@@ -111,10 +93,13 @@ export class TokenService {
   /**
    * refresh token을 생성한다. 토큰 서비스 내부적으로만 사용
    */
-  private async signRefreshToken(payload: IOutAdminUser, refresh_key: string) {
+  async signRefreshToken(payload: IOutAdminUser) {
+    const { refresh_key } = await this.tokeninfoService.updateTokenInfo(
+      payload.id,
+    );
     const inner_payload: RefreshTokenType = {
       data: payload,
-      refresh_key: refresh_key,
+      refresh_key: refresh_key!,
     };
     const refresh_token = await this.jwtService.signAsync(inner_payload, {
       expiresIn: REFRESH_MAX_AGE,

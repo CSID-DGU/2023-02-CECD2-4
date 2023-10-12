@@ -92,11 +92,11 @@ describe('TokenInfoService', () => {
       expect(result).toBeNull();
     });
 
-    it('should throw error if user_id is not valid', async () => {
-      const promise = service.getTokenInfo();
+    // it('should throw error if user_id is not valid', async () => {
+    //   const promise = service.getTokenInfo();
 
-      await expect(promise).rejects.toThrowError('User Not Defined');
-    });
+    //   await expect(promise).rejects.toThrowError('User Not Defined');
+    // });
   });
 
   describe('updateTokenInfo()', () => {

@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { checkPassword, generatePassword } from './util/password';
 import { AdminService } from '../admin/admin.service';
 import { TokenService } from '../token/token.service';
@@ -44,19 +48,27 @@ export class AuthService {
     if (!passMatch) {
       throw new BadRequestException(errorMessage);
     }
-    const token_info = await this.tokenService.signTokens(user.id, {
+    // 외부로 노출할 유저 정보
+    const out_user = {
       id: user.id,
       name: user.name,
-    });
+    };
+
+    const access_token =
+      await this.tokenService.signAccessTokenWithExp(out_user);
+    const refresh_token = await this.tokenService.signRefreshToken(out_user);
     return {
       user,
-      token_info,
+      access_token,
+      refresh_token,
     };
   }
   /**
    * 토큰을 갱신하고, 관련된 정보를 반환한다.
    */
-  async refresh(refresh_token: string) {
+  async refresh(refresh_token?: string) {
+    if (!refresh_token)
+      throw new UnauthorizedException('refresh token invalid');
     const token_info =
       await this.tokenService.refreshAccessToken(refresh_token);
     return token_info;

@@ -1,6 +1,7 @@
 import { Expose, Type } from 'class-transformer';
 import { IsString } from 'class-validator';
 import { OutAdminDto } from './out-admin.dto';
+import { AccessTokenDto } from './access-token.dto';
 
 export class SigninReqDto {
   /**
@@ -18,23 +19,12 @@ export class SigninReqDto {
   password: string;
 }
 
-class TokenInfoDto {
-  @Expose()
-  access_token: string;
-
-  @Expose()
-  expiration_date: string;
-
-  @Expose()
-  refresh_token: string;
-}
-
 export class SigninResDto {
   @Expose()
   @Type(() => OutAdminDto)
   user: OutAdminDto;
 
   @Expose()
-  @Type(() => TokenInfoDto)
-  token_info: TokenInfoDto;
+  @Type(() => AccessTokenDto)
+  token_info: AccessTokenDto;
 }

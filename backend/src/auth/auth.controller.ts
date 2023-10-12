@@ -1,10 +1,21 @@
-import { Controller, Post, Body, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  Res,
+  Get,
+  Req,
+} from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Request, Response } from 'express';
+
 import { SignupDto } from './dtos/signup.dto';
 import { AuthService } from './auth.service';
 import { SigninResDto, SigninReqDto } from './dtos/signin.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Serialize } from '../interceptors/serialize.interceptor';
-import { RefreshReqDto, RefreshResDto } from './dtos/refresh.dto';
+import { RefreshResDto } from './dtos/refresh.dto';
+import { REFRESH_MAX_AGE, REFRESH_TOKEN_NAME } from 'src/token/util/constant';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -19,7 +30,7 @@ export class AuthController {
   })
   @ApiResponse({
     status: 400,
-    description: '계정을 생성할 수 없는 경우, 에러 반환',
+    description: '계정을 생성할 수 없는 경우. 에러 반환',
   })
   @Post('/signup')
   async signup(@Body() dto: SignupDto) {
@@ -33,7 +44,7 @@ export class AuthController {
    */
   @ApiResponse({
     status: 200,
-    description: '로그인 성공, 일부 유저정보 및 토큰 관련  정보 반환',
+    description: '로그인 성공, 일부 유저정보 및 토큰 관련 정보 반환',
     type: () => SigninResDto,
   })
   @ApiResponse({
@@ -43,20 +54,55 @@ export class AuthController {
   @Post('/signin')
   @HttpCode(200)
   @Serialize(SigninResDto)
-  async signin(@Body() dto: SigninReqDto): Promise<SigninResDto> {
+  async signin(
+    @Body() dto: SigninReqDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<SigninResDto> {
     const { login_id, password } = dto;
-    const login_info = await this.authService.signin(login_id, password);
-    console.log(login_info);
-    return login_info;
+    const { user, access_token, refresh_token } = await this.authService.signin(
+      login_id,
+      password,
+    );
+    //refresh token은 쿠키로 전달
+    res.cookie(REFRESH_TOKEN_NAME, refresh_token, {
+      maxAge: REFRESH_MAX_AGE,
+      httpOnly: true,
+    });
+    return {
+      user,
+      token_info: access_token,
+    };
   }
 
+  /**
+   * 로그아웃. refresh token을 쿠키에서 지운다.
+   */
   @ApiResponse({
     status: 200,
-    description: 'access token을 갱신. 갱신된 토큰 및 만료일 반환',
+    description: '로그아웃 성공',
+  })
+  @Get('/signout')
+  @HttpCode(200)
+  async signout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie(REFRESH_TOKEN_NAME);
+    return;
+  }
+
+  /**
+   * access token을 갱신. 갱신된 토큰 및 만료일 반환. refresh token은 쿠키에서 가져온다.
+   */
+  @ApiResponse({
+    status: 201,
+    description: '갱신된 access token 관련 정보',
     type: () => RefreshResDto,
   })
-  @Post('/refresh')
-  async refresh(@Body() dto: RefreshReqDto) {
-    return await this.authService.refresh(dto.refresh_token);
+  @ApiResponse({
+    status: 401,
+    description: 'refresh token이 유효하지 않음',
+  })
+  @Get('/refresh')
+  async refresh(@Req() req: Request): Promise<RefreshResDto> {
+    const refresh_token = req.cookies[REFRESH_TOKEN_NAME];
+    return await this.authService.refresh(refresh_token);
   }
 }
