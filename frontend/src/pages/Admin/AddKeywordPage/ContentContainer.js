@@ -65,7 +65,7 @@ input:focus + label, input:not(:placeholder-shown) + label{
 }
 `;
 
-const LoginBtn = styled.div`
+const AddBtn = styled.div`
 display:flex;
 justify-content:center;
 align-items:center;
@@ -91,7 +91,7 @@ const ContentContainer = (props) => {
                 <InputContent type="text" placeholder=" "></InputContent>
                 <Label>키워드 설명 </Label>
             </TextBoxContainer>
-            <LoginBtn>추가</LoginBtn>
+            <AddBtn>추가</AddBtn>
         </FormBox>
     );
 };

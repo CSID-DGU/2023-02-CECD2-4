@@ -1,5 +1,7 @@
 import React from 'react';
+import Main from "../../../components/Main/Main";
 import styled from 'styled-components';
+import ContentContainer from './ContentContainer';
 
 const TopContainer = styled.div`
 display: flex;
@@ -27,13 +29,17 @@ border-top: 1px solid #aaa;
 margin: 30px auto;
 `;
 
-const SubHeader = (props) => {
+
+const AdminDetailKeywordPage = () => {
     return (
+        <Main>
         <TopContainer>
-            <Label>키워드 추가</Label>
+            <Label>상세 키워드</Label>
             <Line/>
-        </TopContainer>        
+        </TopContainer> 
+        <ContentContainer/>
+        </Main>
     );
 };
 
-export default SubHeader;
+export default AdminDetailKeywordPage;

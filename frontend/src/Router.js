@@ -9,6 +9,7 @@ import CommentDetailPage from './pages/CommentDetailPage/CommentDetailPage';
 import AdminManagePage from './pages/Admin/ManagePage/AdminManagePage';
 import AdminLoginPage from './pages/Admin/LoginPage/AdminLoginPage';
 import AdminAddKeywordPage from './pages/Admin/AddKeywordPage/AdminAddKeywordPage';
+import AdminDetailKeywordPage from './pages/Admin/DetailKeywordPage/AdminDetailKeywordPage';
 import AdminIndexPage from './pages/Admin/IndexPage/AdminIndexPage';
 
 const Router = (props) => {
@@ -23,6 +24,7 @@ const Router = (props) => {
                     <Route path="/admin/manage/" element={<AdminManagePage/>}></Route>
                     <Route path="/admin/login/" element={<AdminLoginPage/>}></Route>
                     <Route path="/admin/add_keyword/" element={<AdminAddKeywordPage/>}></Route>
+                    <Route path="/admin/detail_keyword/" element={<AdminDetailKeywordPage/>}></Route>
                     <Route path="/admin/index/" element={<AdminIndexPage/>}></Route>
                 </Routes>
             <Footer/>
