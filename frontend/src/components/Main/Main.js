@@ -6,7 +6,8 @@ const Main = (props) => {
     useEffect(()=>{
         document.getElementById("main").style.flexDirection = props.direction
         document.getElementById("main").style.flexWrap = props.wrap;
-    }, [props.direction, props.wrap]);
+        document.getElementById("main").style.justifyContent = props.justify;
+    }, [props.direction, props.wrap, props.justify]);
 
     return (
         <div id="main" className='main_container'>
@@ -17,7 +18,8 @@ const Main = (props) => {
 
 Main.defaultProps = {
     direction: "column",
-    wrap: "nowrap"
+    wrap: "nowrap",
+    justify: "flex-start"
 }
 
 export default Main;
