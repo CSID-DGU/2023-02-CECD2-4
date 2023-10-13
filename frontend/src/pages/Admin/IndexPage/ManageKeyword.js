@@ -1,7 +1,8 @@
 import React, {useRef} from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const ManageKeywordBtn = styled.div`
+const ManageKeywordBtn = styled(Link)`
 display:flex;
 flex-direction:column;
 justify-content:space-evenly;
@@ -16,6 +17,7 @@ background-color: #dfdfdf;
 padding:10px;
 border:1px solid #999;
 border-radius:10px;
+text-decoration: none;
 `;
 const Label = styled.span`
 align-self:center;
@@ -53,7 +55,7 @@ const ManageKeyword = (props) => {
         content.current.style.display = "none";
     }
     return (
-        <ManageKeywordBtn onMouseEnter={mouse_enter} onMouseLeave={mouse_leave} ref={btn}>
+        <ManageKeywordBtn to="/admin/manage/"onMouseEnter={mouse_enter} onMouseLeave={mouse_leave} ref={btn}>
             <Label ref={btn_label}>키워드 관리</Label>
             <Title ref={title_text}>키워드를 관리할 수 있습니다.</Title>
             <ContentContainer ref={content}>

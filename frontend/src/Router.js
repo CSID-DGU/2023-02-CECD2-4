@@ -24,7 +24,7 @@ const Router = (props) => {
                     <Route path="/admin/manage/" element={<AdminManagePage/>}></Route>
                     <Route path="/admin/login/" element={<AdminLoginPage/>}></Route>
                     <Route path="/admin/add_keyword/" element={<AdminAddKeywordPage/>}></Route>
-                    <Route path="/admin/detail_keyword/" element={<AdminDetailKeywordPage/>}></Route>
+                    <Route path="/admin/detail_keyword/*" element={<AdminDetailKeywordPage/>}></Route>
                     <Route path="/admin/index/" element={<AdminIndexPage/>}></Route>
                 </Routes>
             <Footer/>
