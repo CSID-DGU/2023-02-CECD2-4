@@ -15,9 +15,9 @@ export const typeormAsyncOptions: TypeOrmModuleAsyncOptions = {
       username: user,
       password: password,
       entities: ['dist/**/*.entity.js'],
-      migrations: ['dist/migration/*.js'],
       charset: 'utf8mb4', // emoji까지 표현 가능,
-      synchronize: true,
+      // migrations: ['dist/migration/*.js'],
+      // synchronize: true,
       logging: ['log', 'info', 'error'],
     };
   },

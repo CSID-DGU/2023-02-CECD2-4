@@ -1,0 +1,13 @@
+version: '3'
+services:
+  backend_server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    env_file:
+      - "./server/.env"
+    ports:
+      - "80:3000"
+    volumes:
+      - /home/app/node_modules
+      - ./server:/home/app
