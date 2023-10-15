@@ -49,13 +49,14 @@ export class KeywordService {
     return result;
   }
   /**
-   * 이름을 기반으로 키워드 검색
+   * 이름을 기반으로 키워드 검색. 히스토리 함께 반환
    */
   async findByName(name: string) {
     return await this.keywordRepo.findOne({
       where: {
         name: name,
       },
+      relations: { histories: true },
     });
   }
 

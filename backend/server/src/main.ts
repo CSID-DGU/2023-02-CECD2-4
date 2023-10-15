@@ -10,7 +10,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
+      whitelist: true, // dto에 정의 안된 프로퍼티는 제거
       transform: true, // dto에 정의된 타입으로 변경
       transformOptions: {
         enableImplicitConversion: true, // Transform 명시 안해도 알아서 처리해줌

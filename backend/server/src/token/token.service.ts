@@ -5,24 +5,28 @@ import { JwtService } from '@nestjs/jwt';
 import { IOutAdminUser } from '../admin/util/admin.type';
 import { TokenValidator } from './token.validator';
 import { TokenInfoService } from './tokeninfo/tokenInfo.service';
-import { AccessTokenType, RefreshTokenType } from './util/token.type';
+import {
+  AccessTokenInfo,
+  AccessTokenObj,
+  RefreshTokenObj,
+} from './util/token.type';
 import { ACCESS_MAX_AGE_MS, REFRESH_MAX_AGE } from './util/constant';
 
 @Injectable()
 export class TokenService {
   constructor(
-    private tokeninfoService: TokenInfoService,
     private config: ConfigService,
     private jwtService: JwtService,
+    private tokeninfoService: TokenInfoService,
     private tokenValidator: TokenValidator,
   ) {}
 
   /**
    * access_token을 검증하고, 결과를 반환한다.
    */
-  async verifyAccessToken(access_token: string) {
+  async verifyAccessToken(access_token: string): Promise<AccessTokenObj> {
     const exception_message = 'access token is not valid';
-    let payload: AccessTokenType;
+    let payload: AccessTokenObj;
     try {
       // refresh token 인증
       payload = await this.jwtService.verifyAsync(access_token, {
@@ -43,9 +47,9 @@ export class TokenService {
    * refresh_token을 이용하여 access_token을 갱신한다.
    * @param refresh_token 갱신 토큰
    */
-  async refreshAccessToken(refresh_token: string) {
+  async refreshAccessToken(refresh_token: string): Promise<AccessTokenInfo> {
     const exception_message = 'refresh token is not valid';
-    let payload: RefreshTokenType;
+    let payload: RefreshTokenObj;
 
     try {
       // refresh token 인증
@@ -75,8 +79,10 @@ export class TokenService {
   /**
    * access token을 생성한다. 토큰 서비스 내부적으로만 사용
    */
-  async signAccessTokenWithExp(payload: IOutAdminUser) {
-    const inner_payload: AccessTokenType = {
+  async signAccessTokenWithExp(
+    payload: IOutAdminUser,
+  ): Promise<AccessTokenInfo> {
+    const inner_payload: AccessTokenObj = {
       data: payload,
     };
     const access_token = await this.jwtService.signAsync(inner_payload, {
@@ -93,11 +99,11 @@ export class TokenService {
   /**
    * refresh token을 생성한다. 토큰 서비스 내부적으로만 사용
    */
-  async signRefreshToken(payload: IOutAdminUser) {
+  async signRefreshToken(payload: IOutAdminUser): Promise<string> {
     const { refresh_key } = await this.tokeninfoService.updateTokenInfo(
       payload.id,
     );
-    const inner_payload: RefreshTokenType = {
+    const inner_payload: RefreshTokenObj = {
       data: payload,
       refresh_key: refresh_key!,
     };

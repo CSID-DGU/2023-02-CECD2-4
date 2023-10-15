@@ -18,6 +18,7 @@ export const typeormAsyncOptions: TypeOrmModuleAsyncOptions = {
       migrations: ['dist/migration/*.js'],
       charset: 'utf8mb4', // emoji까지 표현 가능,
       synchronize: true,
+      logging: ['log', 'info', 'error'],
     };
   },
 };

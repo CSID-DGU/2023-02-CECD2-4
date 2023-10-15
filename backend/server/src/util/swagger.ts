@@ -10,6 +10,7 @@ export function swaggerSetup(app: INestApplication) {
     .setTitle('팀바나나 API 목록')
     .setDescription('팀 바나나에서 사용하는 API입니다')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
