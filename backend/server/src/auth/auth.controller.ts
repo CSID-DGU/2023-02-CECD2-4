@@ -15,7 +15,7 @@ import { AuthService } from './auth.service';
 import { SigninResDto, SigninReqDto } from './dtos/signin.dto';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { RefreshResDto } from './dtos/refresh.dto';
-import { REFRESH_MAX_AGE, REFRESH_TOKEN_NAME } from 'src/token/util/constant';
+import { REFRESH_MAX_AGE, REFRESH_TOKEN_NAME } from '../token/util/constant';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -51,9 +51,9 @@ export class AuthController {
     status: 400,
     description: '로그인 실패(유저 X, 비밀번호 매칭 X 포함)',
   })
+  @Serialize(SigninResDto)
   @Post('/signin')
   @HttpCode(200)
-  @Serialize(SigninResDto)
   async signin(
     @Body() dto: SigninReqDto,
     @Res({ passthrough: true }) res: Response,

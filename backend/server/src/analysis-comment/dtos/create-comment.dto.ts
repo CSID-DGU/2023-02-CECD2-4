@@ -1,10 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsString,
-  IsDateString,
-  IsNumber,
-  ValidateNested,
-} from 'class-validator';
+import { IsString, IsNumber, ValidateNested, IsDate } from 'class-validator';
 import { Type } from 'class-transformer';
 
 /**
@@ -16,7 +11,7 @@ export class createCommentDto {
    * 댓글 생성일
    * @example '2022-03-31'
    */
-  @IsDateString()
+  @IsDate()
   createdAt: Date;
   /**
    * 댓글 내용
@@ -52,6 +47,13 @@ export class createCommentDto {
    */
   @IsString()
   emotion: string;
+
+  /**
+   * 대응되는 키워드의 id 값
+   * @example 1
+   */
+  @IsNumber()
+  keyword_id: number;
 
   /**
    * 연관성 있는 기사 내 문장들

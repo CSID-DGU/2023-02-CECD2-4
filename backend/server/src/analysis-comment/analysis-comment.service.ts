@@ -14,8 +14,6 @@ export class AnalysisCommentService {
 
   async create(dtos: createCommentDto): Promise<AnalysisComment> {
     const comment = this.repo.create();
-    // const {news_sentences, .. other} = dtos;
-    // Object.assign(comment, other);
     comment.createdAt = dtos.createdAt;
     comment.content = dtos.content;
     comment.sympathy = dtos.sympathy;

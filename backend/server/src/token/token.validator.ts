@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import Ajv, { JSONSchemaType, ValidateFunction } from 'ajv';
-import { AccessTokenType, RefreshTokenType } from './util/token.type';
+import { AccessTokenObj, RefreshTokenObj } from './util/token.type';
 
 @Injectable()
 export class TokenValidator {
   constructor() {
     const ajv = new Ajv({ removeAdditional: 'all' });
     // Access Token 구조 정의
-    const AccessTokenSchema: JSONSchemaType<AccessTokenType> = {
+    const AccessTokenSchema: JSONSchemaType<AccessTokenObj> = {
       type: 'object',
       properties: {
         data: {
@@ -22,7 +22,7 @@ export class TokenValidator {
       required: ['data'],
     };
     // Refresh Token 구조 정의
-    const RefreshTokenSchema: JSONSchemaType<RefreshTokenType> = {
+    const RefreshTokenSchema: JSONSchemaType<RefreshTokenObj> = {
       type: 'object',
       properties: {
         data: {
@@ -42,6 +42,6 @@ export class TokenValidator {
     this.validateRefreshToken = ajv.compile(RefreshTokenSchema);
   }
 
-  declare validateAccessToken: ValidateFunction<AccessTokenType>;
-  declare validateRefreshToken: ValidateFunction<AccessTokenType>;
+  declare validateAccessToken: ValidateFunction<AccessTokenObj>;
+  declare validateRefreshToken: ValidateFunction<AccessTokenObj>;
 }

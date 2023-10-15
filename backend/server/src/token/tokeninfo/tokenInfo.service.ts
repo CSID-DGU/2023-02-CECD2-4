@@ -5,7 +5,6 @@ import { randomBytes } from 'crypto';
 
 import { TokenInfo } from './tokeninfo.entity';
 import { Repository } from 'typeorm';
-// import { AdminUser } from 'src/admin/admin.entity';
 
 @Injectable()
 export class TokenInfoService {
