@@ -6,7 +6,9 @@ import { swaggerSetup } from './util/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  swaggerSetup(app);
+  if (process.env.NODE_ENV !== 'production') {
+    swaggerSetup(app);
+  }
   app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({

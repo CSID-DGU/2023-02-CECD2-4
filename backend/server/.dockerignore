@@ -1,0 +1,11 @@
+.git
+*Dockerfile*
+*docker-compose*
+node_modules
+stuff/*
+.vscode/*
+# files
+dist/**/*
+docs/**/*
+# environment & setting files
+.env
