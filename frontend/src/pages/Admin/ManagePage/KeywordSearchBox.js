@@ -68,8 +68,10 @@ line-height: 40px;
 color:#444;
 background-color:#ccc;
 text-decoration: none;
+transition:all 0.2s ease-in-out;
 &:hover {
     background-color:#aaa;
+    transition:all 0.2s ease-in-out;
 }
 `;
 const UnderLine = styled.hr`

@@ -34,7 +34,13 @@ font-weight: 500;
 font-size:20px;
 color:#444;
 background-color: #888888;
-text-decoration:none;
+text-decoration:none;;
+transition: all 0.2s ease-in-out;
+border-radius:10px;
+&:hover {
+    background-color: #ccc;
+    transition: all 0.2s ease-in-out;
+}
 `;
 const PageState = styled.div`
 display:flex;
@@ -80,7 +86,7 @@ const Header = (props) => {
             <HelloLabel>
                 안녕하세요, 관리자님!
             </HelloLabel>
-            <LogoutBtn>
+            <LogoutBtn to="/admin/login">
                 로그아웃
             </LogoutBtn></>
             : null}

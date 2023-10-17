@@ -13,11 +13,16 @@ height:40px;
 color:#444;
 overflow:hidden;
 transition:all 0.2s ease-in-out;
-background-color: #dfdfdf;
+background-color: #aaa;
 padding:10px;
 border:1px solid #999;
 border-radius:10px;
 text-decoration: none;
+transition: all 0.2s ease-in-out;
+&:hover {
+    background-color: #eee;
+    transition: all 0.2s ease-in-out;
+}
 `;
 const Label = styled.span`
 align-self:center;

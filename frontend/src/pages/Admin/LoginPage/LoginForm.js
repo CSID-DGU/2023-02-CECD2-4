@@ -55,8 +55,13 @@ font-size:25px;
 color:#444;
 border:0 none;
 border-radius:15px;
-background-color:#bbb;
+background-color:#888;
 text-decoration:none;
+transition: all 0.2s ease-in-out;
+&:hover {
+    background-color:#ccc;
+    transition: all 0.2s ease-in-out;
+}
 `;
 const LoginForm = (props) => {
     return (
