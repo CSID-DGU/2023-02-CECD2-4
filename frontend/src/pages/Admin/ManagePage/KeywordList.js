@@ -5,7 +5,6 @@ const ListContainer = styled.div`
 width: 80%;
 height: 70%;
 overflow:auto;
-background-color: azure;
 `;
 const Table = styled.table`
 width:100%;
@@ -29,11 +28,11 @@ border-bottom: 1px solid #c6c9cc;
 }
 `;
 const TR = styled.tr`
-&:hover {
-    background-color: rgba(255,255,255,0.3);
-}
-&:nth-child(even) td {
+&:nth-child(even) {
     background: #eaeaed;
+}
+&:hover {
+    background-color: rgba(0,0,0,0.3);
 }
 `;
 
