@@ -9,27 +9,39 @@ import { GetCommentsQueriesDto } from './dtos/get-comments-query.dto';
 export class AnalysisCommentService {
   constructor(
     @InjectRepository(AnalysisComment)
-    private repo: Repository<AnalysisComment>,
+    private comment_repo: Repository<AnalysisComment>,
+    @InjectRepository(ArticleContent)
+    private article_repo: Repository<ArticleContent>,
   ) {}
 
   async create(dtos: createCommentDto): Promise<AnalysisComment> {
-    const comment = this.repo.create();
+    let comment = this.comment_repo.create();
     comment.createdAt = dtos.createdAt;
     comment.content = dtos.content;
     comment.sympathy = dtos.sympathy;
     comment.antipathy = dtos.antipathy;
     comment.link = dtos.link;
-    comment.news_sentences = dtos.news_sentences.map(
-      (it) => new ArticleContent(it.content, it.score),
-    );
+    comment.keyword_id = dtos.keyword_id;
 
-    return await this.repo.save(comment);
+    comment = await this.comment_repo.save(comment);
+    const sentences: Omit<ArticleContent, 'id'>[] = dtos.news_sentences.map(
+      (it) => {
+        return {
+          comment_id: comment.id,
+          score: it.score,
+          content: it.content,
+        };
+      },
+    );
+    await this.article_repo.insert(sentences);
+
+    return comment;
   }
 
   async findMany({ search, psize, head_id, from, to }: GetCommentsQueriesDto) {
     if (!search) return [];
 
-    const qb = this.repo.createQueryBuilder();
+    const qb = this.comment_repo.createQueryBuilder();
     qb.select([
       'id',
       'createdAt',

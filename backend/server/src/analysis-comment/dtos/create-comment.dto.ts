@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNumber, ValidateNested, IsDate } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -58,13 +57,9 @@ export class createCommentDto {
   /**
    * 연관성 있는 기사 내 문장들
    */
-  @ApiProperty({
-    isArray: true,
-    type: () => [ArticleContentDto],
-  })
   @ValidateNested()
   @Type(() => ArticleContentDto) // nested 처리하기 위한 용도
-  news_sentences: [ArticleContentDto];
+  news_sentences: ArticleContentDto[];
 }
 
 class ArticleContentDto {

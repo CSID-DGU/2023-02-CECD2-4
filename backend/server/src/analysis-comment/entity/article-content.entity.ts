@@ -29,7 +29,7 @@ export class ArticleContent {
    * 댓글의 ID 값. 따로 지정 X
    */
   @Column()
-  comment_id: string;
+  comment_id: number;
 
   @JoinColumn({ name: 'comment_id' })
   @ManyToOne(() => AnalysisComment, (comment) => comment.news_sentences)

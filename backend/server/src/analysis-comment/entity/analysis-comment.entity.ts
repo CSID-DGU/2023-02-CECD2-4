@@ -53,6 +53,7 @@ export class AnalysisComment {
     eager: true,
   })
   news_sentences: ArticleContent[];
+
   @JoinColumn({ name: 'keyword_id' })
   @ManyToOne(() => Keyword, (keyword) => keyword.comments)
   keyword: Keyword;

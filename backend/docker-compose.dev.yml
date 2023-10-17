@@ -1,13 +1,24 @@
 version: '3'
 services:
-  backend_server:
+  backend:
     build:
       context: ./server
       dockerfile: Dockerfile.dev
     env_file:
       - "./server/.env"
-    ports:
-      - "80:3000"
     volumes:
       - /home/app/node_modules
       - ./server:/home/app
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 3
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
