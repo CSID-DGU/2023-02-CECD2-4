@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import {Link} from 'react-router-dom';
 import Main from "../../components/Main/Main";
 import RepInfo from "./RepInfo";
 import LineChart from './LineChart';
@@ -43,6 +44,19 @@ color:#777;
 border-bottom: 2px solid #ccc;
 font-size:20px;
 `;
+const Link2Detail = styled(Link)`
+font-family:"aggro";
+font-weight: 500;
+color:#777;
+text-decoration:none;
+font-size:15px;
+margin-left:10px;
+transition:all 0.2s ease-in-out;
+&:hover {
+    color:#bbb;
+    transition:all 0.2s ease-in-out;
+}
+`;
 
 const SearchResultPage = () => {
     const dispatch = useDispatch();
@@ -57,7 +71,12 @@ const SearchResultPage = () => {
                 <LeftContentContainer>
                     <PieChart/>
                     <CommentsContainer>
-                        <CommentsContainerCaption>대표 댓글</CommentsContainerCaption>
+                        <CommentsContainerCaption>
+                            대표 댓글
+                            <Link2Detail to="/emotion_detail/">
+                                {'>'} 자세히 보기
+                            </Link2Detail>
+                        </CommentsContainerCaption>
                         <RepComment emotion="긍정" color="red"/>
                         <RepComment emotion="부정" color="blue"/>
                     </CommentsContainer>
