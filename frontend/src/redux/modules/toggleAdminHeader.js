@@ -4,9 +4,9 @@ const LEAVE = 'toggleAdminHeader/LEAVE';
 export const enter = () => ({type:ENTER});
 export const leave = () => ({type:LEAVE});
 
-const isAdminInitialState = {isAdmin:false};
+const InitialState = {isAdmin:false};
 
-const toggleAdminHeader = (state=isAdminInitialState, action) => {
+const toggleAdminHeader = (state=InitialState, action) => {
     switch(action.type) {
         case ENTER:
             return {isAdmin:true};

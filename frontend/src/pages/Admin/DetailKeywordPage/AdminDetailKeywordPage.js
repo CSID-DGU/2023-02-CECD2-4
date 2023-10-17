@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import ContentContainer from './ContentContainer';
 import { useDispatch } from 'react-redux';
 import { enter } from '../../../redux/modules/toggleAdminHeader';
+import { managePage } from '../../../redux/modules/toggleAddManage';
 
 const TopContainer = styled.div`
 display: flex;
@@ -35,7 +36,8 @@ margin: 30px auto;
 const AdminDetailKeywordPage = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(enter())
+        dispatch(enter());
+        dispatch(managePage());
     }, [dispatch]);
     return (
         <Main>

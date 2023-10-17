@@ -4,12 +4,14 @@ import SubHeader from "./SubHeader";
 import ContentContainer from './ContentContainer';
 import { useDispatch } from 'react-redux';
 import { enter } from '../../../redux/modules/toggleAdminHeader';
+import { addPage } from '../../../redux/modules/toggleAddManage';
 
 
 const AdminAddKeywordPage = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(enter())
+        dispatch(enter());
+        dispatch(addPage());
     }, [dispatch]);
     return (
         <Main>
