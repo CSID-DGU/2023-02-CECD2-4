@@ -1,9 +1,19 @@
 import React from 'react';
-import "./RepLikes.css";
+import styled from 'styled-components';
+
+const LikesInfo = styled.div`
+font-size:20px;
+width:30%;
+height:100%;
+font-family: "aggro";
+font-weight: 500;
+color:#777;
+border: 2px solid #aaa;
+`;
 
 const RepLikes = (props) => {
     return (
-        <div className="likes_info">{props.likes}</div>
+        <LikesInfo>{props.likes}</LikesInfo>
     );
 };
 

@@ -1,9 +1,20 @@
 import React from 'react';
-import "./RepRelated.css";
+import styled from 'styled-components';
 
+const RelatedInfo = styled.div`
+font-size:20px;
+width:90%;
+height:80%;
+margin-top: 25px;
+margin-bottom: 25px;
+font-family: "aggro";
+font-weight: 500;
+color:#777;
+border: 2px solid #aaa;
+`;
 const RepRelated = (props) => {
     return (
-        <div className="related_info">{props.content}</div>
+        <RelatedInfo>{props.content}</RelatedInfo>
     );
 };
 
