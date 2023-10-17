@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Main from '../../../components/Main/Main';
 import LoginForm from './LoginForm';
 import IssueContact from './IssueContact';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { leave } from '../../../redux/modules/toggleAdminHeader';
 
 const CaptionContainer = styled.div`
     display:flex;
@@ -16,6 +18,10 @@ const CaptionContainer = styled.div`
 `;
 
 const AdminLoginPage = (props) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(leave())
+    }, [dispatch]);
     return (
         <Main>
             <CaptionContainer>

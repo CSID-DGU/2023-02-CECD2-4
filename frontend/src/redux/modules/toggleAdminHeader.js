@@ -9,9 +9,9 @@ const isAdminInitialState = {isAdmin:false};
 const toggleAdminHeader = (state=isAdminInitialState, action) => {
     switch(action.type) {
         case ENTER:
-            return {isAdmin:!(state.isAdmin)};
+            return {isAdmin:true};
         case LEAVE:
-            return {isAdmin:!(state.isAdmin)};
+            return {isAdmin:false};
         default:
             return state;
     }

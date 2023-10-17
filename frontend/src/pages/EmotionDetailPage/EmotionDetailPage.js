@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Main from "../../components/Main/Main";
 import RepInfo from "../SearchResultPage/RepInfo";
 import PieChart from './PieChart';
 import RepEmotion from './RepEmotion';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { leave } from '../../redux/modules/toggleAdminHeader';
 
 const BottomContainer = styled.div`
 display: flex;
@@ -40,6 +42,10 @@ font-size:20px;
 `;
 
 const EmotionDetailPage = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(leave())
+    }, [dispatch]);
     return (
         <Main>
             <RepInfo/>

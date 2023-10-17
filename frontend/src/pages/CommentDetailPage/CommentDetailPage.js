@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Main from "../../components/Main/Main";
 import RepInfo from "./RepInfo";
 import RepDetailComment from './RepDetailComment';
 import RepLikes from "./RepLikes";
 import RepRelated from './RepRelated';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { leave } from '../../redux/modules/toggleAdminHeader';
 
 const BottomContainer = styled.div`
 display: flex;
@@ -24,6 +26,10 @@ height:50%;
 `;
 
 const CommentDetailPage = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(leave())
+    }, [dispatch]);
     return (
         <Main>
             <RepInfo/>

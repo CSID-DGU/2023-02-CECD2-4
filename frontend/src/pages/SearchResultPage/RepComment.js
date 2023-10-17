@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Emotion = styled.div`
@@ -16,12 +17,14 @@ font-family: "aggro";
 font-weight: 500;
 color:#777;
 `;
-const Comment = styled.div`
+const Comment = styled(Link)`
 font-size:20px;
 width:75%;
 height:27px;
 margin-right: 10px;
+color:#777;
 border: 2px solid #aaa;
+text-decoration: none;
 `;
 const Likes = styled.div`
 `;
@@ -30,7 +33,7 @@ const RepComment = (props) => {
     return (
         <RepCommentContainer>
             <Emotion color={props.color}>{props.emotion}</Emotion>
-            <Comment>{props.comment}</Comment>
+            <Comment to="/emotion_detail/*">{props.comment}</Comment>
             <Likes>{props.likes}</Likes>
         </RepCommentContainer>
     );

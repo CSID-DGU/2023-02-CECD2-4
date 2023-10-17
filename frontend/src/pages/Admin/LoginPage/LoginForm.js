@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const LoginFormContainer = styled.div`
@@ -43,7 +44,7 @@ input:focus + label, input:not(:placeholder-shown) + label{
     transform: translateY(-27px) scale(0.7);
 }
 `;
-const LoginBtn = styled.div`
+const LoginBtn = styled(Link)`
 display:flex;
 justify-content:center;
 align-items:center;
@@ -55,6 +56,7 @@ color:#444;
 border:0 none;
 border-radius:15px;
 background-color:#bbb;
+text-decoration:none;
 `;
 const LoginForm = (props) => {
     return (
@@ -67,7 +69,7 @@ const LoginForm = (props) => {
                 <Input type="password" placeholder=" "></Input>
                 <Label>PW</Label>
             </TextBoxContainer>
-            <LoginBtn>로그인</LoginBtn>
+            <LoginBtn to="/admin/index">로그인</LoginBtn>
         </LoginFormContainer>
     );
 };
