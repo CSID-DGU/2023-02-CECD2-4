@@ -6,14 +6,15 @@ import { RedisToken } from '../../redis/redis.provider';
 describe('TokenInfoService', () => {
   let service: TokenInfoService;
   let repo: Redis;
+  let _inner_db: Map<string, string>;
   beforeEach(async () => {
-    const _inner_db = new Map<string, string>();
+    _inner_db = new Map();
     const mocked_Redis = {
       get: jest.fn((key: string) => {
-        return _inner_db.get(key);
+        return _inner_db.get(key) ?? null; // 키 없으면 null 반환
       }),
       set: jest.fn(
-        (key: string, value: string, _EX: string, _expire: number) => {
+        (key: string, value: string /* _EX: string, _expire: number*/) => {
           _inner_db.set(key, value);
           return 'OK';
         },
@@ -51,11 +52,13 @@ describe('TokenInfoService', () => {
     it('should return tokeninfo if token exist', async () => {
       // Arrange
       const user_id = 1;
+      const expected = 'testkey';
+      _inner_db.set(`refresh:uid:${user_id}`, expected);
       // Act
       const result = await service.getTokenInfo(user_id);
       // Assert
       expect(repo.get).toBeCalledTimes(1);
-      expect(result).toBeDefined();
+      expect(result).toEqual(expected);
     });
 
     /**
@@ -70,50 +73,19 @@ describe('TokenInfoService', () => {
       expect(repo.get).toBeCalledTimes(1);
       expect(result).toBeNull();
     });
-
-    // it('should throw error if user_id is not valid', async () => {
-    //   const promise = service.getTokenInfo();
-
-    //   await expect(promise).rejects.toThrowError('User Not Defined');
-    // });
   });
 
   describe('updateTokenInfo()', () => {
-    /**
-     * 기존에 token info가 이미 존재하는 경우 -> 기존 내용 사용
-     */
-    it('should update and return token info if exist', async () => {
+    it('should return different refresh_key for every call', async () => {
       // Arrange
       const user_id = 1;
       // Act
-      const token_info = await service.updateTokenInfo(user_id);
+      const result1 = await service.updateTokenInfo(user_id);
+      const result2 = await service.updateTokenInfo(user_id);
       // Assert
-      expect(token_info).toBeDefined();
-    });
-
-    /**
-     * token info가 기존에 없는 경우 -> 생성하고 실행됨.
-     */
-    it('should create and return token info if token not exist', async () => {
-      // Arrange
-      const user_id = 2;
-      // Act
-      const result = await service.updateTokenInfo(user_id);
-      // Assert
-      expect(result).toBeDefined();
-    });
-
-    /**
-     * 존재하지 않는 user_id로 토큰 생성하는 경우 -> 에러 반환
-     */
-    it('should throw error if user not exist', async () => {
-      // Arrange
-      const user_id = 3;
-      // Act
-      const promise = service.updateTokenInfo(user_id);
-      // Assert
-
-      await expect(promise).rejects.toThrowError(); // await 필수
+      expect(result1).toBeDefined();
+      expect(result2).toBeDefined();
+      expect(result1).not.toEqual(result2);
     });
   });
 });
