@@ -1,59 +1,38 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import Redis from 'ioredis';
 import { TokenInfoService } from './tokenInfo.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { TokenInfo } from './tokeninfo.entity';
-import { Repository } from 'typeorm';
+import { RedisToken } from '../../redis/redis.provider';
 
 describe('TokenInfoService', () => {
   let service: TokenInfoService;
-  let repo: jest.Mocked<Repository<TokenInfo>>;
-
-  const mocked_repo = {
-    save: jest.fn((tokenInfo: TokenInfo): Promise<TokenInfo> => {
-      const exist_user_id = [1, 2]; // 이전에 존재하던 유저 ID
-      const { id, refresh_key, user_id } = tokenInfo;
-      if (exist_user_id.every((it) => it != user_id)) {
-        return Promise.reject(); // 없는 유저 생성 시 발생하는 에러
-        // 원래는 reference key에 의해 발생하는 에러.
-      }
-      return Promise.resolve({
-        id: id ?? 0,
-        refresh_key: refresh_key,
-        updatedAt: new Date(),
-        user_id,
-      });
-    }),
-    findOneBy: jest.fn((where) => {
-      const { user_id } = where;
-
-      if (user_id === 1) {
-        return Promise.resolve({
-          id: 0,
-          refresh_key: 'test_refresh',
-          updatedAt: new Date(),
-          user_id: user_id as number,
-        });
-      } else {
-        return Promise.resolve(null);
-      }
-    }),
-    create: jest.fn(() => new TokenInfo()),
-  };
-
+  let repo: Redis;
   beforeEach(async () => {
+    const _inner_db = new Map<string, string>();
+    const mocked_Redis = {
+      get: jest.fn((key: string) => {
+        return _inner_db.get(key);
+      }),
+      set: jest.fn(
+        (key: string, value: string, _EX: string, _expire: number) => {
+          _inner_db.set(key, value);
+          return 'OK';
+        },
+      ),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TokenInfoService,
         // TokenInfo Repository mocking
         {
-          provide: getRepositoryToken(TokenInfo),
-          useValue: mocked_repo,
+          provide: RedisToken,
+          useValue: mocked_Redis,
         },
       ],
     }).compile();
 
     service = module.get<TokenInfoService>(TokenInfoService);
-    repo = module.get(getRepositoryToken(TokenInfo));
+    repo = module.get(RedisToken);
   });
 
   afterEach(() => {
@@ -75,7 +54,7 @@ describe('TokenInfoService', () => {
       // Act
       const result = await service.getTokenInfo(user_id);
       // Assert
-      expect(repo.findOneBy).toBeCalledTimes(1);
+      expect(repo.get).toBeCalledTimes(1);
       expect(result).toBeDefined();
     });
 
@@ -88,7 +67,7 @@ describe('TokenInfoService', () => {
       // Act
       const result = await service.getTokenInfo(user_id);
       // Assert
-      expect(repo.findOneBy).toBeCalledTimes(1);
+      expect(repo.get).toBeCalledTimes(1);
       expect(result).toBeNull();
     });
 
@@ -110,7 +89,6 @@ describe('TokenInfoService', () => {
       const token_info = await service.updateTokenInfo(user_id);
       // Assert
       expect(token_info).toBeDefined();
-      expect(repo.create).not.toBeCalled(); // 있던 것 사용
     });
 
     /**
@@ -123,7 +101,6 @@ describe('TokenInfoService', () => {
       const result = await service.updateTokenInfo(user_id);
       // Assert
       expect(result).toBeDefined();
-      expect(repo.create).toBeCalledTimes(1); // 새로 생성
     });
 
     /**
@@ -137,7 +114,6 @@ describe('TokenInfoService', () => {
       // Assert
 
       await expect(promise).rejects.toThrowError(); // await 필수
-      expect(repo.create).toBeCalledTimes(1); // 새로 생성
     });
   });
 });

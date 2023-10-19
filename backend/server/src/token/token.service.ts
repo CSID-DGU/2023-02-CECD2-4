@@ -66,8 +66,10 @@ export class TokenService {
     }
 
     // refresh key 비교 -> 다르면 이미 만료된 토큰
-    const tokenInfo = await this.tokeninfoService.getTokenInfo(payload.data.id);
-    if (!tokenInfo || tokenInfo.refresh_key != payload.refresh_key) {
+    const refresh_key = await this.tokeninfoService.getTokenInfo(
+      payload.data.id,
+    );
+    if (!refresh_key || refresh_key != payload.refresh_key) {
       throw new UnauthorizedException(exception_message);
     }
 
@@ -100,9 +102,7 @@ export class TokenService {
    * refresh token을 생성한다. 토큰 서비스 내부적으로만 사용
    */
   async signRefreshToken(payload: IOutAdminUser): Promise<string> {
-    const { refresh_key } = await this.tokeninfoService.updateTokenInfo(
-      payload.id,
-    );
+    const refresh_key = await this.tokeninfoService.updateTokenInfo(payload.id);
     const inner_payload: RefreshTokenObj = {
       data: payload,
       refresh_key: refresh_key!,

@@ -1,6 +1,8 @@
 version: '3'
 services:
   backend:
+    depends_on:
+      - my-redis # redis 동작해야 의미 O
     build:
       context: ./server
       dockerfile: Dockerfile.dev
@@ -14,7 +16,12 @@ services:
         condition: on-failure
         delay: 3s
         max_attempts: 3
+  my-redis:
+    image: redis:alpine
+
   nginx:
+    depends_on:
+      - backend
     build:
       context: ./nginx
       dockerfile: Dockerfile.dev

@@ -1,6 +1,6 @@
 import { ConfigModuleOptions } from '@nestjs/config';
-import { plainToInstance } from 'class-transformer';
-import { IsString, validateSync } from 'class-validator';
+import { Transform, plainToInstance } from 'class-transformer';
+import { IsNumber, IsString, validateSync } from 'class-validator';
 
 /**
  * .env validation 용도
@@ -18,6 +18,12 @@ class EnvironmentVariables {
   JWT_ACCESS_SECRET: string;
   @IsString()
   JWT_REFRESH_SECRET: string;
+
+  @IsString()
+  REDIS_HOST: string;
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value))
+  REDIS_PORT: number;
 }
 
 export const configOption: ConfigModuleOptions = {

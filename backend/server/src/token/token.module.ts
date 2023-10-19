@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TokenService } from './token.service';
-import { TokenInfo } from './tokeninfo/tokeninfo.entity';
 import { TokenInfoService } from './tokeninfo/tokenInfo.service';
 import { TokenValidator } from './token.validator';
+import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TokenInfo]), JwtModule.register({})],
+  imports: [JwtModule.register({}), RedisModule],
   providers: [TokenService, TokenInfoService, TokenValidator],
   exports: [TokenService],
 })

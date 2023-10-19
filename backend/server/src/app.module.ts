@@ -11,6 +11,7 @@ import { NewsSourceModule } from './news-source/news-source.module';
 import { AuthModule } from './auth/auth.module';
 
 import { TokenModule } from './token/token.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { TokenModule } from './token/token.module';
     AnalysisCommentModule,
     AuthModule,
     TokenModule,
+    RedisModule,
   ],
 })
 export class AppModule {}

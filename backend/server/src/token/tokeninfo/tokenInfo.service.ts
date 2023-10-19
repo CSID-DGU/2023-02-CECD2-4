@@ -1,50 +1,47 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-
+import { Injectable, Inject, UnauthorizedException } from '@nestjs/common';
+import Redis from 'ioredis';
 import { randomBytes } from 'crypto';
 
-import { TokenInfo } from './tokeninfo.entity';
-import { Repository } from 'typeorm';
+import { RedisToken } from '../../redis/redis.provider';
+import { REFRESH_MAX_AGE } from '../util/constant';
 
 @Injectable()
 export class TokenInfoService {
-  constructor(
-    @InjectRepository(TokenInfo) private tokenRepo: Repository<TokenInfo>,
-  ) {}
+  constructor(@Inject(RedisToken) private redisStore: Redis) {}
 
   /**
    * 토큰 정보를 갱신하고, 갱신된 값을 가져온다. 로그인 시 토큰 갱신에 사용된다.
    */
   async updateTokenInfo(user_id: number) {
-    const error_message = 'User Not Defined';
-    if (user_id === undefined || user_id === null || isNaN(user_id))
-      throw new UnauthorizedException(error_message);
-
-    let tokenInfo = await this.tokenRepo.findOneBy({ user_id });
-    if (!tokenInfo) {
-      tokenInfo = this.tokenRepo.create();
-      tokenInfo.user_id = user_id;
-    }
-
-    // 키 갱신
+    const token_key = this.getTokenKey(user_id);
     const refresh_key = randomBytes(32).toString('hex');
-    tokenInfo.refresh_key = refresh_key;
-    // 토큰 정보 생성할 수 없는 경우 -> user_id 기반으로 생성 불가능
-    try {
-      tokenInfo = await this.tokenRepo.save(tokenInfo);
-    } catch (e) {
-      throw new UnauthorizedException(error_message);
-    }
-    return tokenInfo;
+    const result = await this.redisStore.set(
+      token_key,
+      refresh_key,
+      'EX',
+      REFRESH_MAX_AGE,
+    );
+
+    if (result == 'OK') return refresh_key;
   }
 
   /**
    * 토큰 정보를 가져온다.
+   * @returns {string} refresh_key
    */
   async getTokenInfo(user_id: number) {
+    const key = this.getTokenKey(user_id);
+    const refresh_key = await this.redisStore.get(key);
+    return refresh_key;
+  }
+
+  /**
+   * 토큰 이름을 가져온다.
+   * @returns {string} refresh_key
+   */
+  private getTokenKey(user_id: number) {
     if (user_id === undefined || user_id === null || isNaN(user_id))
-      throw new UnauthorizedException(`User Not Defined`);
-    const tokenInfo = await this.tokenRepo.findOneBy({ user_id });
-    return tokenInfo;
+      throw new UnauthorizedException('User Not Defined');
+    return `refresh:uid:${user_id}`;
   }
 }

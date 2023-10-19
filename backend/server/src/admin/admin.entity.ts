@@ -3,11 +3,9 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { TokenInfo } from '../token/tokeninfo/tokeninfo.entity';
 import { KeywordHistory } from '../keyword/keyword-history.entity';
 
 @Entity({ name: 'admin' })
@@ -30,7 +28,4 @@ export class AdminUser {
 
   @OneToMany(() => KeywordHistory, (history) => history.admin)
   keyword_histories?: KeywordHistory[];
-
-  @OneToOne(() => TokenInfo, (token) => token.user)
-  token?: TokenInfo;
 }
