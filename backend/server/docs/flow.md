@@ -5,43 +5,42 @@
 title: 전반적인 동작 흐름
 ---
 flowchart LR
-    db1[("AWS RDS\n{keywords,news_sources}")]
+    db1[("AWS RDS\n")]
     db1 --> A
 
-    s((start)) --> condition
     subgraph EventBridge
-        condition{is 00:00}
+        condition{00:00?}
     end
-    condition --> act1[data-divider 호출]
+    condition --> act1[data-divider \n호출]
     act1 --> A
     subgraph A ["`data-divider(lambda)`"]
         direction TB
-        a2[키워드/언론사\nDB에서 읽기]
+        a2[키워드/언론사\nDB 읽어오기]
         a3[키워드/언론사\n작은 단위로 분리]
-        a4[SQS 키워드/언론사 삽입]
+        a4[SQS\n키워드/언론사 삽입]
         a2-->a3-->a4
     end
     A --> Q1
-    Q1[("AWS SQS\n{keywords,news_sources}")]
+    Q1[("AWS SQS")]
     Q1 --> B
     subgraph B ["`news-crawler(lambda)`"]
         direction TB
-        b1[뉴스 데이터 수집]
-        b2[S3에 뉴스 데이터 저장]
-        b3[SQS에 데이터 주소 전달]
+        b1[뉴스/댓글\n데이터 수집]
+        b2[S3\n->뉴스 데이터]
+        b3[SQS\n->데이터 주소]
         b1-->b2-->b3
     end
-    Q2[("AWS SQS\n({keyword, key})")]
-    bucket[("aws S3\n{뉴스 데이터}")]
+    Q2[("AWS SQS")]
+    bucket[("aws S3")]
     B --> bucket --> C
     B --> Q2 --> C
 
     subgraph C [AI 모듈]
         direction TB
-        c0["SQS, S3에서 데이터 추출"]
-        c1[댓글 감성 분석]
-        c2[댓글 원인 분석]
-        c3[분석된 댓글 객체 생성]
+        c0["SQS, S3\n데이터 추출"]
+        c1[댓글\n감성 분석]
+        c2[댓글\n원인 분석]
+        c3[분석 댓글 생성]
         c4[RDS 저장]
         c0 --> c1 & c2
         c1 --> c3
@@ -49,7 +48,7 @@ flowchart LR
         c3 --> c4
     end
     C --> db2
-    db2[("AWS RDS\n{AnalysisComment}")]
+    db2[("AWS RDS")]
 ```
 
 전체적인 동작 구상은 다음과 같다.
