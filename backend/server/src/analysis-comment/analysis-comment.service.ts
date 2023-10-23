@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AnalysisComment } from './entity/analysis-comment.entity';
-import { createCommentDto } from './dtos/create-comment.dto';
+import { CreateCommentDto } from './dtos/create-comment.dto';
 import { ArticleContent } from './entity/article-content.entity';
 import { GetCommentsQueriesDto } from './dtos/get-comments-query.dto';
 @Injectable()
@@ -14,7 +14,7 @@ export class AnalysisCommentService {
     private article_repo: Repository<ArticleContent>,
   ) {}
 
-  async create(dtos: createCommentDto): Promise<AnalysisComment> {
+  async create(dtos: CreateCommentDto): Promise<AnalysisComment> {
     let comment = this.comment_repo.create();
     comment.createdAt = dtos.createdAt;
     comment.content = dtos.content;

@@ -5,7 +5,7 @@ import { Type } from 'class-transformer';
  * 댓글 생성 관련 dto.
  * 구조는 [analysiscomment](../entity/analysis-comment.entity.ts) 참조.
  */
-export class createCommentDto {
+export class CreateCommentDto {
   /**
    * 댓글 생성일
    * @example '2022-03-31'
@@ -42,7 +42,7 @@ export class createCommentDto {
 
   /**
    * 댓글의 대표 감정
-   * @example 행복
+   * @example happiness
    */
   @IsString()
   emotion: string;

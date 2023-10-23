@@ -13,8 +13,8 @@ import { KeywordService } from './keyword.service';
 import { UpdateKeywordDto } from './dtos/update-keyword.dto';
 import { Keyword } from './keyword.entity';
 import { AuthGuard } from '../auth/auth.guard';
-import { AdminParam } from 'src/admin/admin.decorator';
-import { IOutAdminUser } from 'src/admin/util/admin.type';
+import { AdminParam } from '../admin/admin.decorator';
+import { IOutAdminUser } from '../admin/util/admin.type';
 
 @ApiTags('Keyword')
 @Controller('keywords')
