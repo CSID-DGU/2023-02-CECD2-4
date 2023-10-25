@@ -20,6 +20,9 @@ class EnvironmentVariables {
   JWT_REFRESH_SECRET: string;
 
   @IsString()
+  POPULAR_KEYWORDS_KEY: string;
+
+  @IsString()
   REDIS_HOST: string;
   @IsNumber()
   @Transform(({ value }) => parseInt(value))

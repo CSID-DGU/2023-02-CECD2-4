@@ -9,3 +9,5 @@ dist/**/*
 docs/**/*
 # environment & setting files
 .env
+
+**/README.md

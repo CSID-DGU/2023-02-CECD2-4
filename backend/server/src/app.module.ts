@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 
 import { TokenModule } from './token/token.module';
 import { RedisModule } from './redis/redis.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RedisModule } from './redis/redis.module';
     AuthModule,
     TokenModule,
     RedisModule,
+    SearchModule,
   ],
 })
 export class AppModule {}

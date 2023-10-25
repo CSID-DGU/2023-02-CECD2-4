@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { AnalysisComment } from './entity/analysis-comment.entity';
 import { CreateCommentDto } from './dtos/create-comment.dto';
 import { ArticleContent } from './entity/article-content.entity';
@@ -12,6 +12,7 @@ export class AnalysisCommentService {
     private comment_repo: Repository<AnalysisComment>,
     @InjectRepository(ArticleContent)
     private article_repo: Repository<ArticleContent>,
+    private dataSource: DataSource,
   ) {}
 
   async create(dtos: CreateCommentDto): Promise<AnalysisComment> {
@@ -20,6 +21,7 @@ export class AnalysisCommentService {
     comment.content = dtos.content;
     comment.sympathy = dtos.sympathy;
     comment.antipathy = dtos.antipathy;
+    comment.emotion = dtos.emotion;
     comment.link = dtos.link;
     comment.keyword_id = dtos.keyword_id;
 
@@ -60,5 +62,40 @@ export class AnalysisCommentService {
       qb.andWhere('createdAt BETWEEN :from AND :to', { from, to });
 
     return await qb.limit(psize).orderBy('id', 'DESC').getRawMany();
+  }
+  /**
+   * 기간 내 감정 별로 최대 공감수를 받은 댓글 목록을 반환한다.
+   */
+  async findTopSympathyCommentsForEachEmotion(
+    keyword_id: number,
+    from?: string,
+    to?: string,
+  ) {
+    // 아래 쿼리에 대응된다.
+    // select id,content,sympathy,antipathy,emotion
+    // from ( select *,
+    // ROW_NUMBER() OVER ( PARTITION BY emotion ORDER BY sympathy DESC ) AS ranking FROM analysis_comment ) temp
+    // where ranking = 1;
+
+    const qb = this.dataSource
+      .createQueryBuilder()
+      .select(['id', 'content', 'sympathy', 'antipathy', 'emotion'])
+      .from((subQuery) => {
+        subQuery
+          .select('*')
+          .addSelect(
+            'ROW_NUMBER() OVER ( PARTITION BY emotion ORDER BY sympathy DESC )',
+            'ranking',
+          )
+          .from(AnalysisComment, 'comments')
+          .where('keyword_id = :kid', {
+            kid: keyword_id,
+          });
+        if (from && to)
+          subQuery.andWhere('createdAt BETWEEN :from AND :to', { from, to });
+        return subQuery;
+      }, 'temp')
+      .where('ranking = 1');
+    return await qb.getRawMany();
   }
 }

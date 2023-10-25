@@ -4,7 +4,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 
 import { Keyword } from './keyword.entity';
 import { CreateKeywordDto } from './dtos/create-keyword.dto';
@@ -61,10 +61,37 @@ export class KeywordService {
   }
 
   /**
-   * 키워드 목록 검색
+   * 키워드 목록 검색. 데이터 스크래핑에 사용됨
    */
   async findMany() {
     return await this.keywordRepo.find();
+  }
+
+  /**
+   * id 기반으로 여러 개 검색하기
+   */
+  async findManyById(id_list: number[]) {
+    return await this.keywordRepo.find({
+      where: {
+        id: In(id_list),
+      },
+    });
+  }
+
+  async findOne(id: number) {
+    return await this.keywordRepo.findOne({
+      where: {
+        id: id,
+      },
+    });
+  }
+
+  async findOneByName(name: string) {
+    return await this.keywordRepo.findOne({
+      where: {
+        name: name,
+      },
+    });
   }
 
   async update(

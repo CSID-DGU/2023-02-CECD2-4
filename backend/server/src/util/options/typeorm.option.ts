@@ -18,7 +18,7 @@ export const typeormAsyncOptions: TypeOrmModuleAsyncOptions = {
       charset: 'utf8mb4', // emoji까지 표현 가능,
       // migrations: ['dist/migration/*.js'],
       // synchronize: true,
-      logging: ['log', 'info', 'error'],
+      logging: process.env.NODE_ENV != 'production',
     };
   },
 };

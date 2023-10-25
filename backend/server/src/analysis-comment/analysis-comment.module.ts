@@ -13,5 +13,6 @@ import { AuthModule } from '../auth/auth.module';
   ],
   providers: [AnalysisCommentService],
   controllers: [AnalysisCommentController],
+  exports: [AnalysisCommentService],
 })
 export class AnalysisCommentModule {}

@@ -10,5 +10,6 @@ import { AuthModule } from '../auth/auth.module';
   imports: [TypeOrmModule.forFeature([Keyword, KeywordHistory]), AuthModule],
   providers: [KeywordService],
   controllers: [KeywordController],
+  exports: [KeywordService],
 })
 export class KeywordModule {}

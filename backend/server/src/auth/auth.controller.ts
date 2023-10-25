@@ -17,7 +17,7 @@ import { Serialize } from '../interceptors/serialize.interceptor';
 import { RefreshResDto } from './dtos/refresh.dto';
 import { REFRESH_MAX_AGE, REFRESH_TOKEN_NAME } from '../token/util/constant';
 
-@ApiTags('auth')
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
