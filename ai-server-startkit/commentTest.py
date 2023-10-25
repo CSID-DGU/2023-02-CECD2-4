@@ -22,6 +22,10 @@ def convert_emotion_to_int(e) -> int:
 csv_file_path = 'CommentData\댓글데이터.csv'
 data = pd.read_csv(csv_file_path, encoding='cp949')
 
+# file
+correct_file = open(".\commentTestresult\correct.txt", 'w')
+wrong_file = open(".\commentTestresult\wrong.txt", 'w')
+
 # 0: 공포 ~
 emotion_cnt_arr = [0] * 7
 emotion_wrong_arr = [0] * 7
@@ -61,19 +65,24 @@ for comment_data in data_list:
     if(result == comment_data[1]):
         correct += 1
         emotion_correct_arr[convert_emotion_to_int(comment_data[1])] += 1
+        correct_file.write("{} --> {}\n".format(comment_data[0], comment_data[1]))
     else:
         # 정답을 잘못 맞쳤을 때 
         # 분노(정답) --> 기쁨(결과) ==> 분노 실패 횟수 + 1
         emotion_wrong_arr[convert_emotion_to_int(comment_data[1])] += 1
         print("{} (정답: {}) --> (예측: {})".format(comment_data[0], comment_data[1], result))
+        wrong_file.write("{} (정답: {}) --> (예측: {})\n".format(comment_data[0], comment_data[1], result))
 
 wrong = data_cnt - correct
 accuracy = correct / data_cnt
 print("Accuray for {} data = {}".format(data_cnt, accuracy))
 
-# print(emotion_cnt_arr)
-# print(emotion_correct_arr)
-# print(emotion_wrong_arr)
+print(emotion_cnt_arr)
+print(emotion_correct_arr)
+print(emotion_wrong_arr)
 for i in range(0, 7):
     print(emotion_correct_arr[i] / emotion_cnt_arr[i], end=', ')
 print()
+
+correct_file.close()
+wrong_file.close()
