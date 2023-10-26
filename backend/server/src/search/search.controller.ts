@@ -36,7 +36,7 @@ export class SearchController {
     type: () => KeywordWithTopCommentsResDto,
   })
   @Serialize(KeywordWithTopCommentsResDto)
-  @Get('top-comments')
+  @Get('keyword')
   async getTopComments(@Query() dto: KeywordWithTopCommentsReqQueryDto) {
     const { keyword, from, to } = dto;
     return await this.service.getKeywordWithTopCommentsForEmotion(

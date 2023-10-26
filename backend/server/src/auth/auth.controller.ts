@@ -6,8 +6,9 @@ import {
   Res,
   Get,
   Req,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 
 import { SignupDto } from './dtos/signup.dto';
@@ -16,6 +17,7 @@ import { SigninResDto, SigninReqDto } from './dtos/signin.dto';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { RefreshResDto } from './dtos/refresh.dto';
 import { REFRESH_MAX_AGE, REFRESH_TOKEN_NAME } from '../token/util/constant';
+import { AuthGuard } from './auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -32,6 +34,12 @@ export class AuthController {
     status: 400,
     description: '계정을 생성할 수 없는 경우. 에러 반환',
   })
+  @ApiResponse({
+    status: 401,
+    description: '계정 생성 권한을 만족하지 않음',
+  })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Post('/signup')
   async signup(@Body() dto: SignupDto) {
     const { login_id, password, name } = dto;

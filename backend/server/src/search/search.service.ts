@@ -28,6 +28,9 @@ export class SearchService {
     return await this.keywordService.findManyById(keyword_ids);
   }
 
+  /**
+   * 주어진 기간 내 감정 별로 추천 수 최대의 댓글들을 가져온다.
+   */
   async getKeywordWithTopCommentsForEmotion(
     keyword_name: string,
     from?: string,
