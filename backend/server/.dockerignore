@@ -3,10 +3,11 @@
 *docker-compose*
 node_modules
 stuff/*
-.vscode/*
-# files
+test/*
 dist/**/*
 docs/**/*
+.vscode/*
+# files
 # environment & setting files
 .env
 

@@ -9,7 +9,7 @@ export class KeywordWithTopCommentsReqQueryDto {
    * @example 윤석열
    */
   @IsString()
-  keyword: string;
+  name: string;
 
   /**
    * 검색 시작일

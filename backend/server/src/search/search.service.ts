@@ -38,6 +38,9 @@ export class SearchService {
   ) {
     const keyword = await this.keywordService.findOneByName(keyword_name);
     if (!keyword) throw new NotFoundException('keyword not found');
+    // redis로 순위 따지기!
+    const key = this.config.get('POPULAR_KEYWORDS_KEY');
+    await this.redisStore.zincrby(key, 1, keyword.id);
     const comments =
       await this.commentService.findTopSympathyCommentsForEachEmotion(
         keyword.id,

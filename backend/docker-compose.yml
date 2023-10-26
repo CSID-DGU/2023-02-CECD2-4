@@ -1,0 +1,17 @@
+version: '3'
+services:
+  backend:
+    image: blaxsior/api-server
+    env_file:
+      - ./.env
+    ports:
+      - 8080:8080
+    volumes:
+      - /home/app/node_modules
+      - ./server:/home/app
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s # 실패 시 대기시간
+        max_attempts: 3 # 최대 재실행 횟수
+        window: 120s # "성공" 기준이 되는 실행 시간
