@@ -109,8 +109,17 @@ export class AuthController {
     description: 'refresh token이 유효하지 않음',
   })
   @Get('/refresh')
-  async refresh(@Req() req: Request): Promise<RefreshResDto> {
+  async refresh(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<RefreshResDto> {
     const refresh_token = req.cookies[REFRESH_TOKEN_NAME];
-    return await this.authService.refresh(refresh_token);
+    try {
+      return await this.authService.refresh(refresh_token);
+    } catch (e) {
+      // 토큰이 유효하지 않은 경우 -> 토큰을 삭제하고 에러 메시지 반환
+      res.clearCookie(REFRESH_TOKEN_NAME);
+      throw e;
+    }
   }
 }

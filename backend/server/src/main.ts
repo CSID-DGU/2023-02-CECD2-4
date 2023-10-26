@@ -10,6 +10,7 @@ async function bootstrap() {
   if (process.env.NODE_ENV !== 'production') {
     swaggerSetup(app);
   }
+  app.enableCors();
   app.use(helmet());
   app.use(cookieParser());
   app.useGlobalPipes(
