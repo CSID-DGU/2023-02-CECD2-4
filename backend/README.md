@@ -88,7 +88,9 @@ sequenceDiagram
     participant S as Server
     participant A as AuthGuard
     participant T as TokenService
+    participant R as Request
     participant C as Controller
+
 
     user ->> S: API 요청
     S ->> +A: 
@@ -100,8 +102,11 @@ sequenceDiagram
     A ->> +T: verifyAccessToken()
     alt token is valid
       T -->> -A: {id, name}
-      A -->> -S: 
+      A ->> R: req['user'] = {id, name} 
+      A -->> -S: true(token valid)
       S ->> +C: 요청 전달
+      C ->> R: @AdminParam() user
+      R -->> C: req['user']
       C -->> -S: 결과 반환
       S -->> user: 결과 반환
     else token not valid
