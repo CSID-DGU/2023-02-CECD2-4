@@ -1,7 +1,12 @@
 FROM node:alpine as base
 
+# 이유는 정확히 알 수 없으나, ec2 docker 환경에서 /home/app/package.json을 찾지 못하는 문제가 발생함.
+# nodejs가 추천하는 기준 대로 변경함
+# WORKDIR /home/app
+
 # 작업 폴더 지정
-WORKDIR /home/app
+# https://nodejs.org/en/docs/guides/nodejs-docker-webapp
+WORKDIR /usr/src/app
 
 # 설정 파일들 복사
 COPY package*.json .
