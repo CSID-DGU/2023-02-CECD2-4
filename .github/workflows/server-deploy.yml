@@ -2,7 +2,7 @@ name: Api Server Deploy
 on:
   push:
     branches: 
-      - server-deploy
+      - 'server-deploy'
   workflow_dispatch: # 수동 실행 가능
 
 jobs:
