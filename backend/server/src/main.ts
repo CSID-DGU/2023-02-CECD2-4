@@ -22,6 +22,7 @@ async function bootstrap() {
       },
     }),
   );
+  //console.log("hello!");
   await app.listen(8080);
 }
 bootstrap();
