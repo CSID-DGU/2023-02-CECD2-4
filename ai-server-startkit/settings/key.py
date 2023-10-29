@@ -17,4 +17,9 @@ keys: KeyType = {
   "AWS_REGION": environ["AWS_REGION"],
   "SQS_URL": environ["SQS_URL"],
   "S3_BUCKET": environ["S3_BUCKET"],
+  "DB_TYPE": environ['DB_TYPE'],
+  "DB_USER_NAME": environ['DB_USER_NAME'],
+  "DB_PASSWORD": environ['DB_PASSWORD'],
+  "DB_HOST": environ['DB_HOST'],
+  "DB_PORT": environ['DB_PORT'],
 }

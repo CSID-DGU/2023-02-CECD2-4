@@ -13,10 +13,18 @@ from settings.key import keys
 from utils.s3 import getNewsResponse
 from utils.sqs import getMessagesFromSQS
 import json
+import pymysql
 
 from models import KcBERT, SBERT
 
 if __name__ == '__main__':
+    # DB init
+    conn = pymysql.connect(host=keys['DB_HOST'], 
+                           user=keys['DB_USER_NAME'], 
+                           password=keys['DB_PASSWORD'], 
+                           db='mydb', 
+                           charset='utf8')
+    
     # model init
     print("Model init....", end='')
     start_t = time.time()
@@ -65,13 +73,13 @@ if __name__ == '__main__':
     print("Analizing comments....")
     start_t = time.time()
     for data in news_response['data']:
-        url = data['url']   # 기사 url
-        publishedDate = data['news']['publishedAt'] # 기사 발행 날짜 
-        
-        body = data['news']['body']     # 본문
         comments = data['comments']     # 댓글
         
         if(len(comments) >= MIN_COMMENT):
+            url = data['url']   # 기사 url
+            publishedDate = data['news']['publishedAt'] # 기사 발행 날짜 
+            body = data['news']['body']     # 본문
+            
             # SBERT corpus init --> 빠른 속도 위함
             SBERT_model.CorpusInit(corpus=body)
             
