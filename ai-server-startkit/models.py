@@ -261,7 +261,7 @@ class KcBERT():
 # SBERT
 class SBERT():
     def __init__(self):
-        self.embedder = SentenceTransformer("jhgan/ko-sroberta-multitask")
+        self.embedder = SentenceTransformer("sentence-transformers/distiluse-base-multilingual-cased-v1")
 
     def CorpusInit(self, corpus):
         self.corpus_embeddings = self.embedder.encode(corpus, convert_to_tensor=True)

@@ -86,11 +86,11 @@ if __name__ == '__main__':
                 #
                 ## 감정 분석 결과
                 text_file.write("{} --> {}\n".format(comment_content, emotion))
-                # print("{} --> {}".format(comment_content, emotion))
+                #print("{} --> {}".format(comment_content, emotion))
                 ## 연관도 분석 결과
                 text_file.write("{} --> {}\n\n".format(comment_content, related))
-                # print("{} --> {}".format(comment_content, related))
-                # print('')
+                #print("{} --> {}".format(comment_content, related))
+                #print('')
     end_t = time.time()
     print("end! ({:0.5f} sec)".format(end_t - start_t))
 
