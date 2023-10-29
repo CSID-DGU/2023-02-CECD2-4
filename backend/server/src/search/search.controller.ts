@@ -1,13 +1,17 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Keyword } from 'src/keyword/keyword.entity';
-import { ReqPopularKeywordQueryDto } from './dtos/popular-keyword.dto';
+
 import { SearchService } from './search.service';
+import { Serialize } from '../interceptors/serialize.interceptor';
+
+import {
+  PopularKeywordsReqQueryDto,
+  PopularKeywordsResDto,
+} from './dtos/popular-keyword.dto';
 import {
   KeywordWithTopCommentsReqQueryDto,
   KeywordWithTopCommentsResDto,
 } from './dtos/keyword-with-top-comments.dto';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
 
 @ApiTags('Search')
 @Controller('search')
@@ -19,13 +23,20 @@ export class SearchController {
   @ApiResponse({
     status: 200,
     description: '중요한 키워드 목록을 반환한다.',
-    type: () => Keyword,
+    type: () => PopularKeywordsResDto,
   })
-  @Get('popular-keyword')
+  // @Serialize(PopularKeywordsResDto)
+  @Get('popular-keywords')
   async getPopularKeywords(
-    @Query() dto: ReqPopularKeywordQueryDto,
-  ): Promise<Keyword[]> {
-    return await this.service.findManyPopularKeyword(dto.count!);
+    @Query() dto: PopularKeywordsReqQueryDto,
+  ): Promise<PopularKeywordsResDto[]> {
+    const keywords = await this.service.findManyPopularKeywords(dto.count!);
+    const results = keywords.map((keyword) => {
+      const { id, description, name } = keyword;
+      return { id, description, name };
+    });
+
+    return results;
   }
 
   /**
@@ -37,7 +48,9 @@ export class SearchController {
   })
   @Serialize(KeywordWithTopCommentsResDto)
   @Get('keyword')
-  async getTopComments(@Query() dto: KeywordWithTopCommentsReqQueryDto) {
+  async getKeywordWithTopComments(
+    @Query() dto: KeywordWithTopCommentsReqQueryDto,
+  ) {
     const { name, from, to } = dto;
     return await this.service.getKeywordWithTopCommentsForEmotion(
       name,

@@ -13,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
 import { RedisModule } from './redis/redis.module';
 import { SearchModule } from './search/search.module';
+import { BatchModule } from './batch/batch.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { SearchModule } from './search/search.module';
     TokenModule,
     RedisModule,
     SearchModule,
+    BatchModule,
   ],
 })
 export class AppModule {}
