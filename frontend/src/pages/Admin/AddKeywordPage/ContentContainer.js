@@ -65,21 +65,6 @@ input:focus + label, input:not(:placeholder-shown) + label{
 }
 `;
 
-const AddBtn = styled.div`
-display:flex;
-justify-content:center;
-align-items:center;
-width:40%;
-height:50px;
-font-family:"aggro";
-font-size:25px;
-color:#444;
-border:0 none;
-border-radius:15px;
-background-color:#bbb;
-margin-top:100px;
-`;
-
 const ContentContainer = (props) => {
     return (
         <FormBox>
@@ -91,7 +76,6 @@ const ContentContainer = (props) => {
                 <InputContent type="text" placeholder=" "></InputContent>
                 <Label>키워드 설명 </Label>
             </TextBoxContainer>
-            <AddBtn>추가</AddBtn>
         </FormBox>
     );
 };
