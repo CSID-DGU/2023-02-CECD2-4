@@ -2,7 +2,7 @@ version: '3'
 services:
   backend:
     ports:
-      - 8080:8080
+      - 3030:8080
     depends_on:
       - my-redis # redis 동작해야 의미 O
     build:

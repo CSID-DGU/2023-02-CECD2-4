@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, Param } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { SearchService } from './search.service';
@@ -30,7 +30,7 @@ export class SearchController {
   async getPopularKeywords(
     @Query() dto: PopularKeywordsReqQueryDto,
   ): Promise<PopularKeywordsResDto[]> {
-    const keywords = await this.service.findManyPopularKeywords(dto.count!);
+    const keywords = await this.service.getManyPopularKeywords(dto.count!);
     const results = keywords.map((keyword) => {
       const { id, description, name } = keyword;
       return { id, description, name };
@@ -47,7 +47,7 @@ export class SearchController {
     type: () => KeywordWithTopCommentsResDto,
   })
   @Serialize(KeywordWithTopCommentsResDto)
-  @Get('keyword')
+  @Get('keyword-search-result')
   async getKeywordWithTopComments(
     @Query() dto: KeywordWithTopCommentsReqQueryDto,
   ) {
@@ -57,5 +57,16 @@ export class SearchController {
       from,
       to,
     );
+  }
+
+  /**
+   * 선택한 댓글의 정보를 연관 문장과 함께 가져온다
+   */
+  @ApiResponse({
+    status: 200,
+  })
+  @Get('detail/comment/:id')
+  async getCommentWithSentences(@Param('id') id: number) {
+    return await this.service.getCommentWithSentences(id);
   }
 }
