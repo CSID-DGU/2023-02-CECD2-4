@@ -2,7 +2,7 @@ version: '3'
 services:
   backend:
     ports:
-      - 8080:8080
+      - 3030:8080
     depends_on:
       - my-redis # redis 동작해야 의미 O
     build:
@@ -11,12 +11,7 @@ services:
     env_file:
       - "./server/.env"
     volumes:
-      - /home/app/node_modules
-      - ./server:/home/app
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 3s
-        max_attempts: 3
+      - /usr/src/app/node_modules
+      - ./server:/usr/src/app
   my-redis:
     image: redis:alpine

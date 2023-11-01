@@ -1,13 +1,17 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, Param } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Keyword } from 'src/keyword/keyword.entity';
-import { ReqPopularKeywordQueryDto } from './dtos/popular-keyword.dto';
+
 import { SearchService } from './search.service';
+import { Serialize } from '../interceptors/serialize.interceptor';
+
+import {
+  PopularKeywordsReqQueryDto,
+  PopularKeywordsResDto,
+} from './dtos/popular-keyword.dto';
 import {
   KeywordWithTopCommentsReqQueryDto,
   KeywordWithTopCommentsResDto,
 } from './dtos/keyword-with-top-comments.dto';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
 
 @ApiTags('Search')
 @Controller('search')
@@ -19,13 +23,20 @@ export class SearchController {
   @ApiResponse({
     status: 200,
     description: '중요한 키워드 목록을 반환한다.',
-    type: () => Keyword,
+    type: () => PopularKeywordsResDto,
   })
-  @Get('popular-keyword')
+  // @Serialize(PopularKeywordsResDto)
+  @Get('popular-keywords')
   async getPopularKeywords(
-    @Query() dto: ReqPopularKeywordQueryDto,
-  ): Promise<Keyword[]> {
-    return await this.service.findManyPopularKeyword(dto.count!);
+    @Query() dto: PopularKeywordsReqQueryDto,
+  ): Promise<PopularKeywordsResDto[]> {
+    const keywords = await this.service.getManyPopularKeywords(dto.count!);
+    const results = keywords.map((keyword) => {
+      const { id, description, name } = keyword;
+      return { id, description, name };
+    });
+
+    return results;
   }
 
   /**
@@ -36,13 +47,26 @@ export class SearchController {
     type: () => KeywordWithTopCommentsResDto,
   })
   @Serialize(KeywordWithTopCommentsResDto)
-  @Get('keyword')
-  async getTopComments(@Query() dto: KeywordWithTopCommentsReqQueryDto) {
+  @Get('keyword-search-result')
+  async getKeywordWithTopComments(
+    @Query() dto: KeywordWithTopCommentsReqQueryDto,
+  ) {
     const { name, from, to } = dto;
     return await this.service.getKeywordWithTopCommentsForEmotion(
       name,
       from,
       to,
     );
+  }
+
+  /**
+   * 선택한 댓글의 정보를 연관 문장과 함께 가져온다
+   */
+  @ApiResponse({
+    status: 200,
+  })
+  @Get('detail/comment/:id')
+  async getCommentWithSentences(@Param('id') id: number) {
+    return await this.service.getCommentWithSentences(id);
   }
 }

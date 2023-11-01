@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AnalysisCommentController } from './analysis-comment.controller';
 import { AnalysisCommentService } from './analysis-comment.service';
 import { CreateCommentDto } from './dtos/create-comment.dto';
-import { GetCommentsQueriesDto } from './dtos/get-comments-query.dto';
 import { AuthGuard } from '../auth/auth.guard';
 
 jest.mock('./analysis-comment.service');
@@ -51,13 +50,11 @@ describe('AnalysisCommentController', () => {
   describe('getComments()', () => {
     it('call commentService.getComments', async () => {
       // dummy data
-      const dummyDto: GetCommentsQueriesDto = {
-        search: '',
-      };
+      const comment_id = 1;
       // action
-      await controller.getComments(dummyDto);
+      await controller.getComment(comment_id);
       // assert
-      expect(service.findMany).toBeCalled();
+      expect(service.findManyWithQuery).toBeCalled();
     });
   });
 });

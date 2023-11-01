@@ -9,5 +9,6 @@ import { SearchController } from './search.controller';
   imports: [KeywordModule, AnalysisCommentModule],
   providers: [redisProvider, SearchService],
   controllers: [SearchController],
+  exports: [SearchService],
 })
 export class SearchModule {}

@@ -1,8 +1,7 @@
-import { Controller, Post, Get, Body, Query, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Body, UseGuards, Param } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateCommentDto } from './dtos/create-comment.dto';
-import { GetCommentsQueriesDto } from './dtos/get-comments-query.dto';
 import { AnalysisCommentService } from './analysis-comment.service';
 import { AuthGuard } from '../auth/auth.guard';
 
@@ -33,9 +32,9 @@ export class AnalysisCommentController {
     description: '가져온 댓글 목록',
     status: 200,
   })
-  @Get()
-  async getComments(@Query() queries: GetCommentsQueriesDto) {
-    const comments = await this.commentService.findMany(queries);
-    return comments;
+  @Get(':id')
+  async getComment(@Param('id') id: number) {
+    const comment = await this.commentService.findOneById(id);
+    return comment;
   }
 }

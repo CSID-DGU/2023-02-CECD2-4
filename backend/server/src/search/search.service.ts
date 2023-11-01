@@ -18,7 +18,7 @@ export class SearchService {
   /**
    * 인기 있는 키워드 목록을 반환한다. 메인 화면에서 사용됨.
    */
-  async findManyPopularKeyword(count: number): Promise<Keyword[]> {
+  async getManyPopularKeywords(count: number): Promise<Keyword[]> {
     const key = this.config.get('POPULAR_KEYWORDS_KEY');
     const keyword_ids = (await this.redisStore.zrevrange(key, 0, count)).map(
       (it) => parseInt(it),
@@ -55,5 +55,36 @@ export class SearchService {
       },
       comments,
     };
+  }
+
+  /**
+   * 최근 인기 키워드 목록을 초기화
+   */
+  async clearPopularKeywords() {
+    const key = this.config.get('POPULAR_KEYWORDS_KEY');
+    return await this.redisStore.del(key);
+  }
+
+  /**
+   * 댓글을 관련된 문장과 함께 가져오기
+   */
+  async getCommentWithSentences(id: number) {
+    const commentWithSentences = await this.commentService.findOneById(
+      id,
+      true,
+    );
+    if (!commentWithSentences)
+      throw new NotFoundException(`there is no comment id: ${id}`);
+    return commentWithSentences;
+  }
+
+  async getRelatedKeywordList(info: {
+    keyword_id: number;
+    emotion: string;
+    count: number;
+    from?: string;
+    to?: string;
+  }) {
+    return await this.commentService.findManyByInfo(info);
   }
 }

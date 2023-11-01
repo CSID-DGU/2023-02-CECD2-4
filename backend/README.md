@@ -180,8 +180,7 @@ NewsSource는 뉴스를 수집할 언론사를 의미합니다. 뉴스 스크래
 | 기능 | 설명 | 경로 | Guard |
 |-|-|-|-|
 |이슈 키워드 목록|최근 이슈 키워드 목록을 가져옵니다.|``GET /search/popular-keywords``||
-|키워드 및 대표 댓글 목록|특정 키워드에 대해 기간 내 감정 별로 최대 공감 수를 받은 댓글들을 가져옵니다.| ``GET /search/top-comments?keyword=~``||
-
+|키워드 및 대표 댓글 목록|특정 키워드에 대해 기간 내 감정 별로 최대 공감 수를 받은 댓글들을 가져옵니다.| ``GET /search/keyword?keyword=~``||
 
 # API 경로
 현재 프로젝트는 [@nestjs/swagger](https://www.npmjs.com/package/@nestjs/swagger)을 이용하여 API를 문서화합니다. 서버를 가동한 후 다음 주소를 통해 swagger 문서를 볼 수 있습니다.

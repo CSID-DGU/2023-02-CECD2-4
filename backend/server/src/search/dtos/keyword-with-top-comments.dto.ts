@@ -1,7 +1,7 @@
 import { Expose } from 'class-transformer';
 import { IsOptional, IsString } from 'class-validator';
 import { AnalysisComment } from '../../analysis-comment/entity/analysis-comment.entity';
-import { Keyword } from '../../keyword/keyword.entity';
+import { OutKeywordDto } from './common/out-keyword.dto';
 
 export class KeywordWithTopCommentsReqQueryDto {
   /**
@@ -17,7 +17,7 @@ export class KeywordWithTopCommentsReqQueryDto {
    */
   @IsString()
   @IsOptional()
-  from: string;
+  from?: string;
 
   /**
    * 검색 끝일
@@ -25,15 +25,7 @@ export class KeywordWithTopCommentsReqQueryDto {
    */
   @IsString()
   @IsOptional()
-  to: string;
-}
-
-export class OutKeywordDto implements Pick<Keyword, 'id' | 'name'> {
-  @Expose()
-  id: number;
-
-  @Expose()
-  name: string;
+  to?: string;
 }
 
 export class OutCommentDto

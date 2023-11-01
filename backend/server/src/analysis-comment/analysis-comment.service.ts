@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { Between, DataSource, FindOperator, Repository } from 'typeorm';
 import { AnalysisComment } from './entity/analysis-comment.entity';
 import { CreateCommentDto } from './dtos/create-comment.dto';
 import { ArticleContent } from './entity/article-content.entity';
 import { GetCommentsQueriesDto } from './dtos/get-comments-query.dto';
+
 @Injectable()
 export class AnalysisCommentService {
   constructor(
@@ -40,7 +41,58 @@ export class AnalysisCommentService {
     return comment;
   }
 
-  async findMany({ search, psize, head_id, from, to }: GetCommentsQueriesDto) {
+  /**
+   * id 기반으로 댓글을 검색한다. 연관 기사 문장과 함께 가져올지 지정할 수 있다.
+   */
+  async findOneById(id: number, isWithSentences = true) {
+    return await this.comment_repo.findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        news_sentences: isWithSentences,
+      },
+    });
+  }
+
+  /**
+   * commment 정보를 이용하여 연관된 키워드 목록을 가져온다
+   */
+  async findManyByInfo(info: {
+    keyword_id: number;
+    emotion: string;
+    count: number;
+    from?: string;
+    to?: string;
+  }) {
+    const { keyword_id, emotion, count, from, to } = info;
+    let between: FindOperator<Date> | undefined;
+    if (from && to) {
+      between = Between(new Date(from), new Date(to));
+    }
+
+    await this.comment_repo.find({
+      where: {
+        keyword_id: keyword_id,
+        emotion: emotion,
+        createdAt: between,
+      },
+      order: {
+        sympathy: {
+          direction: 'DESC',
+        },
+      },
+      take: count,
+    });
+  }
+
+  async findManyWithQuery({
+    search,
+    psize,
+    head_id,
+    from,
+    to,
+  }: GetCommentsQueriesDto) {
     if (!search) return [];
 
     const qb = this.comment_repo.createQueryBuilder();
