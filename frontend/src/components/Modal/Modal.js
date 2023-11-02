@@ -56,6 +56,12 @@ border-radius:10px;
     background-color: #ccc;
     transition: all 0.2s ease-in-out;
 }
+margin:0 5px;
+`;
+const ModalBtnContainer = styled.div`
+display: flex;
+width:100%;
+justify-content: center;
 `;
 
 const Modal = (props) => {
@@ -64,8 +70,15 @@ const Modal = (props) => {
             <ModalBackDrop onClick={props.closeModal}></ModalBackDrop>
             <ModalContent>
                 <ModalTitle>{props.title}</ModalTitle>
-                <div>{props.children}</div>
-                <CloseBtn onClick={props.closeModal}>닫기</CloseBtn>
+                {props.children}
+                <ModalBtnContainer>
+                    {Object.keys(props).includes('customBtn') ?
+                        props.customBtn()
+                        : 
+                        undefined
+                    }
+                    <CloseBtn onClick={props.closeModal}>닫기</CloseBtn>
+                </ModalBtnContainer>
             </ModalContent>
         </ModalConatiner>
     );
