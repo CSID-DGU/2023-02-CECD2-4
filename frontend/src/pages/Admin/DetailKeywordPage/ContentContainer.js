@@ -6,105 +6,108 @@ display: flex;
 flex-direction: column;
 font-size:20px;
 width:60%;
-height:75%;
-border: 2px solid #aaa;
+height:65%;
 align-items: center;
+justify-content: space-evenly;
 `;
 
-const SubContentBox = styled.div`
-display: grid;
-grid-template-columns:repeat(2, 50%);
-justify-items:center;
+const InfoContainer = styled.div`
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
 font-size:20px;
-width:90%;
-height:50%;
-border: 2px solid #aaa;
-align-items: center;
-margin-top:30px;
 `;
 
-const TextBoxContainer = styled.div`
+const TopContainer = styled(InfoContainer)`
+width:90%;
+height:15%;
+`;
+
+const BottomContainer = styled(InfoContainer)`
+width:90%;
+height:65%;
+`;
+
+const iContainer = styled.div`
 position: relative;
 display: flex;
-flex-direction: column;
-align-items:flex-start;
-width:80%;
-height:70px;
+justify-content:space-evenly;
+align-items:center;
 border: 2px solid #aaa;
+border-radius: 3px;
+`;
+
+const KeywordContainer = styled(iContainer)`
+width:45%;
+height:40px;
+`;
+const IDContainer = styled(iContainer)`
+width:45%;
+height:40px;
+`;
+const DetailContainer = styled(iContainer)`
+width: 30%;
+height:50px;
+`;
+const DescContainer = styled(iContainer)`
+width:100%;
+height:60%;
+align-items:flex-start;
+margin-top:20px;
 `;
 
 const Label = styled.label`
 position:absolute;
-top: 0;
-left:0;
+top: -7px;
+left:7px;
 color:#aaa;
 font-family: "aggro";
-font-size:20px;
-transform-origin: 0 0;
-transition: transform 0.2s ease-in-out;
+font-size:14px;
+background-color: white;
 pointer-events: none;
+padding-left: 3px;
+padding-right: 3px;
 `;
 
 const Value = styled.label`
-position:absolute;
-left:0;
-bottom: 0;
 color:#000;
 font-family: "aggro";
-font-size:20px;
-transform-origin: 0 100%;
-transition: transform 0.2s ease-in-out;
+font-size:14px;
 pointer-events: none;
-`;
-
-const BackBtn = styled.div`
-display:flex;
-justify-content:center;
-align-items:center;
-width:40%;
-height:50px;
-font-family:"aggro";
-font-size:25px;
-color:#444;
-border:0 none;
-border-radius:15px;
-background-color:#bbb;
-margin-top:30px;
-margin-bottom:30px;
+margin: 10px;
 `;
 
 const ContentContainer = (props) => {
     return (
         <ContentBox>
-            <SubContentBox>
-                <TextBoxContainer>
+            <TopContainer>
+                <KeywordContainer>
                     <Label>키워드</Label>
                     <Value>{props.key}</Value>
-                </TextBoxContainer>
-                <TextBoxContainer>
+                </KeywordContainer>
+                <IDContainer>
                     <Label>등록자 ID</Label>
                     <Value>{props.id}</Value>
-                </TextBoxContainer>
-            </SubContentBox>
-            <SubContentBox>
-                <TextBoxContainer>
+                </IDContainer>
+            </TopContainer>
+            <BottomContainer>
+                <DetailContainer>
                     <Label>등록일</Label>
                     <Value>{props.day}</Value>
-                </TextBoxContainer>
-                <TextBoxContainer>
+                </DetailContainer>
+                <DetailContainer>
                     <Label>갱신일</Label>
                     <Value>{props.updated}</Value>
-                </TextBoxContainer>
-                <TextBoxContainer>
+                </DetailContainer>
+                <DetailContainer>
                     <Label>상태</Label>
                     <Value>{props.state}</Value>
-                </TextBoxContainer>
-                <TextBoxContainer>
+                </DetailContainer>
+                <DescContainer>
                     <Label>설명</Label>
                     <Value>{props.explain}</Value>
-                </TextBoxContainer>
-            </SubContentBox>
-            <BackBtn>돌아가기</BackBtn>
+                </DescContainer>
+            </BottomContainer>
         </ContentBox>
     );
 };

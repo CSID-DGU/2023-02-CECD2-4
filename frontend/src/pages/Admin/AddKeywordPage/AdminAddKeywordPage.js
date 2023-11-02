@@ -8,18 +8,24 @@ import { addPage } from '../../../redux/modules/toggleAddManage';
 import Modal from '../../../components/Modal/Modal';
 import styled from 'styled-components';
 
-const AddBtn = styled.button`
+const AddBtn = styled.div`
 display:flex;
 justify-content:center;
 align-items:center;
-width:40%;
-height:50px;
-font-family:"aggro";
-font-size:25px;
+width:200px;
+height:40px;
+font-family: "aggro";
+font-weight: 500;
+font-size:20px;
 color:#444;
-border:0 none;
-border-radius:15px;
-background-color:#bbb;
+background-color: #888888;
+text-decoration:none;;
+transition: all 0.2s ease-in-out;
+border-radius:10px;
+&:hover {
+    background-color: #ccc;
+    transition: all 0.2s ease-in-out;
+}
 margin-top:10px;
 `;
 
@@ -27,8 +33,8 @@ const AdminAddKeywordPage = () => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
     
-    const openModal = () => {setIsModalOpen(true); console.log("open");}
-    const closeModal = () => {setIsModalOpen(false); console.log("close");}
+    const openModal = () => {setIsModalOpen(true);}
+    const closeModal = () => {setIsModalOpen(false);}
 
     useEffect(() => {
         dispatch(enter());
@@ -39,7 +45,7 @@ const AdminAddKeywordPage = () => {
             <SubHeader/>
             <ContentContainer/>
             <AddBtn onClick={openModal}>추가</AddBtn>
-            <Modal isOpen={isModalOpen} closeModal={closeModal}>
+            <Modal isOpen={isModalOpen} closeModal={closeModal} title="키워드 추가">
                 <p>모달테스트요</p>
             </Modal>
         </Main>
