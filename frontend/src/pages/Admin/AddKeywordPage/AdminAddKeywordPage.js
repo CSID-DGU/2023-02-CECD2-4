@@ -28,11 +28,17 @@ border-radius:10px;
 }
 margin-top:10px;
 `;
+const ModalBtn = styled(AddBtn)`
+width:120px;
+height:40px;
+margin:0 5px;
+`;
 
 const AdminAddKeywordPage = () => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+    const [isSuccess, setIsSuccess] = useState(true);
+
     const openModal = () => {setIsModalOpen(true);}
     const closeModal = () => {setIsModalOpen(false);}
 
@@ -40,12 +46,13 @@ const AdminAddKeywordPage = () => {
         dispatch(enter());
         dispatch(addPage());
     }, [dispatch]);
+
     return (
         <Main>
             <SubHeader/>
             <ContentContainer/>
             <AddBtn onClick={openModal}>추가</AddBtn>
-            <Modal isOpen={isModalOpen} closeModal={closeModal} title="키워드 추가">
+            <Modal isOpen={isModalOpen} closeModal={closeModal} title="키워드 추가" customBtn={() => isSuccess ? <ModalBtn>테스트</ModalBtn> : null}>
                 <p>모달테스트요</p>
             </Modal>
         </Main>

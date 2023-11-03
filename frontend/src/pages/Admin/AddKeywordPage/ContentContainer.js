@@ -6,76 +6,64 @@ display: flex;
 flex-direction: column;
 font-size:20px;
 width:50%;
-height:60%;
+height:65%;
 border: 2px solid #aaa;
+border-radius: 3px;
 align-items: center;
+justify-content:space-evenly;
 `;
 
-const TextBoxContainer = styled.div`
-position:relative;
+const iContainer = styled.div`
 display: flex;
-flex-direction: row;
+justify-content: flex-start;
+width:90%;
+`;
+const KeywordContainer = styled(iContainer)`
 align-items: center;
-justify-content: center;
-width:55%;
-height:30%px;
-margin-top:50px;
+height: 25%;
+`;
+const DescContainer = styled(iContainer)`
+height: 55%;
 `;
 
-const Label = styled.label`
-position:absolute;
-left:0;
-color:#ccc;
+const Label = styled.div`
+width:25%;
+color:#aaa;
 font-family: "aggro";
 font-size:20px;
-transform-origin: 0 0;
-transition: transform 0.2s ease-in-out;
 pointer-events: none;
 `;
 
 const Input = styled.input`
-border:none;
-border-bottom: 2px solid #ccc;
-background-color: unset;
-outline:none;
-width:100%;
-height: 50px;
-font-family: "aggro";
-font-size: 25px;
-color:#444;
-caret-color: #bbb;
-input:focus + label, input:not(:placeholder-shown) + label{
-    transform: translateY(-27px) scale(0.7);
-}
+width:70%;
+height:25px;
+font-family:"aggro";
+font-size:15px;
+font-color:#555;
 `;
 
-const InputContent = styled.input`
-border:none;
-border: 2px solid #ccc;
-background-color: unset;
-outline:none;
-width:100%;
-height: 100px;
-font-family: "aggro";
-font-size: 15px;
-color:#444;
-caret-color: #bbb;
-input:focus + label, input:not(:placeholder-shown) + label{
-    transform: translateY(-27px) scale(0.7);
-}
+const DescTextArea = styled.textarea`
+width:70%;
+height:12.5em;
+font-family:"aggro";
+font-size:15px;
+font-color:#555;
+resize:none;
+border: 2px solid #aaa;
+border-radius: 2px;
 `;
 
 const ContentContainer = (props) => {
     return (
         <FormBox>
-            <TextBoxContainer>
-                <Input type="text" placeholder=" "></Input>
+            <KeywordContainer>
                 <Label>키워드</Label>
-            </TextBoxContainer>
-            <TextBoxContainer>
-                <InputContent type="text" placeholder=" "></InputContent>
+                <Input type="text" placeholder=" "></Input>
+            </KeywordContainer>
+            <DescContainer>
                 <Label>키워드 설명 </Label>
-            </TextBoxContainer>
+                <DescTextArea/>
+            </DescContainer>
         </FormBox>
     );
 };
