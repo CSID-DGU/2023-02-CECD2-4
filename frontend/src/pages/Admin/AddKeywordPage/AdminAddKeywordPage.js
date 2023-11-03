@@ -33,6 +33,19 @@ width:120px;
 height:40px;
 margin:0 5px;
 `;
+const ModalLine = styled.hr`
+height:1px;
+backgroun-color:#aaa;
+border:0;
+`;
+const ModalDesc = styled.div`
+display:flex;
+flex-direction:column;
+justify-content:space-evenly;
+align-items:center;
+width:30vw;
+height:15vh;
+`;
 
 const AdminAddKeywordPage = () => {
     const dispatch = useDispatch();
@@ -52,8 +65,14 @@ const AdminAddKeywordPage = () => {
             <SubHeader/>
             <ContentContainer/>
             <AddBtn onClick={openModal}>추가</AddBtn>
-            <Modal isOpen={isModalOpen} closeModal={closeModal} title="키워드 추가" customBtn={() => isSuccess ? <ModalBtn>테스트</ModalBtn> : null}>
-                <p>모달테스트요</p>
+            <Modal isOpen={isModalOpen} closeModal={closeModal} 
+            title={isSuccess ? "키워드 추가 성공" : "키워드 추가 실패"} 
+            customBtn={() => isSuccess ? <ModalBtn>관리</ModalBtn> : null}>
+                <ModalLine/>
+                { isSuccess ?
+                <ModalDesc>키워드 추가에 성공했습니다. 추가된 키워드는 검토 중 상태가 되며, 검토 후 수락 또는 거절 될 수 있습니다.</ModalDesc> :
+                <ModalDesc><div>키워드를 추가하지 못했습니다.</div><div>사유:test</div></ModalDesc>
+                }
             </Modal>
         </Main>
     );
