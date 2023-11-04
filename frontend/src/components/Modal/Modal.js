@@ -1,10 +1,28 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
+
+const open_modal = keyframes`
+    0% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+`;
+const close_modal = keyframes`
+    0% {
+        opacity:1;
+    }
+    100% {
+        opacity:0;
+    }
+`;
 
 const ModalConatiner = styled.div`
-display: ${(props) => props.$isOpen ? "block" : "none"};
+display: ${(props) => props.state ? "block" : "none"};
 font-family: "aggro";
 color: #777;
+animation: ${(props) => props.$isOpen ? open_modal : close_modal} 0.2s ease-in-out;
 `;
 const ModalContent = styled.div`
 display: flex;
@@ -30,7 +48,7 @@ right: 100vw;
 bottom: 100vh;
 width: 100vw;
 height: 100vh;
-background-color: rgba(0, 0, 0, 0.35);
+background-color: rgba(0, 0, 0, 0.7);
 `;
 const ModalTitle = styled.div`
 justify-self:flex-start;
@@ -65,8 +83,23 @@ justify-content: center;
 `;
 
 const Modal = (props) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        let timer;
+
+        if(props.isOpen)
+            setIsModalOpen(true);
+        else
+            timer = setTimeout(() => setIsModalOpen(false), 180);
+
+        return () => { clearTimeout(timer); }
+    }, [props.isOpen]);
+
+    if(!isModalOpen) return null;
+
     return (
-        <ModalConatiner $isOpen={props.isOpen}>
+        <ModalConatiner $isOpen={props.isOpen} state={isModalOpen}>
             <ModalBackDrop onClick={props.closeModal}></ModalBackDrop>
             <ModalContent>
                 <ModalTitle>{props.title}</ModalTitle>
@@ -74,7 +107,7 @@ const Modal = (props) => {
                 <ModalBtnContainer>
                     {Object.keys(props).includes('customBtn') ?
                         props.customBtn()
-                        : 
+                        :
                         undefined
                     }
                     <CloseBtn onClick={props.closeModal}>닫기</CloseBtn>
