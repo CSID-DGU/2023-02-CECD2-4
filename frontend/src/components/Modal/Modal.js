@@ -99,7 +99,7 @@ const Modal = (props) => {
     if(!isModalOpen) return null;
 
     return (
-        <ModalConatiner $isOpen={props.isOpen} state={isModalOpen}>
+        <ModalConatiner $isOpen={props.isOpen} state={isModalOpen.toString()}>
             <ModalBackDrop onClick={props.closeModal}></ModalBackDrop>
             <ModalContent>
                 <ModalTitle>{props.title}</ModalTitle>

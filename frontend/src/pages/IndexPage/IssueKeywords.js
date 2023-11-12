@@ -10,7 +10,7 @@ const IssueKeywords = ({keywords}) => {
                 {
                     keywords.map((elem, index) => {
                         return(
-                            <Link to={"/search_result/" + elem.name} className="keyword" key={index}>
+                            <Link to={"/search_result?keyword=" + elem.name} className="keyword" key={index}>
                                 #{elem.name}
                             </Link>
                         )

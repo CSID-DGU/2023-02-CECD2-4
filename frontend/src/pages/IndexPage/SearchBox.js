@@ -23,7 +23,7 @@ const SearchBox = () => {
             <input type="text" className="text_box" placeholder=" " onChange={UpdateSearchKeyword}></input>
             <label>KEYWORD</label>
             {}
-            <Link to={"/search_result/" + searchKeyword} className="search_btn" ref={search_btn}></Link>
+            <Link to={"/search_result?keyword=" + searchKeyword} className="search_btn" ref={search_btn}></Link>
         </div>
     );
 };
