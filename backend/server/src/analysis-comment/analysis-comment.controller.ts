@@ -1,7 +1,7 @@
 import { Controller, Post, Get, Body, UseGuards, Param } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { CreateCommentDto } from './dtos/create-comment.dto';
+import { CreateCommentReqDto } from './dtos/create-comment.dto';
 import { AnalysisCommentService } from './analysis-comment.service';
 import { AuthGuard } from '../auth/auth.guard';
 
@@ -20,7 +20,7 @@ export class AnalysisCommentController {
   })
   @UseGuards(AuthGuard)
   @Post()
-  async createComment(@Body() dto: CreateCommentDto) {
+  async createComment(@Body() dto: CreateCommentReqDto) {
     const comment = await this.commentService.create(dto);
     return comment;
   }

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AnalysisCommentController } from './analysis-comment.controller';
 import { AnalysisCommentService } from './analysis-comment.service';
-import { CreateCommentDto } from './dtos/create-comment.dto';
+import { CreateCommentReqDto } from './dtos/create-comment.dto';
 import { AuthGuard } from '../auth/auth.guard';
 
 jest.mock('./analysis-comment.service');
@@ -30,7 +30,7 @@ describe('AnalysisCommentController', () => {
   describe('createComment()', () => {
     it('call commentService.create', async () => {
       // dummy data
-      const dummyDto: CreateCommentDto = {
+      const dummyDto: CreateCommentReqDto = {
         antipathy: 0,
         sympathy: 0,
         content: '',

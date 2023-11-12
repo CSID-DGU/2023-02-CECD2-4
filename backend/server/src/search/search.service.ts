@@ -3,7 +3,7 @@ import { KeywordService } from '../keyword/keyword.service';
 import { Keyword } from '../keyword/keyword.entity';
 import { Redis } from 'ioredis';
 import { RedisToken } from '../redis/redis.provider';
-import { AnalysisCommentService } from 'src/analysis-comment/analysis-comment.service';
+import { AnalysisCommentService } from '../analysis-comment/analysis-comment.service';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
