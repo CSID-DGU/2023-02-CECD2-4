@@ -29,6 +29,8 @@
 
 .keyword {
     font-family: "aggro";
+    text-decoration: none;
+    color:#555;
 }
 
 hr {

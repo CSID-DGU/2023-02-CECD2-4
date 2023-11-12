@@ -1,4 +1,5 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 import Main from "../../components/Main/Main";
 import SearchBox from "./SearchBox";
 import IssueKeywords from './IssueKeywords';
@@ -7,14 +8,25 @@ import { leave } from '../../redux/modules/toggleAdminHeader';
 
 const IndexPage = () => {
     const dispatch = useDispatch();
+
+    const [popularKeywords, setPopularKeywords] = useState([]);
+    useEffect(()=>{
+        fetchIssueKeyword();
+    }, []);
+
     useEffect(() => {
         dispatch(leave())
     }, [dispatch]);
 
+    const fetchIssueKeyword = async () => {
+        const response = await axios.get("http://localhost:8080/search/popular-keywords?count=3");
+        setPopularKeywords(response.data);
+    };
+
     return (
         <Main>
             <SearchBox/>
-            <IssueKeywords/>
+            <IssueKeywords keywords={popularKeywords}/>
         </Main>
     );
 };
