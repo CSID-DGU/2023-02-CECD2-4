@@ -2,6 +2,12 @@
 - nest.js 기반으로 구성한 웹 API 백엔드 서버입니다.  
 - 웹 API 백엔드 서버는 프로젝트 내 필요한 API 기능들을 제공합니다. 
 
+## 구조도
+### 스크래핑 모듈 구조도
+![이미지](./server/docs/img/crawling_module.png)
+[링크](https://github.com/blaxsior/lambda-deploy-test)
+### 서버 구조도
+![이미지](./server/docs/img/server.png)
 ## 사용법
 API 서버는 docker 기반으로 동작하므로, 먼저 docker을 설치하세요.
 - 실행: ``docker-compose -f docker-compose.dev.yml up``
@@ -193,8 +199,8 @@ NewsSource는 뉴스를 수집할 언론사를 의미합니다. 뉴스 스크래
 erDiagram
     Comment {
       str contents
-      number sympathyCount
-      number antipathyCount
+      int sympathyCount
+      int antipathyCount
       date date "※댓글 작성일"
     }
 
@@ -205,21 +211,21 @@ erDiagram
     }
 
     AnalysisComment {
-      number id PK
+      int id PK
       date createdAt "※댓글 작성일"
       str content
-      number sympathy
-      number antipathy
+      int sympathy
+      int antipathy
       string link
       string emotion
-      number keyword_id FK
+      int keyword_id FK
     }
 
     ArticleContent {
-      number id PK
+      int id PK
       string content
-      number score
-      number comment_id FK
+      float score
+      int comment_id FK
     }
     
     Keyword {
@@ -232,26 +238,26 @@ erDiagram
     }
 
     KeywordHistory {
-      number id PK
+      int id PK
       string description
       string action
       date createdAt "auto"
-      number keyword_id FK
+      int keyword_id FK
     }
     Admin {
-      number id PK
+      int id PK
       string login_id UK
       string password
       string name
       date createdAt
     }
     TokenInfo {
-      number id PK
+      int id PK
       string refresh_key "nullable"
     }
     NewsSource {
-      number id PK
-      number media_id
+      int id PK
+      int media_id
       string media_name
       date createdAt
     }
