@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, DataSource, FindOperator, Repository } from 'typeorm';
 import { AnalysisComment } from './entity/analysis-comment.entity';
-import { CreateCommentDto } from './dtos/create-comment.dto';
+import { CreateCommentReqDto } from './dtos/create-comment.dto';
 import { ArticleContent } from './entity/article-content.entity';
-import { GetCommentsQueriesDto } from './dtos/get-comments-query.dto';
+import { GetCommentsQueriesReqDto } from './dtos/get-comments-query.dto';
 
 @Injectable()
 export class AnalysisCommentService {
@@ -16,7 +16,7 @@ export class AnalysisCommentService {
     private dataSource: DataSource,
   ) {}
 
-  async create(dtos: CreateCommentDto): Promise<AnalysisComment> {
+  async create(dtos: CreateCommentReqDto): Promise<AnalysisComment> {
     let comment = this.comment_repo.create();
     comment.createdAt = dtos.createdAt;
     comment.content = dtos.content;
@@ -92,7 +92,7 @@ export class AnalysisCommentService {
     head_id,
     from,
     to,
-  }: GetCommentsQueriesDto) {
+  }: GetCommentsQueriesReqDto) {
     if (!search) return [];
 
     const qb = this.comment_repo.createQueryBuilder();

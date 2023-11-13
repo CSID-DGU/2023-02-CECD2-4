@@ -5,7 +5,7 @@ import { Type } from 'class-transformer';
  * 댓글 생성 관련 dto.
  * 구조는 [analysiscomment](../entity/analysis-comment.entity.ts) 참조.
  */
-export class CreateCommentDto {
+export class CreateCommentReqDto {
   /**
    * 댓글 생성일
    * @example '2022-03-31'

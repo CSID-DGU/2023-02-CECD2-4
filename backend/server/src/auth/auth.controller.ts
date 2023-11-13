@@ -75,6 +75,8 @@ export class AuthController {
     res.cookie(REFRESH_TOKEN_NAME, refresh_token, {
       maxAge: REFRESH_MAX_AGE,
       httpOnly: true,
+      sameSite: 'none',
+      secure: true,
     });
     return {
       user,
@@ -92,7 +94,11 @@ export class AuthController {
   @Get('/signout')
   @HttpCode(200)
   async signout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie(REFRESH_TOKEN_NAME);
+    res.clearCookie(REFRESH_TOKEN_NAME, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+    });
     return;
   }
 
