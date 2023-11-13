@@ -21,8 +21,7 @@ export class NewsSourceService {
   }
 
   async findMany() {
-    const newsMedia = await this.repo.find();
-    return await this.repo.remove(newsMedia);
+    return await this.repo.find();
   }
 
   async remove(id: number) {
