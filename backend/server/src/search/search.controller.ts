@@ -25,7 +25,7 @@ export class SearchController {
     description: '중요한 키워드 목록을 반환한다.',
     type: () => PopularKeywordsResDto,
   })
-  // @Serialize(PopularKeywordsResDto)
+  @Serialize(PopularKeywordsResDto)
   @Get('popular-keywords')
   async getPopularKeywords(
     @Query() dto: PopularKeywordsReqQueryDto,
@@ -46,7 +46,7 @@ export class SearchController {
     status: 200,
     type: () => KeywordWithTopCommentsResDto,
   })
-  @Serialize(KeywordWithTopCommentsResDto)
+  // @Serialize(KeywordWithTopCommentsResDto)
   @Get('keyword-search-result')
   async getKeywordWithTopComments(
     @Query() dto: KeywordWithTopCommentsReqQueryDto,

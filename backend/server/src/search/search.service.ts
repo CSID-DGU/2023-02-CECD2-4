@@ -73,8 +73,8 @@ export class SearchService {
       id,
       true,
     );
-    if (!commentWithSentences)
-      throw new NotFoundException(`there is no comment id: ${id}`);
+    // if (!commentWithSentences)
+    //   throw new NotFoundException(`there is no comment id: ${id}`);
     return commentWithSentences;
   }
 
