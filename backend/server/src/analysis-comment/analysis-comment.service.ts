@@ -4,7 +4,7 @@ import { Between, DataSource, FindOperator, Repository } from 'typeorm';
 import { AnalysisComment } from './entity/analysis-comment.entity';
 import { CreateCommentReqDto } from './dtos/create-comment.dto';
 import { ArticleContent } from './entity/article-content.entity';
-import { GetCommentsQueriesReqDto } from './dtos/get-comments-query.dto';
+import { CommentsQueriesReqDto } from './dtos/get-comments-query.dto';
 
 @Injectable()
 export class AnalysisCommentService {
@@ -23,6 +23,7 @@ export class AnalysisCommentService {
     comment.sympathy = dtos.sympathy;
     comment.antipathy = dtos.antipathy;
     comment.emotion = dtos.emotion;
+    comment.big_emotion = dtos.big_emotion;
     comment.link = dtos.link;
     comment.keyword_id = dtos.keyword_id;
 
@@ -92,7 +93,7 @@ export class AnalysisCommentService {
     head_id,
     from,
     to,
-  }: GetCommentsQueriesReqDto) {
+  }: CommentsQueriesReqDto) {
     if (!search) return [];
 
     const qb = this.comment_repo.createQueryBuilder();
@@ -103,6 +104,7 @@ export class AnalysisCommentService {
       'sympathy',
       'antipathy',
       'emotion',
+      'big_emotion',
       'link',
     ]).where(`keyword_id IN (SELECT id FROM keyword WHERE name = :name)`, {
       name: search,
@@ -131,7 +133,16 @@ export class AnalysisCommentService {
 
     const qb = this.dataSource
       .createQueryBuilder()
-      .select(['id', 'content', 'sympathy', 'antipathy', 'emotion'])
+      .select([
+        'id',
+        'createdAt',
+        'content',
+        'sympathy',
+        'antipathy',
+        'emotion',
+        'big_emotion',
+        'link',
+      ])
       .from((subQuery) => {
         subQuery
           .select('*')
@@ -148,6 +159,11 @@ export class AnalysisCommentService {
         return subQuery;
       }, 'temp')
       .where('ranking = 1');
-    return await qb.getRawMany();
+    const data = await qb.getRawMany();
+    return data.map((it) => {
+      const comment = new AnalysisComment();
+      Object.assign(comment, it);
+      return comment;
+    });
   }
 }

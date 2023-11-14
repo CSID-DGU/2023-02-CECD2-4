@@ -36,6 +36,7 @@ describe('AnalysisCommentController', () => {
         content: '',
         createdAt: new Date(),
         emotion: '',
+        big_emotion: '',
         keyword_id: 0,
         link: '',
         news_sentences: [],

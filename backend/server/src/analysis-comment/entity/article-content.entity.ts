@@ -22,7 +22,7 @@ export class ArticleContent {
   /**
    * 댓글과 문장 사이의 연관도 점수(-1 ~ 1 사이)
    */
-  @Column()
+  @Column({ type: 'float' })
   score: number;
 
   /**

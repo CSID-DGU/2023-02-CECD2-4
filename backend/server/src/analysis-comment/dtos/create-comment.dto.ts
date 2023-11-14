@@ -42,10 +42,17 @@ export class CreateCommentReqDto {
 
   /**
    * 댓글의 대표 감정
-   * @example happiness
+   * @example 행복
    */
   @IsString()
   emotion: string;
+
+  /**
+   * 댓글의 감정 대분류
+   * @example 행복
+   */
+  @IsString()
+  big_emotion: string;
 
   /**
    * 대응되는 키워드의 id 값

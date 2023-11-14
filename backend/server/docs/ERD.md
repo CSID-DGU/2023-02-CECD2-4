@@ -4,8 +4,8 @@
 erDiagram
     Comment {
       str contents
-      number sympathyCount
-      number antipathyCount
+      int sympathyCount
+      int antipathyCount
       date date "※댓글 작성일"
     }
 
@@ -16,21 +16,21 @@ erDiagram
     }
 
     AnalysisComment {
-      number id PK
+      int id PK
       date createdAt "※댓글 작성일"
       str content
-      number sympathy
-      number antipathy
+      int sympathy
+      int antipathy
       string link
       string emotion
-      number keyword_id FK
+      int keyword_id FK
     }
 
     ArticleContent {
-      number id PK
+      int id PK
       string content
-      number score
-      number comment_id FK
+      float score
+      int comment_id FK
     }
     
     Keyword {
@@ -43,26 +43,26 @@ erDiagram
     }
 
     KeywordHistory {
-      number id PK
+      int id PK
       string description
       string action
       date createdAt "auto"
-      number keyword_id FK
+      int keyword_id FK
     }
     Admin {
-      number id PK
+      int id PK
       string login_id UK
       string password
       string name
       date createdAt
     }
     TokenInfo {
-      number id PK
+      int id PK
       string refresh_key "nullable"
     }
     NewsSource {
-      number id PK
-      number media_id
+      int id PK
+      int media_id
       string media_name
       date createdAt
     }

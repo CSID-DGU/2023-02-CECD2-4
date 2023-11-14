@@ -41,18 +41,24 @@ export class AnalysisComment {
   @Column()
   link: string;
   /**
-   * 댓글에 할당된 감정
+   * 댓글에 할당된 감정(기쁨, 슬픔, 당황, 분노 등)
    */
   @Column()
   emotion: string;
+
+  /**
+   * 댓글에 할당된 감정 대분류(긍정 / 부정 / 중립)
+   */
+  @Column()
+  big_emotion: string;
 
   @Column()
   keyword_id: number;
 
   @OneToMany(() => ArticleContent, (content) => content.comment)
-  news_sentences: ArticleContent[];
+  news_sentences?: ArticleContent[];
 
   @JoinColumn({ name: 'keyword_id' })
   @ManyToOne(() => Keyword, (keyword) => keyword.comments)
-  keyword: Keyword;
+  keyword?: Keyword;
 }

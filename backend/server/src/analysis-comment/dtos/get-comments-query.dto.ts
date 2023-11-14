@@ -2,7 +2,7 @@ import { IsString, IsNumber, IsOptional, IsDateString } from 'class-validator';
 /**
  * 댓글 검색에 사용되는 쿼리 목록
  */
-export class GetCommentsQueriesReqDto {
+export class CommentsQueriesReqDto {
   /**
    * 검색어
    * @example 윤석열

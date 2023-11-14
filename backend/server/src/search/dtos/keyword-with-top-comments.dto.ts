@@ -27,16 +27,13 @@ export class KeywordWithTopCommentsReqQueryDto {
   @IsOptional()
   to?: string;
 }
-
 export class OutCommentDto
-  implements
-    Omit<
-      AnalysisComment,
-      'link' | 'keyword_id' | 'news_sentences' | 'keyword' | 'createdAt'
-    >
+  implements Omit<AnalysisComment, 'keyword_id' | 'news_sentences' | 'keyword'>
 {
   @Expose()
   id: number;
+  @Expose()
+  createdAt: Date;
   @Expose()
   content: string;
   @Expose()
@@ -45,12 +42,16 @@ export class OutCommentDto
   antipathy: number;
   @Expose()
   emotion: string;
+  @Expose()
+  big_emotion: string;
+  @Expose()
+  link: string;
 }
 
 export class KeywordWithTopCommentsResDto {
   @Expose()
   keyword: OutKeywordDto;
 
-  @Expose()
+  @Expose({ toClassOnly: false, toPlainOnly: false })
   comments: OutCommentDto[];
 }
