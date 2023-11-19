@@ -34,12 +34,21 @@ erDiagram
     }
     
     Keyword {
-      number id PK
+      int id PK
       string name
       string description
       date createdAt "auto"
       date updatedAt "auto"
       date deletedAt "auto"
+    }
+
+    DailyKeywordBigEmotionsCnt {
+      int id PK
+      date date "감정 분석일"
+      int positive_cnt
+      int neutral_cnt
+      int negative_cnt
+      int keyword_id FK
     }
 
     KeywordHistory {
@@ -71,6 +80,7 @@ erDiagram
     Article ||--o{ Comment: ""
     Keyword ||--o{ AnalysisComment: ""
     Keyword ||--|{ KeywordHistory: ""
+    Keyword ||--o{ DailyKeywordBigEmotionsCnt:""
     AnalysisComment ||--|{ ArticleContent: ""
 ```
 1. 저장되지 않는 엔티티
@@ -80,6 +90,7 @@ erDiagram
     - AnalysisComment: 분석된 댓글. 세부 감정 / URL 포함
     - ArticleContent: 분석된 댓글과 연관성 높은 기사 내 문장
     - Keyword: 수집 대상이 되는 키워드
+    - DailyKeywordBigEmotionsCnt: 키워드에 대한 날짜별 감정 대분류(긍정,중립,부정)에 대한 댓글 개수
     - KeywordHistory: 키워드 생성 / 수정 내역
 3. redis에서 관리되는 엔티티
     - TokenInfo: refresh_key만 임시로 저장
@@ -113,7 +124,7 @@ interface CrawlingDataType {
 ```
 ### 저장되는 엔티티
 TokenInfo를 제외한 엔티티들은 RDS-mysql에 저장됩니다. 각 서버가 처리하는 데이터는 다음과 같습니다.
-- AI 서버: ``AnalysisComment``, ``ArticleContent``
+- AI 서버: ``AnalysisComment``, ``ArticleContent``, ``DailyKeywordBigEmotionsCnt``
 - API 서버: ``Keyword``, ``KeywordHistory``, ``Admin``, ``NewsSource``
 
 분석된 결과는 AI 서버에서 RDS로 저장됩니다. API 서버는 관리자 관련 기능을 수행합니다.
@@ -128,6 +139,7 @@ TokenInfo의 경우 초기에는 RDS-mysql 환경에 저장하도록 구현하�
 - AI 서버
   - AnalysisComment: 분석된 댓글 정보
   - ArticleContent: 분석된 댓글과 관계가 있는 문장
+  - DailyKeywordBigEmotionsCnt:  날짜 별로 각 키워드에 대한 감정 대분류(긍정, 중립, 부정)에 속하는 댓글의 개수를 저장하는 테이블
 - API 서버
   - Keyword: 데이터 수집 대상이 되는 키워드
   - KeywordHistory: 키워드에 대해 관리자가 수행한 동작 기록

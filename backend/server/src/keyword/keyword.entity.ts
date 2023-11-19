@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { KeywordHistory } from './keyword-history.entity';
 import { AnalysisComment } from '../analysis-comment/entity/analysis-comment.entity';
+import { DailyKeywordBigEmotionsCnt } from '../daily-keyword-big-emotions-cnt/daily-keyword-big-emotions-cnt.entity';
 
 /**
  * 데이터 수집 대상이 되는 키워드
@@ -39,6 +40,8 @@ export class Keyword {
   histories?: KeywordHistory[];
   @OneToMany(() => AnalysisComment, (comment) => comment.keyword)
   comments?: AnalysisComment[];
+  @OneToMany(() => DailyKeywordBigEmotionsCnt, (dkbe_cnts) => dkbe_cnts.keyword)
+  dkbe_cnts?: DailyKeywordBigEmotionsCnt[];
 
   @CreateDateColumn()
   createdAt: Date;

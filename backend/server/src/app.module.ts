@@ -15,6 +15,9 @@ import { RedisModule } from './redis/redis.module';
 import { SearchModule } from './search/search.module';
 import { BatchModule } from './batch/batch.module';
 import { AppController } from './app.controller';
+import { DailyKeywordBigEmotionsCntController } from './daily-keyword-big-emotions-cnt/daily-keyword-big-emotions-cnt.controller';
+import { DailyKeywordBigEmotionsCntService } from './daily-keyword-big-emotions-cnt/daily-keyword-big-emotions-cnt.service';
+import { DailyKeywordBigEmotionsCntModule } from './daily-keyword-big-emotions-cnt/daily-keyword-big-emotions-cnt.module';
 
 @Module({
   imports: [
@@ -28,7 +31,9 @@ import { AppController } from './app.controller';
     RedisModule,
     SearchModule,
     BatchModule,
+    DailyKeywordBigEmotionsCntModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, DailyKeywordBigEmotionsCntController],
+  providers: [DailyKeywordBigEmotionsCntService],
 })
 export class AppModule {}
