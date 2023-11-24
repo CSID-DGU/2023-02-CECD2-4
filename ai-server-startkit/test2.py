@@ -69,126 +69,133 @@ if __name__ == '__main__':
     )
     queue_url = keys['SQS_URL']
 
-    # while(1):
-    sqs_response = getMessagesFromSQS(sqs, queue_url)
-    for res in sqs_response:
-        news_response = getNewsResponse(s3, keys['S3_BUCKET'], res['key'])
-        Data_file.write(str(news_response))
-        # print(news_response['keyword'])
-        # print(news_response['data'][0]['comments'][0])
-        print(news_response)
-    
-        ## 하나의 받은 데이터 처리
-        print("Read data....", end='')
-        start_t = time.time()
-        # with open('DummyData\\file\\이재명(23.11.12).json', 'rt', encoding='UTF8') as f:
-        #     news_response = json.load(f)
-        end_t = time.time()
-        print("end! ({:0.5f} sec)".format(end_t - start_t))
+    while(1):
+        print()
+        now = datetime.datetime.now()
+        print("현재 시각: " + str(now))
 
-        keyword = news_response['keyword']  # keyword(단어)
-        keyword_id = keyword_dict[keyword]  # keyword_id
-        #news_n = len(news_response['data']) # news 개수
-        publishedDate = news_response["data"][0]['news']['publishedAt'] # 기사 발행 날짜(데이터 수집 날짜)
-        
-        positive_cnt = 0
-        neutral_cnt = 0
-        negative_cnt = 0
-        
-        MIN_COMMENT = 5
-        
-        print("Analizing comments....")
-        start_t = time.time()
-        for data in news_response['data']:
-            comments = data['comments']     # 댓글
-            
-            if(len(comments) >= MIN_COMMENT):
-                url = data['url']   # 기사 url
-                #publishedDate = data['news']['publishedAt'] # 기사 발행 날짜 
-                body = data['news']['body']     # 본문
-                
-                ## SBERT corpus init --> 빠른 속도 위함
-                SBERT_model.CorpusInit(corpus=body)
-                
-                # comment analysis
-                for comment in comments:
-                    comment_date = comment['date']              # 댓글 작성 날짜
-                    comment_content = comment['contents']       # 댓글 내용
-                    comment_sympathy = comment['sympathyCount'] # 공감
-                    comment_antipathy = comment['antipathyCount'] # 비공감
-                    
-                    emotion = KcBERT_model.predict(predict_sentence=comment_content)
-                    related = SBERT_model.analysis(comments=[comment_content])
-                    
-                    if(big_emotion_dict[emotion] == "긍정"):
-                        positive_cnt += 1
-                    elif(big_emotion_dict[emotion] == "부정"):
-                        negative_cnt += 1
-                    else:
-                        neutral_cnt += 1
-                    
-                    # 결과 출력해보고 싶다면 아래 주석 해제
-                    #
-                    # 감정 분석 결과
-                    #text_file.write("{} --> {}\n".format(comment_content, emotion))
-                    #print("{} --> {}".format(comment_content, emotion))
-                    # 연관도 분석 결과
-                    #text_file.write("{} --> {}\n\n".format(comment_content, related))
-                    #print("{} --> {}".format(comment_content, related))
-                    #print('')
-                    
-                    try:
-                        ## INSERT
-                        comment_date = datetime.datetime.strptime(comment_date, "%Y-%m-%dT%H:%M:%S%z")
-                        comment_date = str(comment_date.strftime("%Y-%m-%d %H:%M:%S"))
-                        
-                        insert_query = "INSERT INTO analysis_comment (createdAt, content, sympathy, antipathy, emotion, link, keyword_id, big_emotion) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-                        data_to_insert = (comment_date, comment_content, comment_sympathy, comment_antipathy, emotion, url, keyword_id, big_emotion_dict[emotion])
-                        cursor.execute(insert_query, data_to_insert)
-                        
-                        lastrowid = cursor.lastrowid
-                        text = related['text']
-                        score = related['score']
-                        for i in range(0, len(text)):
-                            # print(text[i])
-                            # print(score[i])
-                            insert_query = "INSERT INTO article_content (content, score, comment_id) VALUES (%s, %s, %s)"
-                            data_to_insert = (text[i], score[i], lastrowid)
-                            cursor.execute(insert_query, data_to_insert)
-                        
-                    except Exception as e:
-                        # fail
-                        conn.rollback()
-                        print("Error in INSERT comment")
-                        
-        # big emotion cnt
+        sqs_response = getMessagesFromSQS(sqs, queue_url)
         try:
-            ## INSERT
-            publishedDate = datetime.datetime.strptime(publishedDate, "%Y-%m-%d %H:%M:%S")
-            publishedDate = str(publishedDate.strftime("%Y-%m-%d"))
+            for res in sqs_response:
+                news_response = getNewsResponse(s3, keys['S3_BUCKET'], res['key'])
+                Data_file.write(str(news_response))
+                # print(news_response['keyword'])
+                # print(news_response['data'][0]['comments'][0])
+                # print(news_response)
             
-            insert_query = "INSERT INTO daily_keyword_big_emotions_cnt (date, positive_cnt, neutral_cnt, negative_cnt, keyword_id) VALUES (%s, %s, %s, %s, %s)"
-            data_to_insert = (publishedDate, positive_cnt, neutral_cnt, negative_cnt, keyword_id)
-            cursor.execute(insert_query, data_to_insert)
+                ## 하나의 받은 데이터 처리
+                print("Read data....", end='')
+                start_t = time.time()
+                # with open('DummyData\\file\\이재명(23.11.12).json', 'rt', encoding='UTF8') as f:
+                #     news_response = json.load(f)
+                end_t = time.time()
+                print("end! ({:0.5f} sec)".format(end_t - start_t))
+
+                keyword = news_response['keyword']  # keyword(단어)
+                keyword_id = keyword_dict[keyword]  # keyword_id
+                #news_n = len(news_response['data']) # news 개수
+                publishedDate = news_response["data"][0]['news']['publishedAt'] # 기사 발행 날짜(데이터 수집 날짜)
+                
+                positive_cnt = 0
+                neutral_cnt = 0
+                negative_cnt = 0
+                
+                MIN_COMMENT = 5
+                
+                print("Analizing comments....")
+                start_t = time.time()
+                for data in news_response['data']:
+                    comments = data['comments']     # 댓글
+                    
+                    if(len(comments) >= MIN_COMMENT):
+                        url = data['url']   # 기사 url
+                        #publishedDate = data['news']['publishedAt'] # 기사 발행 날짜 
+                        body = data['news']['body']     # 본문
+                        
+                        ## SBERT corpus init --> 빠른 속도 위함
+                        SBERT_model.CorpusInit(corpus=body)
+                        
+                        # comment analysis
+                        for comment in comments:
+                            comment_date = comment['date']              # 댓글 작성 날짜
+                            comment_content = comment['contents']       # 댓글 내용
+                            comment_sympathy = comment['sympathyCount'] # 공감
+                            comment_antipathy = comment['antipathyCount'] # 비공감
+                            
+                            emotion = KcBERT_model.predict(predict_sentence=comment_content)
+                            related = SBERT_model.analysis(comments=[comment_content])
+                            
+                            if(big_emotion_dict[emotion] == "긍정"):
+                                positive_cnt += 1
+                            elif(big_emotion_dict[emotion] == "부정"):
+                                negative_cnt += 1
+                            else:
+                                neutral_cnt += 1
+                            
+                            # 결과 출력해보고 싶다면 아래 주석 해제
+                            #
+                            # 감정 분석 결과
+                            #text_file.write("{} --> {}\n".format(comment_content, emotion))
+                            #print("{} --> {}".format(comment_content, emotion))
+                            # 연관도 분석 결과
+                            #text_file.write("{} --> {}\n\n".format(comment_content, related))
+                            #print("{} --> {}".format(comment_content, related))
+                            #print('')
+                            
+                            try:
+                                ## INSERT
+                                comment_date = datetime.datetime.strptime(comment_date, "%Y-%m-%dT%H:%M:%S%z")
+                                comment_date = str(comment_date.strftime("%Y-%m-%d %H:%M:%S"))
+                                
+                                insert_query = "INSERT INTO analysis_comment (createdAt, content, sympathy, antipathy, emotion, link, keyword_id, big_emotion) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+                                data_to_insert = (comment_date, comment_content, comment_sympathy, comment_antipathy, emotion, url, keyword_id, big_emotion_dict[emotion])
+                                cursor.execute(insert_query, data_to_insert)
+                                
+                                lastrowid = cursor.lastrowid
+                                text = related['text']
+                                score = related['score']
+                                for i in range(0, len(text)):
+                                    # print(text[i])
+                                    # print(score[i])
+                                    insert_query = "INSERT INTO article_content (content, score, comment_id) VALUES (%s, %s, %s)"
+                                    data_to_insert = (text[i], score[i], lastrowid)
+                                    cursor.execute(insert_query, data_to_insert)
+                                
+                            except Exception as e:
+                                # fail
+                                conn.rollback()
+                                print("Error in INSERT comment")
+                                
+                # big emotion cnt
+                try:
+                    ## INSERT
+                    publishedDate = datetime.datetime.strptime(publishedDate, "%Y-%m-%d %H:%M:%S")
+                    publishedDate = str(publishedDate.strftime("%Y-%m-%d"))
+                    
+                    insert_query = "INSERT INTO daily_keyword_big_emotions_cnt (date, positive_cnt, neutral_cnt, negative_cnt, keyword_id) VALUES (%s, %s, %s, %s, %s)"
+                    data_to_insert = (publishedDate, positive_cnt, neutral_cnt, negative_cnt, keyword_id)
+                    cursor.execute(insert_query, data_to_insert)
+                    
+                except Exception as e:
+                    # fail
+                    conn.rollback()
+                    print("Error in INSERT big_emotion_cnt")
+                
+                # commit
+                conn.commit()
+                
+                # comment_date = "2023-10-05T16:59:17+0900"
+                # comment_date = datetime.datetime.strptime(comment_date, "%Y-%m-%dT%H:%M:%S%z")
+                # comment_date = str(comment_date.strftime("%Y-%m-%d %H:%M:%S"))
+                # insert_query = "INSERT INTO analysis_comment (createdAt, content, sympathy, antipathy, emotion, link, keyword_id) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                # data_to_insert = (comment_date, "ddd", 123, 2, '혐오', 'www.naver.com', 1)
+                # cursor.execute(insert_query, data_to_insert)
+                # conn.commit()    
+                
+                end_t = time.time()
+                print("end! ({:0.5f} sec)".format(end_t - start_t))
+        except:
+            print("error in sqs_response")
             
-        except Exception as e:
-            # fail
-            conn.rollback()
-            print("Error in INSERT big_emotion_cnt")
-        
-        # commit
-        conn.commit()
-        
-        # comment_date = "2023-10-05T16:59:17+0900"
-        # comment_date = datetime.datetime.strptime(comment_date, "%Y-%m-%dT%H:%M:%S%z")
-        # comment_date = str(comment_date.strftime("%Y-%m-%d %H:%M:%S"))
-        # insert_query = "INSERT INTO analysis_comment (createdAt, content, sympathy, antipathy, emotion, link, keyword_id) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        # data_to_insert = (comment_date, "ddd", 123, 2, '혐오', 'www.naver.com', 1)
-        # cursor.execute(insert_query, data_to_insert)
-        # conn.commit()    
-        
-        end_t = time.time()
-        print("end! ({:0.5f} sec)".format(end_t - start_t))
-        
-        cursor.close()
-        conn.close()
+    cursor.close()
+    conn.close()
