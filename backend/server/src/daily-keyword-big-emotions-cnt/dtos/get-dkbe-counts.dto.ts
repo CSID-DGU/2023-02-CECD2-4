@@ -10,7 +10,7 @@ export class GetdkbeCountReqDto {
 
   /**
    * 개수 정보를 가져오는 시작일
-   * @example: '2020-01-01'
+   * @example '2020-01-01'
    */
   @IsDate()
   from: Date;
