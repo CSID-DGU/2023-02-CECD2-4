@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -32,40 +32,54 @@ min-width: 360px;
 export const options = {
     responsive: true,
     maintainAspectRatio: false,
+    scales: {
+      y: {
+        axis: 'y',
+        afterDataLimits: (scale) => {
+          scale.max = scale.max * 1.2;
+        }
+      }
+    },
     plugins: {
         legend: {
             position: 'top',
         },
         title: {
             display: true,
-            text: 'Chart.js Line Chart',
+            text: '긍정/중립/부정 변화 그래프',
         },
     },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+/*const labels = ['2023.10.01', '2023.10.02', '2023.10.03', '2023.10.04', '2023.10.05', '2023.10.06', '2023.10.07'];
 export const data = {
   labels,
   datasets: [
     {
-      label: 'Dataset 1',
-      data: [0, 15 , 59, 102, 90, 290, 50],
+      label: '긍정',
+      data: [3, 10 , 7, 12, 15, 9, 8],
       borderColor: 'rgb(255, 99, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
     },
     {
-      label: 'Dataset 2',
-      data: [0, 10 , 50, 100, 150, 200, 250],
+      label: '중립',
+      data: [17, 25 , 21, 23, 14, 16, 12],
+      borderColor: 'rgb(162, 162, 162)',
+      backgroundColor: 'rgba(162, 162, 162, 0.5)',
+    },
+    {
+      label: '부정',
+      data: [80, 65 , 72, 65, 71, 75, 80],
       borderColor: 'rgb(53, 162, 235)',
       backgroundColor: 'rgba(53, 162, 235, 0.5)',
     },
   ],
-};
+};*/
 
-const LineChart = (props) => {
+const LineChart = ({chart_data}) => {
     return (
         <LineChartContainer>
-            <Line options={options} data={data}/>
+            <Line options={options} data={chart_data}/>
         </LineChartContainer>
     );
 };

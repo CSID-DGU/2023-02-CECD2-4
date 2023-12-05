@@ -19,7 +19,7 @@ const IndexPage = () => {
     }, [dispatch]);
 
     const fetchIssueKeyword = async () => {
-        const response = await axios.get("http://localhost:8080/search/popular-keywords?count=3");
+        const response = await axios.get("http://" + process.env.REACT_APP_ADDRESS + "/search/popular-keywords?count=3");
         setPopularKeywords(response.data);
     };
 

@@ -63,7 +63,7 @@ const Header = (props) => {
     const currentPageState = useSelector(state => state.toggleAddManage);
     return (
         <div className="header">
-            <Link to={"/"} className="project_title">팀 바나나</Link>
+            <Link to={"/"} className="project_title">KEYWORD-ON</Link>
             {isAdmin === true
             ? <><CurrentPageContainer>
                 {currentPageState.isAddPage === true
