@@ -124,6 +124,8 @@ const SearchResultPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [startDate, setStartDate] = useState(new Date(2023, 8, 27));
     const [endDate, setEndDate] = useState(new Date());
+    const [from, setFrom] = useState();
+    const [to, setTo] = useState();
     const [keywordId, setKeywordId] = useState();
     const [passData, setPassData] = useState([]);
     const [commentDs, setCommentDs] = useState([{},{},{}]);
@@ -181,40 +183,25 @@ const SearchResultPage = () => {
     const FindKeyword = item => { return item.name === searchKeyword}
 
     const onLoadBtnClick = (e) => {
-        setChartLabel([]);
-        setChartDs([
-            {
-                label: '긍정',
-                data: [],
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            },
-            {
-                label: '중립',
-                data: [],
-                borderColor: 'rgb(162, 162, 162)',
-                backgroundColor: 'rgba(162, 162, 162, 0.5)',
-            },
-            {
-                label: '부정',
-                data: [],
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            }
-        ]);
         lbs = [...chartLabel];
         ds = [...chartDs];
+        lbs.splice(0, lbs.length);
+        ds[0].data.splice(0, ds[0].data.length);
+        ds[1].data.splice(0, ds[1].data.length);
+        ds[2].data.splice(0, ds[2].data.length);
         LoadKeywordInfo();
     }
     const LoadKeywordInfo = async (id = keywordId) => {
         const offset = 1000 * 60 * 60 * 9;
-        const koreaStart = new Date(startDate.getTime() + offset).toISOString().substring(0,10);
-        const koreaEnd = new Date(endDate.getTime() + offset).toISOString().substring(0,10); 
+        const search_from = new Date(startDate.getTime() + offset).toISOString().substring(0,10);
+        const search_to = new Date(endDate.getTime() + offset).toISOString().substring(0,10);
+        setFrom(search_from);
+        setTo(search_to);
 
         let response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+
         "/daily-keyword-big-emotions-cnt?keyword_id="+id+
-        "&from="+koreaStart+
-        "&to="+koreaEnd);
+        "&from="+search_from+
+        "&to="+search_to);
 
         for(let i in response.data) {
             ds[2].data[i] = response.data[i].negative_cnt;
@@ -227,8 +214,8 @@ const SearchResultPage = () => {
 
         response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+
         "/search/keyword-search-result?name="+searchKeyword+
-        "&from="+koreaStart+
-        "&to="+koreaEnd);
+        "&from="+search_from+
+        "&to="+search_to);
 
         setPassData(response.data.comments);
 
@@ -273,7 +260,7 @@ const SearchResultPage = () => {
             <>
             <RepInfo keyword={searchKeyword}/>
             <BottomContainer>
-                <LineChart chart_data={{labels:lbs, datasets: ds}} />
+                <LineChart chart_data={{labels:chartLabel, datasets:chartDs}} />
                 <LeftContentContainer>
                     <TimeSettingContainer>
                         기간설정:
@@ -300,7 +287,7 @@ const SearchResultPage = () => {
                     <CommentsContainer>
                         <CommentsContainerCaption>
                             대표 댓글
-                            <Link2Detail to={"/emotion_detail?keyword="+searchKeyword} state={{comments : passData}}>
+                            <Link2Detail to={"/emotion_detail?keyword="+searchKeyword} state={{comments : passData, keyword_id: keywordId, from: from, to: to}}>
                                 {'>'} 자세히 보기
                             </Link2Detail>
                         </CommentsContainerCaption>

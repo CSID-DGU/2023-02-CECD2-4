@@ -21,15 +21,6 @@ height:40%;
 border: 2px solid #aaa;
 border-radius:5px;
 `;
-const ArticleTitle = styled.div`
-position:relative;
-font-size:13px;
-width:100%;
-height:8%;
-border: 2px solid #aaa;
-padding:15px 10px;
-border-radius:5px;
-`;
 const ArticleLink = styled.div`
 position:relative;
 font-size:13px;
@@ -57,10 +48,6 @@ const RepDetailComment = (props) => {
                 <BorderLabel>댓글 내용</BorderLabel>
                 {props.comment}
             </Comment>
-            <ArticleTitle>
-                <BorderLabel>기사 제목</BorderLabel>
-                {props.title}
-            </ArticleTitle>
             <ArticleLink>
                 <BorderLabel>기사 링크</BorderLabel>
                 <Link to={props.link}>{props.link}</Link>

@@ -28,7 +28,7 @@ export const options = {
   },
 };
 
-export const data = {
+/*export const data = {
   labels: ['행복', '놀람', '중립', '혐오', '공포', '슬픔', '분노'],
   datasets: [
     {
@@ -55,12 +55,12 @@ export const data = {
       borderWidth: 1,
     },
   ],
-};
+};*/
 
 const PieChart = (props) => {
     return (
         <PieChartContainer>
-            <Pie options={options} data={data}/>
+            <Pie options={options} data={props.data}/>
         </PieChartContainer>
     );
 };

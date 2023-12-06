@@ -5,7 +5,8 @@ const LikesInfo = styled.div`
 position:relative;
 font-size:15px;
 width:30%;
-height:75%;
+height:69%;
+margin-top:40px;
 font-family: "aggro";
 font-weight: 500;
 color:#777;
