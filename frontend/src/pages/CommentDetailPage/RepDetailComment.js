@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const RDCContainer = styled.div`
@@ -62,17 +63,10 @@ const RepDetailComment = (props) => {
             </ArticleTitle>
             <ArticleLink>
                 <BorderLabel>기사 링크</BorderLabel>
-                {props.link}
+                <Link to={props.link}>{props.link}</Link>
             </ArticleLink>
         </RDCContainer>
     );
-};
-
-RepDetailComment.defaultProps = {
-    emotion: "감정이 표시되는 영역입니다",
-    comment: "댓글 내용이 표시되는 영역입니다.",
-    title: "기사 제목이 표시되는 영역입니다.",
-    link: "기사 링크가 표시되는 영역입니다.",
 };
 
 export default RepDetailComment;

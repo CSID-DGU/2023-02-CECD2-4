@@ -45,9 +45,4 @@ const RepInfo = (props) => {
     );
 };
 
-RepInfo.defaultProps = {
-    keyword: "EXAMPLE",
-    emotion: "EXAMPLE"
-};
-
 export default RepInfo;

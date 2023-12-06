@@ -23,6 +23,12 @@ background-color:white;
 padding-right:3px;
 padding-left:3px;
 `;
+const InfoContainer = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: space-evenly;
+height:100%;
+`;
 
 const RepLikes = (props) => {
     return (
@@ -30,13 +36,20 @@ const RepLikes = (props) => {
             <BorderLabel>
                 댓글 정보
             </BorderLabel>
-            {props.likes}
+            <InfoContainer>
+                <div>좋아요 개수 : {props.content.sympathy} 개</div>                
+                <div>싫어요 개수 : {props.content.antipathy} 개</div>
+                <div>
+                    이 댓글은 {props.content.createdAt.substring(0,4)}년&nbsp; 
+                    {props.content.createdAt.substring(5,7)}월&nbsp;
+                    {props.content.createdAt.substring(8,10)}일&nbsp;
+                    {props.content.createdAt.substring(11,13)}시&nbsp;
+                    {props.content.createdAt.substring(14,16)}분&nbsp;
+                    {props.content.createdAt.substring(17,19)}초에 작성된 댓글입니다.
+                </div>
+            </InfoContainer>
         </LikesInfo>
     );
-};
-
-RepLikes.defaultProps = {
-    likes: "댓글 좋아요/싫어요 정보 및 날짜 등의 정보가 표시되는 영역입니다."
 };
 
 export default RepLikes;

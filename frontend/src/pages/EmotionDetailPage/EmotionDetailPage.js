@@ -84,12 +84,12 @@ const EmotionDetailPage = () => {
 
     useEffect(() => {
         setLoading(true);
-        CheckKeyword();
+        CheckKeywordAndLoading();
         setLoading(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const CheckKeyword = async () => {
+    const CheckKeywordAndLoading = async () => {
         let response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+"/keywords");
         if(await response.data.find(FindKeyword) === undefined || location.state === null) {
             if(location.state === null)
@@ -114,7 +114,6 @@ const EmotionDetailPage = () => {
                     data[6] = location.state.comments[i];
             }
             setComments(data);
-            console.log(data);
             setIsRender(true);
         }
     };

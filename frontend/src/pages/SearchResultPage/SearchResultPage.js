@@ -230,7 +230,6 @@ const SearchResultPage = () => {
         "&from="+koreaStart+
         "&to="+koreaEnd);
 
-        console.log(response.data);
         setPassData(response.data.comments);
 
         let copy_commentDs = [...commentDs];

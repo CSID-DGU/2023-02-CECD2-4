@@ -66,7 +66,10 @@ const RepEmotion = (props) => {
     return (
         <RepEmotionContainer>
             <Emotion color={props.color}>{props.emotion}</Emotion>
-            <Comment to={"/comment_detail?keyword="+props.keyword+"&emotion="+props.emotion}><Text ref={comment}>{props.comment.content}</Text></Comment>
+            <Comment to={"/comment_detail?keyword="+props.keyword+"&emotion="+props.emotion}
+                state={{keyword: props.keyword, emotion: props.emotion, comment: props.comment}}>
+                <Text ref={comment}>{props.comment.content}</Text>
+            </Comment>
             <More onClick={OnMoreClick} ref={more_btn}>▼</More>
             <Less onClick={OnLessClick} ref={less_btn}>▲</Less>
         </RepEmotionContainer>

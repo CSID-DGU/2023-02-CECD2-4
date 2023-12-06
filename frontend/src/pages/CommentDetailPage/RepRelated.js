@@ -5,7 +5,7 @@ const RelatedInfo = styled.div`
 position:relative;
 font-size:15px;
 width:90%;
-height:60%;
+min-height:60%;
 margin-top: 25px;
 margin-bottom: 25px;
 font-family: "aggro";
@@ -25,20 +25,34 @@ background-color:white;
 padding-right:3px;
 padding-left:3px;
 `;
+const SentenceContainer = styled.div`
+height:100%;
+display: flex;
+flex-direction: column;
+justify-content: space-evenly;
+`;
+const Sentence = styled.div`
+margin: 7px 0px;
+`;
 
 const RepRelated = (props) => {
+    const renderSentences = (data) => {
+        let result = [];
+        for(let i in data) {
+            result.push(<Sentence key={i}>{data[i].content}</Sentence>);
+        }
+        return result;
+    }
     return (
         <RelatedInfo>
             <BorderLabel>
                 댓글과 관련된 본문 문장
             </BorderLabel>
-            {props.content}
+            <SentenceContainer>
+                {renderSentences(props.content)}
+            </SentenceContainer>
         </RelatedInfo>
     );
-};
-
-RepRelated.defaultProps = {
-    content: "기사 본문에서 댓글과 연관된 문장을 표시하는 영역입니다."
 };
 
 export default RepRelated;
