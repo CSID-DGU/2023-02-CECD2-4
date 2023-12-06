@@ -22,7 +22,7 @@ font-weight: 500;
 font-size: 20px;
 color:whitesmoke;
 `;
-const LogoutBtn = styled(Link)`
+const Btn = styled(Link)`
 display:flex;
 justify-content:center;
 align-items:center;
@@ -31,18 +31,18 @@ height:40px;
 margin-right:10px;
 font-family: "aggro";
 font-weight: 500;
-font-size:20px;
-color:#444;
-background-color: #888888;
+font-size:15px;
+color:#222;
+background-color: #ddd;
 text-decoration:none;;
 transition: all 0.2s ease-in-out;
 border-radius:10px;
 &:hover {
-    background-color: #ccc;
+    background-color: #888;
     transition: all 0.2s ease-in-out;
 }
 `;
-const PageState = styled.div`
+const PageState = styled(Link)`
 display:flex;
 justify-content:center;
 align-items:center;
@@ -50,6 +50,7 @@ font-family:"aggro";
 font-weight:500;
 font-size:20px;
 color: ${props => props.theme.color};
+text-decoration:none;
 `;
 const activate_theme = { 
     color: "whitesmoke"
@@ -68,28 +69,31 @@ const Header = (props) => {
             ? <><CurrentPageContainer>
                 {currentPageState.isAddPage === true
                 ?   <ThemeProvider theme={activate_theme}>
-                    <PageState>키워드 추가</PageState>
+                    <PageState to="/admin/add_keyword/">키워드 추가</PageState>
                     </ThemeProvider>
                 :   <ThemeProvider theme={disabled_theme}>
-                    <PageState>키워드 추가</PageState>
+                    <PageState to="/admin/add_keyword/">키워드 추가</PageState>
                     </ThemeProvider>
                 }
                 {currentPageState.isManagePage === true
                 ?   <ThemeProvider theme={activate_theme}>
-                    <PageState>키워드 관리</PageState>
+                    <PageState to="admin/manage/">키워드 관리</PageState>
                     </ThemeProvider>
                 :   <ThemeProvider theme={disabled_theme}>
-                    <PageState>키워드 관리</PageState>
+                    <PageState to="admin/manage/">키워드 관리</PageState>
                     </ThemeProvider>
                 }
             </CurrentPageContainer>
             <HelloLabel>
                 안녕하세요, 관리자님!
             </HelloLabel>
-            <LogoutBtn to="/admin/login">
+            <Btn to="/admin/login">
                 로그아웃
-            </LogoutBtn></>
-            : null}
+            </Btn></>
+            : 
+            <Btn to="/admin/login">
+                관리자 로그인
+            </Btn>}
         </div>
     );
 };

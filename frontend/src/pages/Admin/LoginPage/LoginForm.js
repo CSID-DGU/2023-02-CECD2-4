@@ -1,6 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import styled from 'styled-components';
+
 
 const LoginFormContainer = styled.div`
 display: flex;
@@ -44,7 +46,7 @@ input:focus + label, input:not(:placeholder-shown) + label{
     transform: translateY(-27px) scale(0.7);
 }
 `;
-const LoginBtn = styled(Link)`
+const LoginBtn = styled.div`
 display:flex;
 justify-content:center;
 align-items:center;
@@ -63,18 +65,46 @@ transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
 `;
+
+
 const LoginForm = (props) => {
+    const [id, setId] = useState();
+    const [pw, setPw] = useState();
+
+    const navigate = useNavigate();
+
+    const onChangeID = (e) => {
+        setId(e.target.value);
+    }
+
+    const onChangePW = (e) => {
+        setPw(e.target.value);
+    }
+
+    const onClickLogin = async () => {
+        try {
+            const response = await axios.post(
+                "http://"+process.env.REACT_APP_ADDRESS+"/auth/signin",
+                { "login_id": id, "password": pw },
+                {"Content-Type": "application/json", "accept": "application/json"});
+            window.sessionStorage.setItem("token_info", JSON.stringify(response.data.token_info));
+            navigate("/admin/index");
+        } catch(err) {
+            props.openModal();
+        }
+    }
+
     return (
         <LoginFormContainer>
             <TextBoxContainer>
-                <Input type="text" placeholder=" "></Input>
+                <Input type="text" placeholder=" " onChange={onChangeID}></Input>
                 <Label>ID</Label>
             </TextBoxContainer>
             <TextBoxContainer>
-                <Input type="password" placeholder=" "></Input>
+                <Input type="password" placeholder=" " onChange={onChangePW}></Input>
                 <Label>PW</Label>
             </TextBoxContainer>
-            <LoginBtn to="/admin/index">로그인</LoginBtn>
+            <LoginBtn onClick={onClickLogin}>로그인</LoginBtn>
         </LoginFormContainer>
     );
 };
