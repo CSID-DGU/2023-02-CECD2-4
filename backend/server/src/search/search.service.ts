@@ -1,10 +1,12 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { AnalysisCommentService } from '../analysis-comment/analysis-comment.service';
+import { ConfigService } from '@nestjs/config';
 import { KeywordService } from '../keyword/keyword.service';
 import { Keyword } from '../keyword/keyword.entity';
 import { Redis } from 'ioredis';
 import { RedisToken } from '../redis/redis.provider';
-import { AnalysisCommentService } from '../analysis-comment/analysis-comment.service';
-import { ConfigService } from '@nestjs/config';
+
+import { getDateString } from 'src/util/date';
 
 @Injectable()
 export class SearchService {
@@ -78,13 +80,61 @@ export class SearchService {
     return commentWithSentences;
   }
 
-  async getRelatedKeywordList(info: {
+  async getCommentList(info: {
     keyword_id: number;
-    emotion: string;
+    emotion?: string;
     count: number;
     from?: string;
     to?: string;
   }) {
     return await this.commentService.findManyByInfo(info);
+  }
+
+  async getCountsEachEmotion(info: {
+    keyword_id: number;
+    from: string;
+    to: string;
+  }) {
+    const { keyword_id, from, to } = info;
+    const comments = await this.commentService.findManyByInfo({
+      keyword_id,
+      from,
+      to,
+    });
+
+    // 임시로 데이터를 저장하기 위한 캐시
+    const cache = new Map();
+
+    // 댓글 갯수 많아지면 분할 처리 필요. -> 리팩토링
+    for (const comment of comments) {
+      const date_key = getDateString(comment.createdAt);
+
+      let countsForEachEmotion = cache.get(date_key);
+
+      if (!countsForEachEmotion) {
+        countsForEachEmotion = {};
+        cache.set(date_key, countsForEachEmotion);
+      }
+
+      if (countsForEachEmotion[comment.emotion] === undefined) {
+        countsForEachEmotion[comment.emotion] = 0;
+      }
+
+      countsForEachEmotion[comment.emotion]++;
+    }
+
+    const result: {
+      date: string;
+      emotions: Record<string, string>;
+    }[] = [];
+
+    for (const [key, value] of cache.entries()) {
+      result.push({
+        date: key,
+        emotions: value,
+      });
+    }
+
+    return result;
   }
 }

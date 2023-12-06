@@ -12,6 +12,8 @@ import {
   KeywordWithTopCommentsReqQueryDto,
   KeywordWithTopCommentsResDto,
 } from './dtos/keyword-with-top-comments.dto';
+import { GetCommentQueryReqDto } from './dtos/commentQuery.dto';
+import { GetEmotionCountsReqDto } from './dtos/emotion-counts.dto';
 
 @ApiTags('Search')
 @Controller('search')
@@ -37,6 +39,12 @@ export class SearchController {
     });
 
     return results;
+  }
+
+  @Get('comments')
+  async getComments(@Query() query: GetCommentQueryReqDto) {
+    const info = query;
+    return await this.service.getCommentList(info);
   }
 
   /**
@@ -68,5 +76,14 @@ export class SearchController {
   @Get('detail/comment/:id')
   async getCommentWithSentences(@Param('id') id: number) {
     return await this.service.getCommentWithSentences(id);
+  }
+
+  /**
+   * 감정에 대한 연관된 개수 목록을 가져온다.
+   * @returns 날짜 + 감정 별 댓글 개수. 각 날짜에 대해 특정 감정은 존재하지 않을 수 있다.
+   */
+  @Get('emotion-counts')
+  async getCountsEachEmotion(@Query() query: GetEmotionCountsReqDto) {
+    return await this.service.getCountsEachEmotion(query);
   }
 }

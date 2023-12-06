@@ -4,7 +4,6 @@ import { Between, DataSource, FindOperator, Repository } from 'typeorm';
 import { AnalysisComment } from './entity/analysis-comment.entity';
 import { CreateCommentReqDto } from './dtos/create-comment.dto';
 import { ArticleContent } from './entity/article-content.entity';
-import { CommentsQueriesReqDto } from './dtos/get-comments-query.dto';
 
 @Injectable()
 export class AnalysisCommentService {
@@ -61,8 +60,8 @@ export class AnalysisCommentService {
    */
   async findManyByInfo(info: {
     keyword_id: number;
-    emotion: string;
-    count: number;
+    emotion?: string;
+    count?: number;
     from?: string;
     to?: string;
   }) {
@@ -72,7 +71,7 @@ export class AnalysisCommentService {
       between = Between(new Date(from), new Date(to));
     }
 
-    await this.comment_repo.find({
+    return await this.comment_repo.find({
       where: {
         keyword_id: keyword_id,
         emotion: emotion,
@@ -93,7 +92,13 @@ export class AnalysisCommentService {
     head_id,
     from,
     to,
-  }: CommentsQueriesReqDto) {
+  }: {
+    search: string;
+    head_id?: number;
+    psize?: number;
+    from?: string;
+    to?: string;
+  }) {
     if (!search) return [];
 
     const qb = this.comment_repo.createQueryBuilder();
@@ -117,6 +122,7 @@ export class AnalysisCommentService {
 
     return await qb.limit(psize).orderBy('id', 'DESC').getRawMany();
   }
+
   /**
    * 기간 내 감정 별로 최대 공감수를 받은 댓글 목록을 반환한다.
    */
