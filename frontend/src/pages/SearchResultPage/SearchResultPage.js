@@ -27,7 +27,7 @@ height:85%;
 const LeftContentContainer = styled.div`
 display:flex;
 flex-direction: column;
-justify-content: flex-start;
+justify-content: space-evenly;
 width:45%;
 height:100%;
 min-width: 360px;
@@ -38,7 +38,7 @@ display:flex;
 flex-direction: column;
 justify-content: space-evenly;
 width:100%;
-height:30%;
+height:40%;
 `;
 
 const CommentsContainerCaption = styled.div`
@@ -125,6 +125,7 @@ const SearchResultPage = () => {
     const [startDate, setStartDate] = useState(new Date(2023, 8, 27));
     const [endDate, setEndDate] = useState(new Date());
     const [keywordId, setKeywordId] = useState();
+    const [commentDs, setCommentDs] = useState([{},{},{}]);
     const [chartLabel, setChartLabel] = useState([]);
     const [chartDs, setChartDs] = useState([
         {
@@ -166,12 +167,13 @@ const SearchResultPage = () => {
     }, []);
 
     const CheckKeyword = async () => {
-        const response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+"/keywords");
-        if(response.data.find(FindKeyword) === undefined) {
+        let response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+"/keywords");
+        if(await response.data.find(FindKeyword) === undefined) {
             openModal();
         } else {
-            setIsRender(true);
             setKeywordId(response.data.find(FindKeyword).id);
+            LoadKeywordInfo(response.data.find(FindKeyword).id);
+            setIsRender(true);
         }
     };
 
@@ -203,13 +205,13 @@ const SearchResultPage = () => {
         ds = [...chartDs];
         LoadKeywordInfo();
     }
-    const LoadKeywordInfo = async () => {
+    const LoadKeywordInfo = async (id = keywordId) => {
         const offset = 1000 * 60 * 60 * 9;
         const koreaStart = new Date(startDate.getTime() + offset).toISOString().substring(0,10);
         const koreaEnd = new Date(endDate.getTime() + offset).toISOString().substring(0,10); 
 
-        const response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+
-        "/daily-keyword-big-emotions-cnt?keyword_id="+keywordId+
+        let response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+
+        "/daily-keyword-big-emotions-cnt?keyword_id="+id+
         "&from="+koreaStart+
         "&to="+koreaEnd);
 
@@ -221,6 +223,41 @@ const SearchResultPage = () => {
         }
         setChartLabel(lbs);
         setChartDs(ds);
+
+        response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+
+        "/search/keyword-search-result?name="+searchKeyword+
+        "&from="+koreaStart+
+        "&to="+koreaEnd);
+
+        console.log(response.data);
+
+        let copy_commentDs = [...commentDs];
+        
+        for(let i in response.data.comments) {
+            if(response.data.comments[i].big_emotion === "긍정") {
+                if(Object.keys(copy_commentDs[0]).length === 0) {
+                    copy_commentDs[0] = { data: response.data.comments[i].content, likes: response.data.comments[i].sympathy };
+                } else {
+                    if(copy_commentDs[0].likes < response.data.comments[i].sympathy)
+                        copy_commentDs[0] = { data: response.data.comments[i].content, likes: response.data.comments[i].sympathy };
+                }
+            } else if(response.data.comments[i].big_emotion === "중립") {
+                if(Object.keys(copy_commentDs[1]).length === 0) {
+                    copy_commentDs[1] = { data: response.data.comments[i].content, likes: response.data.comments[i].sympathy };
+                } else {
+                    if(copy_commentDs[1].likes < response.data.comments[i].sympathy)
+                        copy_commentDs[1] = { data: response.data.comments[i].content, likes: response.data.comments[i].sympathy };
+                }
+            } else if(response.data.comments[i].big_emotion === "부정") {
+                if(Object.keys(copy_commentDs[2]).length === 0) {
+                    copy_commentDs[2] = { data: response.data.comments[i].content, likes: response.data.comments[i].sympathy };
+                } else {
+                    if(copy_commentDs[2].likes < response.data.comments[i].sympathy)
+                        copy_commentDs[2] = { data: response.data.comments[i].content, likes: response.data.comments[i].sympathy };
+                }
+            }
+        }
+        setCommentDs(copy_commentDs);
     }
 
     useEffect(() => {
@@ -266,8 +303,9 @@ const SearchResultPage = () => {
                                 {'>'} 자세히 보기
                             </Link2Detail>
                         </CommentsContainerCaption>
-                        <RepComment emotion="긍정" color="red"/>
-                        <RepComment emotion="부정" color="blue"/>
+                        <RepComment emotion="긍정" color="red" comment={commentDs[0].data} likes={commentDs[0].likes}/>
+                        <RepComment emotion="중립" color="#a2a2a2" comment={commentDs[1].data} likes={commentDs[1].likes}/>
+                        <RepComment emotion="부정" color="blue" comment={commentDs[2].data} likes={commentDs[2].likes}/>
                     </CommentsContainer>
                 </LeftContentContainer>
             </BottomContainer>
