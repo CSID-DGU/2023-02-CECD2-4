@@ -125,6 +125,7 @@ const SearchResultPage = () => {
     const [startDate, setStartDate] = useState(new Date(2023, 8, 27));
     const [endDate, setEndDate] = useState(new Date());
     const [keywordId, setKeywordId] = useState();
+    const [passData, setPassData] = useState([]);
     const [commentDs, setCommentDs] = useState([{},{},{}]);
     const [chartLabel, setChartLabel] = useState([]);
     const [chartDs, setChartDs] = useState([
@@ -230,6 +231,7 @@ const SearchResultPage = () => {
         "&to="+koreaEnd);
 
         console.log(response.data);
+        setPassData(response.data.comments);
 
         let copy_commentDs = [...commentDs];
         
@@ -299,7 +301,7 @@ const SearchResultPage = () => {
                     <CommentsContainer>
                         <CommentsContainerCaption>
                             대표 댓글
-                            <Link2Detail to="/emotion_detail/">
+                            <Link2Detail to={"/emotion_detail?keyword="+searchKeyword} state={{comments : passData}}>
                                 {'>'} 자세히 보기
                             </Link2Detail>
                         </CommentsContainerCaption>

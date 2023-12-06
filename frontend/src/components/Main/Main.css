@@ -5,4 +5,5 @@
     width:100vw;
     height:calc(100vh - 150px);
     background-color: white;
+    overflow-y:scroll;
 }
