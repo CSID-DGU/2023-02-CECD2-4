@@ -194,4 +194,4 @@ NewsSource는 뉴스를 수집할 언론사를 의미합니다. 뉴스 스크래
 - http://localhost:8080/api-json
 
 # ERD
-[링크](/server/docs/ERD.md)
+[링크](./server/docs/ERD.md)
