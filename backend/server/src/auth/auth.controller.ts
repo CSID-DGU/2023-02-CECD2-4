@@ -74,9 +74,9 @@ export class AuthController {
     //refresh token은 쿠키로 전달
     res.cookie(REFRESH_TOKEN_NAME, refresh_token, {
       maxAge: REFRESH_MAX_AGE,
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
+      // httpOnly: true,
+      // sameSite: 'none',
+      // secure: true,
     });
     return {
       user,
@@ -95,9 +95,9 @@ export class AuthController {
   @HttpCode(200)
   async signout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie(REFRESH_TOKEN_NAME, {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
+      // httpOnly: true,
+      // sameSite: 'none',
+      // secure: true,
     });
     return;
   }
