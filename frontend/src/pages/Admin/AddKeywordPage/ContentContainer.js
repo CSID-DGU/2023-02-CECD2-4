@@ -25,6 +25,9 @@ height: 25%;
 const DescContainer = styled(iContainer)`
 height: 55%;
 `;
+const MemoContainer = styled(iContainer)`
+height: 20%;
+`;
 
 const Label = styled.div`
 width:25%;
@@ -52,18 +55,44 @@ resize:none;
 border: 2px solid #aaa;
 border-radius: 2px;
 `;
+const MemoTextArea = styled.textarea`
+width:70%;
+height:3.5em;
+font-family:"aggro";
+font-size:15px;
+font-color:#555;
+resize:none;
+border: 2px solid #aaa;
+border-radius: 2px;
+`;
 
 const ContentContainer = (props) => {
+    const onChangeKeyword = (e) => {
+        props.setKeyword(e.target.value);
+    }
+
+    const onChangeDesc = (e) => {
+        props.setDescription(e.target.value);
+    }
+
+    const onChangeMemo = (e) => {
+        props.setMemo(e.target.value);
+    }
+
     return (
         <FormBox>
             <KeywordContainer>
                 <Label>키워드</Label>
-                <Input type="text" placeholder=" "></Input>
+                <Input type="text" placeholder=" " onChange={onChangeKeyword}></Input>
             </KeywordContainer>
             <DescContainer>
                 <Label>키워드 설명 </Label>
-                <DescTextArea/>
+                <DescTextArea onChange={onChangeDesc}/>
             </DescContainer>
+            <MemoContainer>
+                <Label>메모사항 </Label>
+                <MemoTextArea onChange={onChangeMemo}/>
+            </MemoContainer>
         </FormBox>
     );
 };

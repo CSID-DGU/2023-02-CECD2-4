@@ -54,6 +54,7 @@ width:100%;
 height:60%;
 align-items:flex-start;
 margin-top:20px;
+border: none;
 `;
 
 const Label = styled.label`
@@ -77,23 +78,39 @@ pointer-events: none;
 margin: 10px;
 `;
 
+const Desc = styled.textarea`
+font-family:"aggro";
+font-size:15px;
+color:#555;
+width:100%;
+height:13em;
+resize:none;
+border: 2px solid #aaa;
+border-radius: 2px;
+padding:10px;
+`;
+
 const ContentContainer = (props) => {
+    const onChangeDesc = (e) => {
+        props.setDesc(e.target.value);
+    }
+
     return (
         <ContentBox>
             <TopContainer>
                 <KeywordContainer>
                     <Label>키워드</Label>
-                    <Value>{props.key}</Value>
+                    <Value>{props.keyword}</Value>
                 </KeywordContainer>
                 <IDContainer>
-                    <Label>등록자 ID</Label>
+                    <Label>등록ID</Label>
                     <Value>{props.id}</Value>
                 </IDContainer>
             </TopContainer>
             <BottomContainer>
                 <DetailContainer>
                     <Label>등록일</Label>
-                    <Value>{props.day}</Value>
+                    <Value>{props.created}</Value>
                 </DetailContainer>
                 <DetailContainer>
                     <Label>갱신일</Label>
@@ -101,11 +118,11 @@ const ContentContainer = (props) => {
                 </DetailContainer>
                 <DetailContainer>
                     <Label>상태</Label>
-                    <Value>{props.state}</Value>
+                    <Value>{props.status}</Value>
                 </DetailContainer>
                 <DescContainer>
                     <Label>설명</Label>
-                    <Value>{props.explain}</Value>
+                    <Desc value={props.desc} onChange={onChangeDesc}></Desc>
                 </DescContainer>
             </BottomContainer>
         </ContentBox>
@@ -113,12 +130,7 @@ const ContentContainer = (props) => {
 };
 
 ContentContainer.defaultProps = {
-    key : "Keyword",
     id : "asdf",
-    day  : "2023-10-11",
-    updated : "2023-10-12",
-    state : "good",
-    explain : "asdf",
 };
 
 export default ContentContainer;

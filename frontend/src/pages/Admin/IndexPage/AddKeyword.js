@@ -60,7 +60,7 @@ const AddKeyword = (props) => {
         content.current.style.display = "none";
     }
     return (
-        <AddKeywordBtn to="/admin/add_keyword" onMouseEnter={mouse_enter} onMouseLeave={mouse_leave} ref={btn}>
+        <AddKeywordBtn to="/admin/add/" onMouseEnter={mouse_enter} onMouseLeave={mouse_leave} ref={btn}>
             <Label ref={btn_label}>키워드 추가</Label>
             <Title ref={title_text}>새로운 키워드를 추가할 수 있습니다.</Title>
             <ContentContainer ref={content}>

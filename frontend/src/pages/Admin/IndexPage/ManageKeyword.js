@@ -60,7 +60,7 @@ const ManageKeyword = (props) => {
         content.current.style.display = "none";
     }
     return (
-        <ManageKeywordBtn to="/admin/manage/"onMouseEnter={mouse_enter} onMouseLeave={mouse_leave} ref={btn}>
+        <ManageKeywordBtn to="/admin/manage/index/"onMouseEnter={mouse_enter} onMouseLeave={mouse_leave} ref={btn}>
             <Label ref={btn_label}>키워드 관리</Label>
             <Title ref={title_text}>키워드를 관리할 수 있습니다.</Title>
             <ContentContainer ref={content}>

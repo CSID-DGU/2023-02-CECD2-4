@@ -96,6 +96,11 @@ const Modal = (props) => {
         return () => { clearTimeout(timer); }
     }, [props.isOpen]);
 
+    document.addEventListener('keydown', (e) => {
+        if(e.key === "Escape")
+            props.closeModal();
+    });
+
     if(!isModalOpen) return null;
 
     return (

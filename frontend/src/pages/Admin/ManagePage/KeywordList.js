@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ListContainer = styled.div`
@@ -23,6 +24,7 @@ const TD = styled.td`
 padding: 6px 15px;
 border-right: 1px solid #c6c9cc;
 border-bottom: 1px solid #c6c9cc;
+cursor: pointer;
 &:first-child {
     border-left: 1px solid #c6c9cc;
 }
@@ -37,18 +39,37 @@ const TR = styled.tr`
 `;
 
 const KeywordList = (props) => {
+    const navigate = useNavigate();
+
+    const onClickItem = (e) => {
+        if(props.isSearch)
+            navigate("/admin/manage/update?keyword="+props.keywords[props.searchIndex].name, {state: props.keywords[props.searchIndex]});
+        else {
+            const index = e.target.parentNode.rowIndex;
+            navigate("/admin/manage/update?keyword="+props.keywords[index].name, {state: props.keywords[index]});
+        }
+    }
+
     const ListingRow = () => {
         const result = [];
-        for (let i = 0; i < 20; i++) {
-          result.push(<TR>{GenData(i)}</TR>);
+        for (let i in props.keywords) {
+          result.push(<TR onClick={onClickItem} key={i}>{GenData(props.keywords[i], i)}</TR>);
         }
         return result;
     }
-    const GenData = (n) => {
+    
+    const showSearch = (index) => {
+        return <TR onClick={onClickItem} key={index}>{GenData(props.keywords[index], index)}</TR>
+    }
+
+    const GenData = (data, key) => {
         const result = [];
-        for (let i = 0; i < 6; i++) {
-          result.push(<TD>{n}번째열의 데이터{i+1}</TD>);
-        }
+        result.push(<TD key={key}>{data.id}</TD>);
+        result.push(<TD key={key+1}>{data.name}</TD>);
+        result.push(<TD key={key+2}>{data.isActive ? "활성화" : "비활성화"}</TD>);
+        result.push(<TD key={key+3}>{data.description}</TD>);
+        result.push(<TD key={key+4}>{data.createdAt.substring(0,10)+" "+data.createdAt.substring(11,19)}</TD>);
+        result.push(<TD key={key+5}>{data.updatedAt.substring(0,10)+" "+data.updatedAt.substring(11,19)}</TD>);
         return result;
     };
     return (
@@ -63,7 +84,7 @@ const KeywordList = (props) => {
                     <TH>UPDATE DATE</TH>
                 </thead>
                 <tbody>
-                    {ListingRow()}
+                    {props.isSearch ? showSearch(props.searchIndex) : ListingRow()}
                 </tbody>
             </Table>
         </ListContainer>

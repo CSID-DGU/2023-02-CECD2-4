@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { leave } from '../../../redux/modules/toggleAdminHeader';
 import Modal from '../../../components/Modal/Modal';
+import { useNavigate } from 'react-router-dom';
 
 const CaptionContainer = styled.div`
     display:flex;
@@ -32,9 +33,13 @@ height:15vh;
 `;
 
 const AdminLoginPage = (props) => {
+    const [id, setId] = useState("");
+    const [pw, setPw] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     useEffect(() => {
         dispatch(leave())
     }, [dispatch]);
@@ -44,12 +49,19 @@ const AdminLoginPage = (props) => {
         setIsModalOpen(false);
     }
 
+    useEffect(() => {
+        if(window.sessionStorage.getItem("token_info") !== null) {
+            navigate("/admin/index/");
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <Main>
             <CaptionContainer>
                 관리자 로그인
             </CaptionContainer>
-            <LoginForm openModal={openModal}/>
+            <LoginForm openModal={openModal} id={id} pw={pw} setId={setId} setPw={setPw}/>
             <IssueContact/>
             <Modal isOpen={isModalOpen} closeModal={closeModal} 
                 title={"로그인 실패"}>

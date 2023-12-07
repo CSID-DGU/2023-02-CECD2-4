@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import {Link} from "react-router-dom";
 import styled from 'styled-components';
 
@@ -82,17 +82,62 @@ border: 0;
 height: 3px;
 background-color: #ccc;
 `;
-
+const RefreshBtn = styled.div`
+display:flex;
+justify-content:center;
+align-center:center;
+font-family:"aggro";
+font-weight:500;
+font-size:14px;
+padding:9px;
+margin-left:10px;
+border-radius:4px;
+color:#2f2f2f;
+background-color:#bbb;
+cursor:pointer;
+transition:all 0.2s ease-in-out;
+&:hover {
+    color: #4f4f4f;
+    background-color: #ddd;
+    transition:all 0.2s ease-in-out;
+}
+`;
 
 const KeywordSearchBox = (props) => {
+    const [search, setSearch] = useState("");
+    const searchBox = useRef();
+
+    const onChangeSearchBox = (e) => {
+        setSearch(e.target.value);
+    }
+
+    const onClickRefresh = () => {
+        props.setIsSearch(false);
+        setSearch("");
+    }
+
+    const onClickSearch = () => {
+        for(let i in props.keywords) {
+            if(search === props.keywords[i].name) {
+                props.setSearchKeywordIndex(i);
+                props.setIsSearch(true);
+                searchBox.current.value = "";
+                return;
+            }
+        }
+        props.setSearchKeywordIndex(-1);
+        props.openModal();
+    }
+
     return (
         <MainContainer>
             <SearchContainer>
                 <Caption>키워드 관리</Caption>
+                <RefreshBtn onClick={onClickRefresh}>초기화</RefreshBtn>
                 <SearchItemContainer>
-                    <SearchInput type="text" placeholder=" "></SearchInput>
+                    <SearchInput type="text" placeholder=" " onChange={onChangeSearchBox} ref={searchBox}></SearchInput>
                     <SearchInputLabel>SEARCH</SearchInputLabel>
-                    <SearchBtn>검색</SearchBtn>
+                    <SearchBtn onClick={onClickSearch}>검색</SearchBtn>
                 </SearchItemContainer>
             </SearchContainer>
             <UnderLine/>

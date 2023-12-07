@@ -68,34 +68,43 @@ transition: all 0.2s ease-in-out;
 
 
 const LoginForm = (props) => {
-    const [id, setId] = useState();
-    const [pw, setPw] = useState();
-
     const navigate = useNavigate();
 
     const onChangeID = (e) => {
-        setId(e.target.value);
+        props.setId(e.target.value);
     }
 
     const onChangePW = (e) => {
-        setPw(e.target.value);
+        props.setPw(e.target.value);
     }
 
-    const onClickLogin = async () => {
+    const onLogin = async (e) => {
+        if(props.id.length === 0 || props.pw.length === 0) {
+            props.openModal();
+            return;
+        }
+
         try {
             const response = await axios.post(
                 "http://"+process.env.REACT_APP_ADDRESS+"/auth/signin",
-                { "login_id": id, "password": pw },
+                { "login_id": props.id, "password": props.pw },
                 {"Content-Type": "application/json", "accept": "application/json"});
             window.sessionStorage.setItem("token_info", JSON.stringify(response.data.token_info));
-            navigate("/admin/index");
+            window.sessionStorage.setItem("username", JSON.stringify(response.data.user));
+            axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token_info.access_token}`;
+            navigate("/admin/index/");
         } catch(err) {
             props.openModal();
         }
     }
 
+    const onEnterKey = (e) => {
+        if(e.key === "Enter")
+            onLogin();
+    };
+
     return (
-        <LoginFormContainer>
+        <LoginFormContainer onKeyUp={onEnterKey}>
             <TextBoxContainer>
                 <Input type="text" placeholder=" " onChange={onChangeID}></Input>
                 <Label>ID</Label>
@@ -104,7 +113,7 @@ const LoginForm = (props) => {
                 <Input type="password" placeholder=" " onChange={onChangePW}></Input>
                 <Label>PW</Label>
             </TextBoxContainer>
-            <LoginBtn onClick={onClickLogin}>로그인</LoginBtn>
+            <LoginBtn onClick={onLogin}>로그인</LoginBtn>
         </LoginFormContainer>
     );
 };

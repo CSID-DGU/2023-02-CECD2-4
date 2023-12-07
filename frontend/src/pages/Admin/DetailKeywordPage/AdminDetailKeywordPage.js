@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Main from "../../../components/Main/Main";
 import styled from 'styled-components';
 import ContentContainer from './ContentContainer';
@@ -112,11 +114,31 @@ display:flex;
 align-items:center;
 font-size:15px;
 `;
+const ModalDesc = styled.div`
+display:flex;
+flex-direction:column;
+justify-content:space-evenly;
+align-items:center;
+width:30vw;
+height:15vh;
+`;
 
 const AdminDetailKeywordPage = () => {
     const dispatch = useDispatch();
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [keyword, setKeyword] = useState("");
+    const [registerId, setRegisterId] = useState("");
+    const [registerDate, setRegisterDate] = useState();
+    const [updateDate, setUpdateDate] = useState();
+    const [status, setStatus] = useState();
+    const [desc, setDesc] = useState();
+    const [reason, setReason] = useState("");
+    const [isDisable, setIsDisable] = useState(false);
     
     const openModal = () => {
         setIsModalOpen(true);
@@ -125,10 +147,72 @@ const AdminDetailKeywordPage = () => {
         setIsModalOpen(false);
     }
 
+    const openResultModal = () => {
+        setIsResultModalOpen(true);
+    }
+    const closeResultModal = () => {
+        setIsResultModalOpen(false);
+        navigate("/admin/manage/index");
+    }
+
+    const onClickBack = (e) => {
+        navigate(-1);
+    }
+    
+    const onChangeReason = (e) => {
+        setReason(e.target.value);
+    }
+
+    const onChangeCheck = (e) => {
+        setIsDisable(e.target.checked);
+    }
+
+    const onClickAble = async (e) => {
+        try {
+            axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(window.sessionStorage.getItem("token_info")).access_token}`;
+            const response = await axios.put(
+                "http://"+process.env.REACT_APP_ADDRESS+"/keywords",
+                { "id": registerId, "description": desc, "isActive": true, "memo": reason },
+                );
+            setIsSuccess(true);
+            openResultModal();
+        } catch(err) {
+            setIsSuccess(false);
+            openResultModal();
+        }
+    }
+
+    const onClickSubmit = async () => {
+        try {
+            axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(window.sessionStorage.getItem("token_info")).access_token}`;
+            const response = await axios.put(
+                "http://"+process.env.REACT_APP_ADDRESS+"/keywords",
+                { "id": registerId, "description": desc, "isActive": isDisable ? false : location.state.isActive, "memo": reason },
+                );
+            closeModal();
+            setIsSuccess(true);
+            openResultModal();
+        } catch(err) {
+            closeModal();
+            setIsSuccess(false);
+            openResultModal();
+        }
+    }
+
     useEffect(() => {
         dispatch(enter());
         dispatch(managePage());
     }, [dispatch]);
+
+    useEffect(() => {
+        setKeyword(location.state.name);
+        setRegisterId(location.state.id);
+        setRegisterDate(location.state.createdAt.substring(0,10)+" "+location.state.createdAt.substring(11,19));
+        setUpdateDate(location.state.updatedAt.substring(0,10)+" "+location.state.updatedAt.substring(11,19));
+        setStatus((location.state.isActive ? "활성화" : "비활성화"));
+        setDesc(location.state.description);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Main>
@@ -136,25 +220,32 @@ const AdminDetailKeywordPage = () => {
                 <Label>상세 키워드</Label>
                 <Line/>
             </TopContainer> 
-            <ContentContainer/>
+            <ContentContainer keyword={keyword} id={registerId} created={registerDate} updated={updateDate} status={status} desc={desc} setDesc={setDesc}/>
             <BtnContainer>
-                <Btn onClick={openModal}>해제</Btn>
-                <Btn>돌아가기</Btn>
+                {location.state.isActive ? null : <Btn onClick={onClickAble}>활성화</Btn>}
+                <Btn onClick={openModal}>수정</Btn>
+                <Btn onClick={onClickBack}>돌아가기</Btn>
             </BtnContainer>
-            <Modal isOpen={isModalOpen} closeModal={closeModal} title="키워드 해제" customBtn={() => <ModalBtn>테스트</ModalBtn>}>
+            <Modal isOpen={isModalOpen} closeModal={closeModal} title="키워드 수정" customBtn={() => <ModalBtn onClick={onClickSubmit}>확인</ModalBtn>}>
                 <ModalLine/>
                 <ModalContainer>
-                    <ModalLabel>취소자 ID</ModalLabel>
-                    <IDLabel>관리자1</IDLabel>
+                    <ModalLabel>수정자 ID</ModalLabel>
+                    <IDLabel>{JSON.parse(window.sessionStorage.getItem("username")).name}</IDLabel>
                 </ModalContainer>
                 <ModalContainer>
-                    <ModalLabel>취소 사유</ModalLabel>
-                    <ModalTextArea/>
+                    <ModalLabel>수정 사유</ModalLabel>
+                    <ModalTextArea onChange={onChangeReason}/>
                 </ModalContainer>
                 <CautionContainer>
                     <Caution>키워드를 해제하면 더이상 해당키워드에 대한 정보를 수집하지 않습니다. 키워드를 해제한 취소자 정보는 데이터베이스에 보관되므로 다시 한번 잘못된 부분은 없는지 검토하시길 바랍니다. 악의적인 키워드 해제는 취소자 책임이 될 수 있습니다.</Caution>
-                    <AgreeLabel><input type="checkbox"/>위 사실에 동의합니다.</AgreeLabel>
+                    <AgreeLabel><input type="checkbox" onChange={onChangeCheck}/>위 사실에 동의하며 키워드를 해제하겠습니다.</AgreeLabel>
                 </CautionContainer>
+            </Modal>
+            <Modal isOpen={isResultModalOpen} closeModal={closeResultModal} title="키워드 수정">
+                <ModalLine/>
+                <ModalDesc>
+                    {isSuccess ? "키워드 수정을 성공했습니다." : "키워드 수정에 실패했습니다."}
+                </ModalDesc>
             </Modal>
         </Main>
     );
