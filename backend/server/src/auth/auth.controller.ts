@@ -124,7 +124,11 @@ export class AuthController {
       return await this.authService.refresh(refresh_token);
     } catch (e) {
       // 토큰이 유효하지 않은 경우 -> 토큰을 삭제하고 에러 메시지 반환
-      res.clearCookie(REFRESH_TOKEN_NAME);
+      res.clearCookie(REFRESH_TOKEN_NAME, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      });
       throw e;
     }
   }
