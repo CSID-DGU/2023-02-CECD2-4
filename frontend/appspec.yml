@@ -3,10 +3,10 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ec2-user/2023-02-CECD2-4/frontend
+    destination: /home/ec2-user/2023-02-CECD2-4/frontend/build
     overwrite: yes
 permissions:
-  - object: /home/ec2-user/2023-02-CECD2-4/frontend
+  - object: /home/ec2-user/2023-02-CECD2-4/frontend/build
     owner: ec2-user
     group: ec2-user
     mode: 755
@@ -14,4 +14,4 @@ hooks:
   AfterInstall:
     - location: deploy.sh
       timeout: 60
-      runas: ec2-user
+      runas: root
