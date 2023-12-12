@@ -15,10 +15,10 @@ jobs:
 
       - name: Generate .env file
         working-directory: ./frontend
-        run: |
-          echo "REACT_APP_ADDRESS=$REACT_APP_ADDRESS" >> .env
         env:
           REACT_APP_ADDRESS: ${{ secrets.REACT_APP_ADDRESS }} 
+        run: |
+          echo "REACT_APP_ADDRESS=$REACT_APP_ADDRESS" >> .env
 
       - name: Install Dependencies
         working-directory: ./frontend
