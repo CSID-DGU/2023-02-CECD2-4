@@ -24,6 +24,7 @@ jobs:
           CI: ""
 
       - name: zip create
+        working-directory: ./frontend/build
         run: zip -qq -r ./build-fe.zip .
         shell: bash
 
@@ -46,6 +47,6 @@ jobs:
           --application-name keyword-on-codedeploy
           --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name keyword-on-webservice-group
-          --s3-location keyword-on,key=build-fe.zip,bundleType=zip
+          --s3-location bucket=keyword-on,key=build-fe.zip,bundleType=zip
 
       
