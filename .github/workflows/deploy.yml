@@ -14,6 +14,7 @@ jobs:
         run: node -v
 
       - name: Generate .env
+        working-directory: ./frontend
         run: |
           echo "REACT_APP_ADDRESS=$REACT_APP_ADDRESS" >> .env
         env:
