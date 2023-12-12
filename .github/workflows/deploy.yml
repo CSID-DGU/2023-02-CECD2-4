@@ -13,6 +13,12 @@ jobs:
       - name: Check Node version
         run: node -v
 
+      - name: Generate .env
+        run: |
+          echo "REACT_APP_ADDRESS=$REACT_APP_ADDRESS" >> .env
+        env:
+          REACT_APP_ADDRESS: ${{ secrets.REACT_APP_ADDRESS }} 
+
       - name: Install Dependencies
         working-directory: ./frontend
         run: npm install
