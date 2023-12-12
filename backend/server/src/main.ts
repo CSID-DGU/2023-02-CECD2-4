@@ -10,7 +10,12 @@ async function bootstrap() {
   if (process.env.NODE_ENV !== 'production') {
     swaggerSetup(app);
   }
-  app.enableCors();
+
+  const frontPath = process.env.FRONT_ORIGIN;
+  app.enableCors({
+    origin: frontPath,
+    credentials: true,
+  });
   app.use(helmet());
   app.use(cookieParser());
   app.useGlobalPipes(

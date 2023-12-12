@@ -24,6 +24,10 @@ class EnvironmentVariables {
 
   @IsString()
   REDIS_HOST: string;
+
+  @IsString()
+  FRONT_ORIGIN: string;
+
   @IsNumber()
   @Transform(({ value }) => parseInt(value))
   REDIS_PORT: number;
