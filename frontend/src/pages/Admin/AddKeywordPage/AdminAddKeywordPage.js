@@ -99,6 +99,31 @@ const AdminAddKeywordPage = () => {
     const onClickAdd = async (e) => {
         try {
             axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(window.sessionStorage.getItem("token_info")).access_token}`;
+            axios.interceptors.response.use(
+                (res) => {
+                    return res;
+                },
+                async (err) => {
+                    const {
+                        config,
+                        response: { status },
+                    } = err;
+
+                    if(status === 401) {
+                        if(err.response.data.message === "Unauthorized") {
+                            const originReq = config;
+                            const rtRes = await axios.get("https://"+process.env.REACT_APP_ADDRESS+"/auth/refresh");
+                            
+                            window.sessionStorage.setItem("token_info", JSON.stringify(rtRes.data));
+                            axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(window.sessionStorage.getItem("token_info")).access_token}`;
+                            originReq.headers["Authorization"] = `Bearer ${JSON.parse(window.sessionStorage.getItem("token_info")).access_token}`;
+
+                            return axios(originReq);
+                        }
+                    }
+                    return Promise.reject(err);
+                }
+            );
             const response = await axios.post(
                 "https://"+process.env.REACT_APP_ADDRESS+"/keywords",
                 { "name": keyword, "description": description, "memo": memo },
@@ -106,6 +131,8 @@ const AdminAddKeywordPage = () => {
             setIsSuccess(true);
             openModal();
         } catch(err) {
+            if(err.response.status === 401)
+                navigate("/admin/login");
             setIsSuccess(false);
             openModal();
         }
