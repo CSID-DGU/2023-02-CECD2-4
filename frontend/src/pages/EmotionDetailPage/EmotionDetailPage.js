@@ -178,7 +178,7 @@ const EmotionDetailPage = () => {
         for(let i in ds[0].data)
             ds[0].data[i] = 0;
 
-        let response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+
+        let response = await axios.get("https://"+process.env.REACT_APP_ADDRESS+
                 "/search/emotion-counts?keyword_id="+location.state.keyword_id+
                 "&from="+location.state.from+
                 "&to="+location.state.to);
