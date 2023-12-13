@@ -53,7 +53,7 @@ jobs:
       - name: Deploy to EC2
         run: aws deploy create-deployment
           --application-name keyword-on-codedeploy
-          --deployment-config-name CodeDeployDefault.OneAtATime
+          --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name keyword-on-webservice-group
           --s3-location bucket=keyword-on,key=build-fe.zip,bundleType=zip
 
