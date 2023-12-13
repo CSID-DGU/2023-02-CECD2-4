@@ -170,7 +170,7 @@ const SearchResultPage = () => {
     }, []);
 
     const CheckKeyword = async () => {
-        let response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+"/keywords");
+        let response = await axios.get("https://"+process.env.REACT_APP_ADDRESS+"/keywords");
         if(await response.data.find(FindKeyword) === undefined) {
             openModal();
         } else {
@@ -198,7 +198,7 @@ const SearchResultPage = () => {
         setFrom(search_from);
         setTo(search_to);
 
-        let response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+
+        let response = await axios.get("https://"+process.env.REACT_APP_ADDRESS+
         "/daily-keyword-big-emotions-cnt?keyword_id="+id+
         "&from="+search_from+
         "&to="+search_to);
@@ -212,7 +212,7 @@ const SearchResultPage = () => {
         setChartLabel(lbs);
         setChartDs(ds);
 
-        response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+
+        response = await axios.get("https://"+process.env.REACT_APP_ADDRESS+
         "/search/keyword-search-result?name="+searchKeyword+
         "&from="+search_from+
         "&to="+search_to);

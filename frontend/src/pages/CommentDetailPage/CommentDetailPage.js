@@ -73,14 +73,14 @@ const CommentDetailPage = () => {
     }, []);
 
     const CheckKeywordAndLoading = async () => {
-        let response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+"/keywords");
+        let response = await axios.get("https://"+process.env.REACT_APP_ADDRESS+"/keywords");
         if(await response.data.find(FindKeyword) === undefined || location.state === null) {
             if(location.state === null)
                 setIsAbnormal(true);
             openModal();
         } else {
             setKeywordId(response.data.find(FindKeyword).id);
-            response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+
+            response = await axios.get("https://"+process.env.REACT_APP_ADDRESS+
                 "/search/detail/comment/"+location.state.comment.id);
             setData(response.data);
             setIsRender(true);

@@ -171,7 +171,7 @@ const AdminDetailKeywordPage = () => {
         try {
             axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(window.sessionStorage.getItem("token_info")).access_token}`;
             const response = await axios.put(
-                "http://"+process.env.REACT_APP_ADDRESS+"/keywords",
+                "https://"+process.env.REACT_APP_ADDRESS+"/keywords",
                 { "id": registerId, "description": desc, "isActive": true, "memo": reason },
                 );
             setIsSuccess(true);
@@ -186,7 +186,7 @@ const AdminDetailKeywordPage = () => {
         try {
             axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(window.sessionStorage.getItem("token_info")).access_token}`;
             const response = await axios.put(
-                "http://"+process.env.REACT_APP_ADDRESS+"/keywords",
+                "https://"+process.env.REACT_APP_ADDRESS+"/keywords",
                 { "id": registerId, "description": desc, "isActive": isDisable ? false : location.state.isActive, "memo": reason },
                 );
             closeModal();

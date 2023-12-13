@@ -146,7 +146,7 @@ const EmotionDetailPage = () => {
     }, []);
 
     const CheckKeywordAndLoading = async () => {
-        let response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+"/keywords");
+        let response = await axios.get("https://"+process.env.REACT_APP_ADDRESS+"/keywords");
         if(await response.data.find(FindKeyword) === undefined || location.state === null) {
             if(location.state === null)
                 setIsAbnormal(true);

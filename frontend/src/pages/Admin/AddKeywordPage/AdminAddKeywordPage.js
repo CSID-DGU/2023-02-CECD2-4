@@ -100,7 +100,7 @@ const AdminAddKeywordPage = () => {
         try {
             axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(window.sessionStorage.getItem("token_info")).access_token}`;
             const response = await axios.post(
-                "http://"+process.env.REACT_APP_ADDRESS+"/keywords",
+                "https://"+process.env.REACT_APP_ADDRESS+"/keywords",
                 { "name": keyword, "description": description, "memo": memo },
                 );
             setIsSuccess(true);

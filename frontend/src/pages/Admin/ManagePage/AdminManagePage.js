@@ -49,7 +49,7 @@ const AdminManagePage = (props) => {
     const fetchKeywordList = async () => {
         let copy_keywordList = [...keywordList];
 
-        const response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+"/keywords");
+        const response = await axios.get("https://"+process.env.REACT_APP_ADDRESS+"/keywords");
         
         copy_keywordList = [...response.data];
         setKeywordList(copy_keywordList);
