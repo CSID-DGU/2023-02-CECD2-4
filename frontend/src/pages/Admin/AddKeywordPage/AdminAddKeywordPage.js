@@ -102,7 +102,7 @@ const AdminAddKeywordPage = () => {
             const response = await axios.post(
                 "https://"+process.env.REACT_APP_ADDRESS+"/keywords",
                 { "name": keyword, "description": description, "memo": memo },
-                );
+                { withCredentials: true });
             setIsSuccess(true);
             openModal();
         } catch(err) {

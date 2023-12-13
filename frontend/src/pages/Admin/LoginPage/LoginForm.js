@@ -88,7 +88,7 @@ const LoginForm = (props) => {
             const response = await axios.post(
                 "https://"+process.env.REACT_APP_ADDRESS+"/auth/signin",
                 { "login_id": props.id, "password": props.pw },
-                {"Content-Type": "application/json", "accept": "application/json"});
+                { withCredentials: true, "Content-Type": "application/json", "accept": "application/json"});
             window.sessionStorage.setItem("token_info", JSON.stringify(response.data.token_info));
             window.sessionStorage.setItem("username", JSON.stringify(response.data.user));
             axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token_info.access_token}`;

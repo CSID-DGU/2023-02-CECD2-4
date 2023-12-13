@@ -68,7 +68,7 @@ const Header = (props) => {
 
     const onClickLogout = async () => {
         window.sessionStorage.clear();
-        const response = await axios.get("http://"+process.env.REACT_APP_ADDRESS+"/auth/signout");
+        const response = await axios.get("https://"+process.env.REACT_APP_ADDRESS+"/auth/signout");
     }
 
     return (

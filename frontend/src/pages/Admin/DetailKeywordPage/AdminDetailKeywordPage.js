@@ -173,7 +173,7 @@ const AdminDetailKeywordPage = () => {
             const response = await axios.put(
                 "https://"+process.env.REACT_APP_ADDRESS+"/keywords",
                 { "id": registerId, "description": desc, "isActive": true, "memo": reason },
-                );
+                { withCredentials: true });
             setIsSuccess(true);
             openResultModal();
         } catch(err) {
@@ -188,7 +188,7 @@ const AdminDetailKeywordPage = () => {
             const response = await axios.put(
                 "https://"+process.env.REACT_APP_ADDRESS+"/keywords",
                 { "id": registerId, "description": desc, "isActive": isDisable ? false : location.state.isActive, "memo": reason },
-                );
+                { withCredentials: true });
             closeModal();
             setIsSuccess(true);
             openResultModal();
